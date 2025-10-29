@@ -85,6 +85,14 @@ def generate_sustainability_database():
         target_emissions REAL,
         sbti_aligned BOOLEAN
     );
+                         
+    CREATE TABLE scope3_categories (
+        category_id INTEGER PRIMARY KEY,
+        category_name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        typical_pct_of_scope3 REAL
+    );                     
+
     ''')
     
     print("✅ Schema created")
@@ -158,6 +166,28 @@ def generate_sustainability_database():
     
     print("✅ Targets set")
     
+    # Generate Scope 3 categories
+    print("\n🔗 Loading Scope 3 categories...")
+
+    scope3_categories_data = [
+        (1, 'Purchased Goods & Services', 'Servers, networking equipment, construction materials', 45.0),
+        (2, 'Capital Goods', 'Data center construction, major equipment', 15.0),
+        (3, 'Fuel & Energy Related', 'Upstream emissions from electricity generation', 8.0),
+        (4, 'Upstream Transportation', 'Logistics and distribution', 3.0),
+        (6, 'Business Travel', 'Employee air travel, hotels', 2.0),
+        (7, 'Employee Commute', 'Daily commuting', 1.0),
+        (11, 'Use of Sold Products', 'Customer use of cloud services', 25.0),
+        (15, 'Investments', 'Equity investments', 1.0),
+    ]
+
+    cursor.executemany('''
+    INSERT INTO scope3_categories
+        (category_id, category_name, description, typical_pct_of_scope3)
+    VALUES (?, ?, ?, ?)
+    ''', scope3_categories_data)
+
+    print(f"✅ Loaded {len(scope3_categories_data)} Scope 3 categories")
+
     # Generate time series data (36 months)
     print("\n📅 Generating 36 months of emissions data...")
     
