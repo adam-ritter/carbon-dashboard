@@ -116,7 +116,7 @@ try:
         
         col1, col2 = st.columns(2)
         with col1:
-            fig_waterfall = go.Figure(go.Waterfall(orientation="v", measure=["relative"]*len(scope3_breakdown), x=scope3_breakdown['category_name'], y=scope3_breakdown['estimated_tonnes'], connector={"line":{"color":"rgb(63,63,63)"}}, marker={"color":"#d62728"}))
+            fig_waterfall = go.Figure(go.Waterfall(orientation="v", measure=["relative"]*len(scope3_breakdown), x=scope3_breakdown['category_name'], y=scope3_breakdown['estimated_tonnes'], connector={"line":{"color":"rgb(63,63,63)"}}, increasing={"marker": {"color": "#d62728"}}, decreasing={"marker": {"color": "#2ca02c"}}, totals={"marker": {"color": "#1f77b4"}}))
             fig_waterfall.update_layout(title='Scope 3 Waterfall', xaxis_title='Category', yaxis_title='Emissions', height=450, template='plotly_white', xaxis={'tickangle':-45})
             st.plotly_chart(fig_waterfall, use_container_width=True)
         
