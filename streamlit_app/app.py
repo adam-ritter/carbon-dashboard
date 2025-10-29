@@ -1,6 +1,15 @@
 import streamlit as st
+
 import warnings
-warnings.filterwarnings('ignore', category = DeprecationWarning)
+import traceback
+import sys
+
+def warning_with_traceback(message, category, filename, lineno, file=None, line=None):
+    log = file if hasattr(file, 'write') else sys.stderr
+    traceback.print_stack(file=log)
+    log.write(warnings.formatwarning(message, category, filename, lineno, line))
+
+warnings.showwarning = warning_with_traceback
 
 st.set_page_config(
     page_title="Corporate Sustainability Analytics",
