@@ -91,9 +91,30 @@ class EmissionsForecaster:
             forecast = self.model.forecast(steps=periods)
             return pd.DataFrame({
                 'forecast': forecast.values,
-                'lower': forecast.values * 0.9
+                'lower': forecast.values * 0.9,
                 'upper': forecast.values * 1.1
             })
+        
+        elif self.method == 'arima':
+            forecast = self.model.forecast(steps=periods)
+
+            last_date = self.data['ds'].max()
+            future_dates = pd.date_range(
+                start=last_date + pd.DateOffset(months = 1),
+                periods = periods,
+                freq = freq
+            )
+
+            #confidence intervals
+            std_error = np.std(self.data['y'].values[-12:])
+
+            return {
+                'dates': future_dates,
+                'forecast': forecast.values,
+                'upper': forecast.values + 1.96 * std_error, # 95% CI
+                'lower': forecast.values - 1.96 * std_error,
+                'components': None
+            }
         
     def get_components(self):
         """Get trend and seasonal components"""
@@ -173,7 +194,7 @@ class EmissionsDriverAnalyzer:
         if models is None:
             models = {
                 'Linear Regression': LinearRegression(),
-                'Ridge Regression': Ride(alpha=1.0),
+                'Ridge Regression': Ridge(alpha=1.0),
                 'Random Forest': RandomForestRegressor(
                     n_estimators=100,
                     max_depth=5,
@@ -208,7 +229,7 @@ class EmissionsDriverAnalyzer:
             #predictions for metrics
             y_pred = model.predict(X_test_scaled)
             mae = np.mean(np.abs(y_test - y_pred))
-            rmse = np.sqrt(np.mean((y_test = y_pred) ** 2))
+            rmse = np.sqrt(np.mean((y_test - y_pred) ** 2))
 
             results[name] = {
                 'model': model,
@@ -270,7 +291,7 @@ class EmissionsDriverAnalyzer:
     def get_model_comparison(self):
         """Return comparison of all models"""
         comparison = pd.DataFrame({
-            'Model': list(self.models.keys())
+            'Model': list(self.models.keys()),
             'CV R2 (mean)': [m['cv_score_mean'] for m in self.models.values()],
             'CV R2 (std)': [m['cv_score_std'] for m in self.models.values()],
             'Test R2': [m['test_r2'] for m in self.models.values()],
@@ -310,7 +331,7 @@ class FacilityClusterer:
         X_scaled = self.scaler.fit_transform(X)
 
         #K-means cluster
-        self.model = Kmeans(
+        self.model = KMeans(
             n_clusters = self.n_clusters,
             random_state = 42,
             n_init = 10
