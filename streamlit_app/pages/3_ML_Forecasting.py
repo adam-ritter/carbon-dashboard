@@ -212,7 +212,7 @@ try:
 
         #confidence interval
         fig.add_trace(go.Scatter(
-            x=forecast['ds']
+            x=forecast['ds'],
             y=forecast['yhat_upper'],
             mode='lines',
             name='Upper Bound',
