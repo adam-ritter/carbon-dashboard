@@ -241,7 +241,7 @@ try:
             hovermode='x'
         )
         
-        st.plotly_chart(fig_elbow, use_container_width=True)
+        st.plotly_chart(fig_elbow, width = 'stretch')
         
         st.info("""
         💡 **How to read:** Look for the "elbow" where the curve starts to flatten. 
@@ -278,7 +278,7 @@ try:
             height=350
         )
         
-        st.plotly_chart(fig_pie, use_container_width=True)
+        st.plotly_chart(fig_pie, width = 'stretch')
     
     with col2:
         st.markdown("### 📊 Cluster Sizes")
@@ -334,7 +334,7 @@ try:
         showlegend=True
     )
     
-    st.plotly_chart(fig_pca, use_container_width=True)
+    st.plotly_chart(fig_pca, width = 'stretch')
     
     st.markdown("---")
     
@@ -366,7 +366,7 @@ try:
             })
             .background_gradient(subset=['Total Emissions'], cmap='Reds')
             .background_gradient(subset=['Renewable % Mean'], cmap='Greens'),
-        use_container_width=True
+        width = 'stretch'
     )
     
     # Detailed cluster analysis
@@ -433,7 +433,7 @@ try:
             })
             .background_gradient(subset=['Total Emissions'], cmap='Reds')
             .background_gradient(subset=['Renewable %'], cmap='Greens'),
-        use_container_width=True
+        width = 'stretch'
     )
     
     # Cluster comparison radar chart
@@ -481,7 +481,7 @@ try:
         showlegend=True
     )
     
-    st.plotly_chart(fig_radar, use_container_width=True)
+    st.plotly_chart(fig_radar, width = 'stretch')
     
     st.info("""
     💡 **Reading the chart:** Values closer to the edge are better. 

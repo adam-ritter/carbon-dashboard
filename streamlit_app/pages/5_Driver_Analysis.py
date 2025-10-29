@@ -198,7 +198,7 @@ try:
                 col: '{:,.2f}' if col in feature_cols else '{:,.0f}'
                 for col in sample_data.columns if col not in ['date', 'facility_name']
             }),
-            use_container_width=True
+            width = 'stretch'
         )
     
     col1, col2 = st.columns(2)
@@ -271,7 +271,7 @@ try:
             })
             .apply(highlight_best, axis=1)
             .background_gradient(subset=['Test R²'], cmap='Greens'),
-        use_container_width=True
+        width = 'stretch'
     )
     
     best_model_name = comparison.loc[best_model_idx, 'Model']
@@ -330,7 +330,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_scatter, use_container_width=True)
+        st.plotly_chart(fig_scatter, width = 'stretch')
     
     with col2:
         # Residuals plot
@@ -369,7 +369,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_residuals, use_container_width=True)
+        st.plotly_chart(fig_residuals, width = 'stretch')
     
     st.markdown("---")
     
@@ -409,7 +409,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_importance, use_container_width=True)
+        st.plotly_chart(fig_importance, width = 'stretch')
     
     with col2:
         st.markdown("### 📊 Rankings")
@@ -467,7 +467,7 @@ try:
                     plot_size=(10, 6)
                 )
                 
-                st.pyplot(fig_shap, use_container_width=True)
+                st.pyplot(fig_shap, width = 'stretch')
                 
                 # SHAP waterfall for a single prediction
                 st.markdown("#### 🌊 SHAP Waterfall - Sample Prediction")
@@ -495,7 +495,7 @@ try:
                     ),
                     show=False
                 )
-                st.pyplot(fig_waterfall, use_container_width=True)
+                st.pyplot(fig_waterfall, width = 'stretch')
                 
                 # Interpretation
                 actual_value = analyzer.models[best_model_name]['y_test'].iloc[sample_idx]

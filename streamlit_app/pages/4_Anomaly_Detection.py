@@ -277,7 +277,7 @@ try:
         showlegend=True
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width = 'stretch')
     
     # Anomaly score distribution
     col1, col2 = st.columns(2)
@@ -311,7 +311,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_hist, use_container_width=True)
+        st.plotly_chart(fig_hist, width = 'stretch')
     
     with col2:
         # Anomalies by facility
@@ -338,7 +338,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_facility, use_container_width=True)
+        st.plotly_chart(fig_facility, width = 'stretch')
     
     # Detailed anomaly table
     st.subheader("🔍 High-Priority Anomalies")
@@ -376,7 +376,7 @@ try:
                 'anomaly_score': '{:.3f}'
             })
             .apply(highlight_severity, axis=1),
-        use_container_width=True,
+        width = 'stretch',
         height=400
     )
     
@@ -485,7 +485,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_trend, use_container_width=True)
+        st.plotly_chart(fig_trend, width = 'stretch')
         
         # Investigation checklist
         st.markdown("""

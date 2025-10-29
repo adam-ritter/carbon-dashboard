@@ -306,7 +306,7 @@ try:
                 'Lower Bound (95%)': '{:,.0f}',
                 'Upper Bound (95%)': '{:,.0f}'
             }).background_gradient(subset=['Forecast'], cmap='YlOrRd'),
-            use_container_width=True
+            width = 'stretch'
         )  
 
     #trends and seasonality
@@ -334,7 +334,7 @@ try:
                 template='plotly_white'
             )
 
-            st.plotly_chart(fig_trend, use_container_width = True)
+            st.plotly_chart(fig_trend, width = 'stretch')
 
         with col2:
             #yearly seasonality
@@ -356,7 +356,7 @@ try:
                     template='plotly_white'
                 )
 
-                st.plotly_chart(fig_seasonal, use_container_width=True)
+                st.plotly_chart(fig_seasonal, width = 'stretch')
 
     #key insights
     st.subheader("Key Insights and Recommendations")

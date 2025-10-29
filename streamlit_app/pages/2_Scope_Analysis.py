@@ -72,14 +72,14 @@ try:
             scope1_monthly = year_data.groupby('month')['scope1_tonnes'].sum().reset_index().sort_values('month')
             fig_s1 = go.Figure(go.Scatter(x=scope1_monthly['month'], y=scope1_monthly['scope1_tonnes'], mode='lines+markers', line=dict(color='#ff7f0e', width=3), fill='tozeroy'))
             fig_s1.update_layout(title='Scope 1 Monthly Trend', xaxis_title='Month', yaxis_title='Emissions (tonnes CO₂e)', height=400, template='plotly_white')
-            st.plotly_chart(fig_s1, use_container_width=True)
+            st.plotly_chart(fig_s1, width = 'stretch')
         
         with col2:
             scope1_fac = year_data.groupby('facility_id')['scope1_tonnes'].sum().reset_index()
             scope1_fac = scope1_fac.merge(facilities_df[['facility_id', 'facility_name']], on='facility_id').sort_values('scope1_tonnes', ascending=False).head(10)
             fig_s1_fac = go.Figure(go.Bar(x=scope1_fac['scope1_tonnes'], y=scope1_fac['facility_name'], orientation='h', marker_color='#ff7f0e'))
             fig_s1_fac.update_layout(title='Top 10 Facilities - Scope 1', xaxis_title='Emissions', height=400, template='plotly_white', yaxis={'categoryorder':'total ascending'})
-            st.plotly_chart(fig_s1_fac, use_container_width=True)
+            st.plotly_chart(fig_s1_fac, width = 'stretch')
         st.markdown("---")
     
     if scope_focus in ["All Scopes", "Scope 2"]:
@@ -93,7 +93,7 @@ try:
             fig_s2.add_trace(go.Scatter(x=scope2_monthly['month'], y=scope2_monthly['scope2_location_tonnes'], mode='lines', name='Location-Based', line=dict(color='#2ca02c', dash='dash')))
             fig_s2.add_trace(go.Scatter(x=scope2_monthly['month'], y=scope2_monthly['scope2_market_tonnes'], mode='lines+markers', name='Market-Based', line=dict(color='#2ca02c', width=3)))
             fig_s2.update_layout(title='Scope 2: Location vs Market', xaxis_title='Month', yaxis_title='Emissions', height=400, template='plotly_white')
-            st.plotly_chart(fig_s2, use_container_width=True)
+            st.plotly_chart(fig_s2, width = 'stretch')
             
             renewable_impact = total_scope2_location - total_scope2_market
             renewable_pct = (renewable_impact / total_scope2_location) * 100
@@ -103,7 +103,7 @@ try:
             renewable_monthly = year_data.groupby('month')['renewable_pct'].mean().reset_index().sort_values('month')
             fig_ren = go.Figure(go.Scatter(x=renewable_monthly['month'], y=renewable_monthly['renewable_pct'], mode='lines+markers', line=dict(color='#2ca02c', width=3), fill='tozeroy'))
             fig_ren.update_layout(title='Average Renewable Energy %', xaxis_title='Month', yaxis_title='Renewable %', yaxis_range=[0,100], height=400, template='plotly_white')
-            st.plotly_chart(fig_ren, use_container_width=True)
+            st.plotly_chart(fig_ren, width = 'stretch')
         st.markdown("---")
     
     if scope_focus in ["All Scopes", "Scope 3"]:
@@ -137,7 +137,7 @@ try:
                 xaxis = {'tickangle': -45}
             )
 
-            st.plotly_chart(fig_scope3_bar, use_container_width=True)
+            st.plotly_chart(fig_scope3_bar, width = 'stretch')
         
         with col2:
             fig_pareto = make_subplots(specs=[[{"secondary_y": True}]])
@@ -147,14 +147,14 @@ try:
             fig_pareto.update_yaxes(title_text="Emissions", secondary_y=False)
             fig_pareto.update_yaxes(title_text="Cumulative %", range=[0,100], secondary_y=True)
             fig_pareto.update_layout(title='Pareto Analysis', height=450, template='plotly_white')
-            st.plotly_chart(fig_pareto, use_container_width=True)
+            st.plotly_chart(fig_pareto, width = 'stretch')
         
         st.markdown("#### 📋 Scope 3 Categories")
         scope3_table = scope3_breakdown[['category_name','description','estimated_tonnes','typical_pct_of_scope3']].copy()
         scope3_table.columns = ['Category','Description','Estimated Emissions','% of Scope 3']
         scope3_table['Estimated Emissions'] = scope3_table['Estimated Emissions'].apply(lambda x: f"{x:,.0f}")
         scope3_table['% of Scope 3'] = scope3_table['% of Scope 3'].apply(lambda x: f"{x:.1f}%")
-        st.dataframe(scope3_table, use_container_width=True)
+        st.dataframe(scope3_table, width = 'stretch')
         
         top_3_pct = scope3_breakdown.head(3)['typical_pct_of_scope3'].sum()
         st.success(f"**80/20 Rule:** Top 3 categories = {top_3_pct:.0f}% of Scope 3")
@@ -167,7 +167,7 @@ try:
     fig_all.add_trace(go.Scatter(x=monthly_all['month'], y=monthly_all['scope2_market_tonnes'], name='Scope 2', mode='lines', stackgroup='one', fillcolor='rgba(44,160,44,0.6)'))
     fig_all.add_trace(go.Scatter(x=monthly_all['month'], y=monthly_all['scope3_tonnes'], name='Scope 3', mode='lines', stackgroup='one', fillcolor='rgba(214,39,40,0.6)'))
     fig_all.update_layout(title='Stacked Area - All Scopes', xaxis_title='Month', yaxis_title='Emissions', height=500, template='plotly_white', hovermode='x unified')
-    st.plotly_chart(fig_all, use_container_width=True)
+    st.plotly_chart(fig_all, width = 'stretch')
     
     st.markdown("---")
     st.markdown("### 🎯 Reduction Priorities")

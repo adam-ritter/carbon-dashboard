@@ -186,7 +186,7 @@ try:
         template='plotly_white'
     )
     
-    st.plotly_chart(fig_trend, use_container_width=True)
+    st.plotly_chart(fig_trend, width = 'stretch')
     
     st.markdown("---")
     
@@ -221,7 +221,7 @@ try:
             showlegend=True
         )
         
-        st.plotly_chart(fig_scope, use_container_width=True)
+        st.plotly_chart(fig_scope, width = 'stretch')
         
         # Scope metrics
         for _, row in scope_data.iterrows():
@@ -268,7 +268,7 @@ try:
             yaxis={'categoryorder': 'total ascending'}
         )
         
-        st.plotly_chart(fig_facilities, use_container_width=True)
+        st.plotly_chart(fig_facilities, width = 'stretch')
     
     st.markdown("---")
     
@@ -340,7 +340,7 @@ try:
         template='plotly_white'
     )
     
-    st.plotly_chart(fig_regional, use_container_width=True)
+    st.plotly_chart(fig_regional, width = 'stretch')
     
     # Regional table
     regional_totals['Total'] = regional_totals['Total'].apply(lambda x: f"{x:,.0f}")
@@ -348,7 +348,7 @@ try:
     regional_totals['Scope 2'] = regional_totals['Scope 2'].apply(lambda x: f"{x:,.0f}")
     regional_totals['Scope 3'] = regional_totals['Scope 3'].apply(lambda x: f"{x:,.0f}")
     
-    st.dataframe(regional_totals, use_container_width=True)
+    st.dataframe(regional_totals, width = 'stretch')
     
     st.markdown("---")
     
@@ -398,7 +398,7 @@ try:
     
     fig_yoy.update_layout(height=400, showlegend=False, template='plotly_white')
     
-    st.plotly_chart(fig_yoy, use_container_width=True)
+    st.plotly_chart(fig_yoy, width = 'stretch')
     
     # YoY table
     yearly_display = yearly_totals.copy()
@@ -406,7 +406,7 @@ try:
     yearly_display['YoY Change'] = yearly_display['YoY Change'].apply(lambda x: f"{x:+.1f}%" if pd.notna(x) else "N/A")
     yearly_display.columns = ['Year', 'Scope 1', 'Scope 2', 'Scope 3', 'Total Emissions', 'YoY Change']
     
-    st.dataframe(yearly_display, use_container_width=True)
+    st.dataframe(yearly_display, width = 'stretch')
     
     st.markdown("---")
     
