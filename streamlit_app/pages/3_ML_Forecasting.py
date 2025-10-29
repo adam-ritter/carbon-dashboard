@@ -222,7 +222,7 @@ try:
         ))
 
         fig.add_trace(go.Scatter(
-            x_forecast['ds'],
+            x=forecast['ds'],
             y=forecast['yhat_lower'],
             mode='lines',
             name='Lower Bound',

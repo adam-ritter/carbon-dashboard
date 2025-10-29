@@ -1,4 +1,6 @@
 import streamlit as st
+import warnings
+warnings.filterwarnings('ignore', category = DeprecationWarning)
 
 st.set_page_config(
     page_title="Corporate Sustainability Analytics",
