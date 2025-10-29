@@ -62,7 +62,7 @@ class EmissionsForecaster:
             #holt-winters exponential smoothing
             self.model = ExponentialSmoothing(
                 df[target_col],
-                seasonal_period=12,
+                seasonal_periods=12,
                 trend='add',
                 seasonal='add',
                 damped_trend=True
