@@ -127,6 +127,17 @@ try:
                 text = scope3_breakdown['estimated_tonnes'].apply(lambda x: f"{x:,.0f}"),
                 textposition = 'outside'
             ))
+
+            fig_scope3_bar.update_layout(
+                title = 'Scope 3 Category Breakdown',
+                xaxis_title = 'Category',
+                yaxis_title = 'Emissions (tonnes CO₂e)',
+                height = 450,
+                template = 'plotly_white',
+                xaxis = {'tickangle': -45}
+            )
+
+            st.plotly_chart(fig_scope3_bar, use_container_width=True)
         
         with col2:
             fig_pareto = make_subplots(specs=[[{"secondary_y": True}]])
