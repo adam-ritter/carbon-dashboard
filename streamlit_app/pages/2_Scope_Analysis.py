@@ -121,7 +121,7 @@ try:
                 y = scope3_breakdown['estimated_tonnes'],
                 marker = dict(
                     color = scope3_breakdown['estimated_tonnes'],
-                    colorscale = 'Reds'
+                    colorscale = 'Reds',
                     showscale = False
                 ),
                 text = scope3_breakdown['estimated_tonnes'].apply(lambda x: f"{x:,.0f}"),
