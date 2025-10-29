@@ -98,7 +98,7 @@ def load_data():
         SUM(scope1_tonnes) as scope1,
         SUM(scope2_market_tonnes) as scope2_market,
         SUM(scope3_tonnes) as scope3,
-        SUM(scope1_tonnes + scope2_market + scope3_tonnes) as total_emissions
+        SUM(scope1_tonnes + scope2_market_tonnes + scope3_tonnes) as total_emissions
     FROM emissions_monthly
     GROUP BY date
     ORDER BY date
@@ -117,7 +117,7 @@ try:
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metrics(
+        st.metric(
             "Historical Data",
             len(data),
             help = "Months of historical emissions data"
@@ -132,7 +132,7 @@ try:
         )
 
     with col3:
-        yoy_change = ((data['total emissions'].iloc[-1] / data['total_emissions'].iloc[-13]) - 1) * 100
+        yoy_change = ((data['total_emissions'].iloc[-1] / data['total_emissions'].iloc[-13]) - 1) * 100
         st.metric(
             "YoY Change",
             f"{yoy_change:+.1f}%",
