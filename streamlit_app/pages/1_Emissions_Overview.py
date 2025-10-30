@@ -457,7 +457,7 @@ try:
         # Load operational metrics for intensity calculations
         from utils.data_loader import load_combined_metrics
         
-        combined_data = load_combined_metrics(start_date=start_date, end_date=end_date)
+        combined_data = load_combined_metrics()
         
         if len(combined_data) > 0:
             # Monthly aggregates
