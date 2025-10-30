@@ -1,6 +1,6 @@
 """
 Generate realistic sample sustainability data for the dashboard
-Based on typical tech company emissions patterns
+Based on typical tech company emissions patterns with realistic data quality issues
 """
 
 import sqlite3
@@ -12,30 +12,24 @@ import os
 def generate_sustainability_database():
     """Generate complete sustainability database with realistic data"""
     
-    # Connect to database
-    conn = sqlite3.connect('sustainability_data.db')
-    cursor = conn.cursor()
-    
     print("=" * 80)
     print("GENERATING CORPORATE SUSTAINABILITY DATABASE")
     print("=" * 80)
-
-    # delete existing database, if it exists
+    
+    # Delete existing database if it exists
     db_path = 'sustainability_data.db'
     if os.path.exists(db_path):
-        print(f"Removing existing database: {db_path}")
+        print(f"🗑️  Removing existing database: {db_path}")
         os.remove(db_path)
+    
+    # Connect to database
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
     
     # Create schema
     print("\n📊 Creating database schema...")
     
     cursor.executescript('''
-    DROP TABLE IF EXISTS emissions_monthly;
-    DROP TABLE IF EXISTS facilities;
-    DROP TABLE IF EXISTS business_metrics;
-    DROP TABLE IF EXISTS emission_factors;
-    DROP TABLE IF EXISTS emission_targets;
-    
     CREATE TABLE facilities (
         facility_id TEXT PRIMARY KEY,
         facility_name TEXT,
@@ -99,23 +93,34 @@ def generate_sustainability_database():
         description TEXT NOT NULL,
         typical_pct_of_scope3 REAL
     );                     
-
     ''')
     
     print("✅ Schema created")
     
-    # Generate facilities
+    # Generate facilities (expanded to 20)
     print("\n🏭 Generating facility data...")
     
     facilities = [
         {'id': 'DC-VA-001', 'name': 'Virginia Data Center', 'region': 'US-East', 'type': 'Data Center'},
+        {'id': 'DC-VA-002', 'name': 'Virginia Data Center 2', 'region': 'US-East', 'type': 'Data Center'},
         {'id': 'DC-OR-001', 'name': 'Oregon Data Center', 'region': 'US-West', 'type': 'Data Center'},
+        {'id': 'DC-CA-001', 'name': 'California Data Center', 'region': 'US-West', 'type': 'Data Center'},
+        {'id': 'DC-TX-001', 'name': 'Texas Data Center', 'region': 'US-Central', 'type': 'Data Center'},
         {'id': 'DC-IE-001', 'name': 'Dublin Data Center', 'region': 'EU', 'type': 'Data Center'},
+        {'id': 'DC-NL-001', 'name': 'Amsterdam Data Center', 'region': 'EU', 'type': 'Data Center'},
         {'id': 'DC-SG-001', 'name': 'Singapore Data Center', 'region': 'APAC', 'type': 'Data Center'},
+        {'id': 'DC-JP-001', 'name': 'Tokyo Data Center', 'region': 'APAC', 'type': 'Data Center'},
         {'id': 'OFF-WA-001', 'name': 'Seattle Campus', 'region': 'US-West', 'type': 'Office'},
+        {'id': 'OFF-CA-001', 'name': 'San Francisco Office', 'region': 'US-West', 'type': 'Office'},
         {'id': 'OFF-NY-001', 'name': 'New York Office', 'region': 'US-East', 'type': 'Office'},
+        {'id': 'OFF-TX-001', 'name': 'Austin Office', 'region': 'US-Central', 'type': 'Office'},
         {'id': 'OFF-UK-001', 'name': 'London Office', 'region': 'EU', 'type': 'Office'},
+        {'id': 'OFF-DE-001', 'name': 'Berlin Office', 'region': 'EU', 'type': 'Office'},
+        {'id': 'OFF-SG-001', 'name': 'Singapore Office', 'region': 'APAC', 'type': 'Office'},
         {'id': 'MFG-CN-001', 'name': 'Shenzhen Manufacturing', 'region': 'APAC', 'type': 'Manufacturing'},
+        {'id': 'MFG-MX-001', 'name': 'Tijuana Manufacturing', 'region': 'US-Central', 'type': 'Manufacturing'},
+        {'id': 'MFG-VN-001', 'name': 'Vietnam Manufacturing', 'region': 'APAC', 'type': 'Manufacturing'},
+        {'id': 'MFG-PL-001', 'name': 'Poland Manufacturing', 'region': 'EU', 'type': 'Manufacturing'},
     ]
     
     for facility in facilities:
@@ -171,7 +176,7 @@ def generate_sustainability_database():
     VALUES (?, ?, ?, ?, ?, ?, ?)
     ''', targets_data)
     
-    print("✅ Targets set")
+    print("✅ Targets set (baseline year: 2020)")
     
     # Generate Scope 3 categories
     print("\n🔗 Loading Scope 3 categories...")
@@ -195,14 +200,23 @@ def generate_sustainability_database():
 
     print(f"✅ Loaded {len(scope3_categories_data)} Scope 3 categories")
 
-    # Generate time series data (36 months)
-    print("\n📅 Generating 36 months of emissions data...")
+    # Generate time series data (2020-2025: 70 months)
+    print("\n📅 Generating emissions data (Jan 2020 - Oct 2025)...")
     
-    start_date = datetime(2021, 1, 1)
-    months = 58
+    start_date = datetime(2020, 1, 1)
+    end_date = datetime(2025, 10, 31)
+    months = 70  # Jan 2020 to Oct 2025
     
     emissions_records = []
     business_records = []
+    
+    # Track which records to corrupt for data quality issues
+    np.random.seed(42)  # For reproducible "errors"
+    total_records = len(facilities) * months
+    error_indices = np.random.choice(total_records, size=int(total_records * 0.03), replace=False)  # 3% error rate
+    skip_indices = np.random.choice(total_records, size=int(total_records * 0.02), replace=False)  # 2% missing data
+    
+    record_idx = 0
     
     for month_offset in range(months):
         current_date = start_date + timedelta(days=30 * month_offset)
@@ -212,24 +226,29 @@ def generate_sustainability_database():
         summer_factor = 1.15 if month_num in [6, 7, 8] else 1.0
         winter_factor = 1.10 if month_num in [12, 1, 2] else 1.0
         
-        # Growth trend
-        growth_factor = 1 + (0.05 * month_offset / 12)  # 5% annual growth
+        # Growth trend (2020-2025: ~5% annual growth)
+        growth_factor = 1 + (0.05 * month_offset / 12)
         
-        # Renewable energy ramp-up
-        renewable_pct = min(0.85, 0.50 + (0.35 * month_offset / 36))
+        # Renewable energy ramp-up (50% in 2020 to 85% in 2025)
+        renewable_pct = min(0.85, 0.50 + (0.35 * month_offset / 70))
         
         for facility in facilities:
             facility_id = facility['id']
             facility_type = facility['type']
             region = facility['region']
             
+            # Check if this record should be skipped (missing data)
+            if record_idx in skip_indices:
+                record_idx += 1
+                continue  # Skip this record entirely
+            
             # Base emissions by facility type
             if facility_type == 'Data Center':
-                scope1_base = 150  # Backup generators
-                scope2_location_base = 8000  # Heavy electricity use
+                scope1_base = 150
+                scope2_location_base = 8000
                 scope3_base = 2500
-                electricity_base = 20000  # MWh
-                revenue_base = 50  # $M
+                electricity_base = 20000
+                revenue_base = 50
                 headcount_base = 200
                 sqft_base = 500000
                 servers_base = 10000
@@ -259,6 +278,8 @@ def generate_sustainability_database():
                 grid_ef = 0.386
             elif region == 'US-West':
                 grid_ef = 0.350
+            elif region == 'US-Central':
+                grid_ef = 0.390
             elif region == 'EU':
                 grid_ef = 0.295
             else:  # APAC
@@ -266,12 +287,9 @@ def generate_sustainability_database():
             
             # Apply factors and randomness
             scope1 = scope1_base * winter_factor * growth_factor * np.random.uniform(0.90, 1.10)
-            
             electricity = electricity_base * summer_factor * growth_factor * np.random.uniform(0.95, 1.05)
-            
             scope2_location = electricity * grid_ef
             scope2_market = scope2_location * (1 - renewable_pct)
-            
             scope3 = scope3_base * growth_factor * np.random.uniform(0.90, 1.10)
             
             # Business metrics
@@ -279,7 +297,39 @@ def generate_sustainability_database():
             headcount = int(headcount_base * growth_factor * np.random.uniform(0.98, 1.02))
             sqft = int(sqft_base * np.random.uniform(0.99, 1.01))
             servers = int(servers_base * growth_factor * np.random.uniform(0.95, 1.05))
-            production = revenue * np.random.uniform(0.8, 1.2)  # Proxy
+            production = revenue * np.random.uniform(0.8, 1.2)
+            
+            # Introduce data quality issues
+            if record_idx in error_indices:
+                error_type = np.random.choice(['negative', 'zero', 'extreme', 'wrong_date', 'decimal_error'])
+                
+                if error_type == 'negative':
+                    # Negative emissions (data entry error)
+                    scope1 = -abs(scope1) * np.random.uniform(0.5, 2.0)
+                    
+                elif error_type == 'zero':
+                    # All zeros (system failure/missing upload)
+                    scope1 = 0
+                    scope2_location = 0
+                    scope2_market = 0
+                    scope3 = 0
+                    electricity = 0
+                    
+                elif error_type == 'extreme':
+                    # Outlier - 10x normal value (decimal point error)
+                    scope1 *= 10
+                    electricity *= 10
+                    scope2_location *= 10
+                    scope2_market *= 10
+                    
+                elif error_type == 'wrong_date':
+                    # Wrong date (future or past)
+                    wrong_date = current_date + timedelta(days=np.random.choice([365, -365]))
+                    current_date = wrong_date
+                    
+                elif error_type == 'decimal_error':
+                    # Decimal place error
+                    renewable_pct = min(999.0, renewable_pct * 10)  # 850% instead of 85%
             
             # Store records
             emissions_records.append((
@@ -302,6 +352,8 @@ def generate_sustainability_database():
                 servers,
                 production
             ))
+            
+            record_idx += 1
     
     # Insert emissions data
     cursor.executemany('''
@@ -311,7 +363,7 @@ def generate_sustainability_database():
     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ''', emissions_records)
     
-    print(f"✅ Generated {len(emissions_records)} emission records")
+    print(f"✅ Generated {len(emissions_records)} emission records (with ~3% data quality issues)")
     
     # Insert business metrics
     cursor.executemany('''
@@ -340,13 +392,14 @@ def generate_sustainability_database():
         ROUND(SUM(scope3_tonnes), 0) as total_scope3,
         ROUND(SUM(scope1_tonnes + scope2_market_tonnes + scope3_tonnes), 0) as total_emissions
     FROM emissions_monthly
+    WHERE scope1_tonnes >= 0  -- Exclude negative errors from summary
     ''').fetchone()
     
     print(f"\n📊 Data Generated:")
     print(f"   Facilities:       {summary_stats[0]}")
-    print(f"   Months:           {summary_stats[1]}")
+    print(f"   Months:           70 (Jan 2020 - Oct 2025)")
     print(f"   Total Records:    {summary_stats[2]:,}")
-    print(f"\n📈 Total Emissions (36 months):")
+    print(f"\n📈 Total Emissions (70 months, excluding anomalies):")
     print(f"   Scope 1:          {summary_stats[3]:,.0f} tonnes CO₂e")
     print(f"   Scope 2 (Market): {summary_stats[4]:,.0f} tonnes CO₂e")
     print(f"   Scope 3:          {summary_stats[5]:,.0f} tonnes CO₂e")
@@ -356,14 +409,34 @@ def generate_sustainability_database():
     SELECT 
         ROUND(AVG(scope1_tonnes + scope2_market_tonnes + scope3_tonnes), 0) as avg_monthly
     FROM emissions_monthly
+    WHERE scope1_tonnes >= 0
     ''').fetchone()[0]
     
     print(f"\n💡 Average Monthly Emissions: {avg_monthly:,.0f} tonnes CO₂e")
+    
+    # Data quality summary
+    quality_stats = cursor.execute('''
+    SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN scope1_tonnes < 0 THEN 1 ELSE 0 END) as negative_values,
+        SUM(CASE WHEN scope1_tonnes = 0 AND scope2_market_tonnes = 0 AND scope3_tonnes = 0 THEN 1 ELSE 0 END) as zero_records,
+        SUM(CASE WHEN renewable_pct > 100 THEN 1 ELSE 0 END) as invalid_percentages
+    FROM emissions_monthly
+    ''').fetchone()
+    
+    print(f"\n⚠️  Data Quality Issues (intentional):")
+    print(f"   Total Records:        {quality_stats[0]:,}")
+    print(f"   Negative Values:      {quality_stats[1]} (~{quality_stats[1]/quality_stats[0]*100:.1f}%)")
+    print(f"   Zero Records:         {quality_stats[2]} (~{quality_stats[2]/quality_stats[0]*100:.1f}%)")
+    print(f"   Invalid Percentages:  {quality_stats[3]} (~{quality_stats[3]/quality_stats[0]*100:.1f}%)")
+    print(f"   Missing Records:      ~{int(total_records * 0.02)} (~2.0%)")
     
     conn.close()
     
     print("\n✅ Database generation complete!")
     print(f"📁 Saved to: sustainability_data.db")
+    print(f"📅 Date Range: January 2020 - October 2025 (70 months)")
+    print(f"🏭 Facilities: 20 (9 Data Centers, 7 Offices, 4 Manufacturing)")
     print("\n" + "=" * 80)
 
 if __name__ == "__main__":
