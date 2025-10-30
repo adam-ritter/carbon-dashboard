@@ -16,8 +16,6 @@ st.set_page_config(page_title="AI Forecasting", page_icon="🤖", layout="wide")
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #9b59b6;}</style>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🤖 AI-Powered Forecasting</p>', unsafe_allow_html=True)
 
-arima_line = "- **ARIMA**: Autoregressive Integrated Moving Average with auto-parameter tuning\n" if ARIMA_AVAILABLE else ""
-
 st.markdown("""
 ## Predictive Analytics for Emissions & Operational Metrics
 
