@@ -5,19 +5,30 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from prophet import Prophet
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
-from statsmodels.tsa.statespace.sarimax import SARIMAX
-from pmdarima import auto_arima as pm_auto_arima
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import sys
 sys.path.append('..')
 from utils.data_loader import load_emissions_data, load_combined_metrics, load_targets
+
+# Try to import ARIMA dependencies
+ARIMA_AVAILABLE = False
+try:
+    from statsmodels.tsa.statespace.sarimax import SARIMAX
+    from pmdarima import auto_arima as pm_auto_arima
+    ARIMA_AVAILABLE = True
+except Exception as e:
+    SARIMAX = None
+    pm_auto_arima = None
+    print(f"⚠️ ARIMA not available: {e}")
 
 st.set_page_config(page_title="AI Forecasting", page_icon="🤖", layout="wide")
 
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #9b59b6;}</style>', unsafe_allow_html=True)
 st.markdown('<p class="main-header">🤖 AI-Powered Forecasting</p>', unsafe_allow_html=True)
 
-st.markdown("""
+arima_line = "- **ARIMA**: Autoregressive Integrated Moving Average with auto-parameter tuning\n" if ARIMA_AVAILABLE else ""
+
+st.markdown(f"""
 ## Predictive Analytics for Emissions & Operational Metrics
 
 Use advanced time series models to forecast future emissions and operational performance 
@@ -25,8 +36,7 @@ under different scenarios.
 
 **Models Available:**
 - **Prophet**: Facebook's robust forecasting with seasonality and trends
-- **ARIMA**: Autoregressive Integrated Moving Average with auto-parameter tuning
-- **Holt-Winters**: Exponential smoothing with seasonal components
+{arima_line}- **Holt-Winters**: Exponential smoothing with seasonal components
 - **Scenario Analysis**: Business-as-usual vs decarbonization strategies
 """)
 
@@ -73,14 +83,21 @@ try:
     data_source, target_col = forecast_target_options[forecast_target]
     
     # Model selection
+    available_models = ["Prophet", "Holt-Winters"]
+    if ARIMA_AVAILABLE:
+        available_models.insert(1, "ARIMA")
+
     model_type = st.sidebar.selectbox(
         "Model Type",
-        ["Prophet", "ARIMA", "Holt-Winters"],
+        available_models,
         help="Select forecasting algorithm"
     )
 
+    if not ARIMA_AVAILABLE:
+        st.sidebar.info("ARIMA unavailable (library compatibility issue)")
+
     # ARIMA parameters (only show if ARIMA selected)
-    if model_type == "ARIMA":
+    if model_type == "ARIMA" and ARIMA_AVAILABLE:
         st.sidebar.markdown("**ARIMA Parameters:**")
         arima_p = st.sidebar.slider("p (AR order)", 0, 5, 1, help="Autoregressive order")
         arima_d = st.sidebar.slider("d (Differencing)", 0, 2, 1, help="Degree of differencing")
@@ -209,6 +226,10 @@ try:
             forecast = model.predict(future_dates)
             
         elif model_type == "ARIMA":
+            if not ARIMA_AVAILABLE:
+                st.error("ARIMA is unavailable due to library incompatibility")
+                st.info("Please select Prophet or Holt-Winters instead")
+                st.stop()
             
             try:
                 if auto_arima:
