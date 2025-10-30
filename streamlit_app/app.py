@@ -276,7 +276,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_scope, width = 'stretch'
+        st.plotly_chart(fig_scope, width = 'stretch')
     
     with col2:
         # Scope breakdown percentages
@@ -305,7 +305,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_pie, width = 'stretch'
+        st.plotly_chart(fig_pie, width = 'stretch')
 
 except Exception as e:
     st.warning(f"Unable to load summary statistics: {e}")

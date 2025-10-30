@@ -5,21 +5,11 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from prophet import Prophet
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
+from statsmodels.tsa.statespace.sarimax import SARIMAX
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 import sys
 sys.path.append('..')
 from utils.data_loader import load_emissions_data, load_combined_metrics, load_targets
-
-# Try to import ARIMA dependencies
-ARIMA_AVAILABLE = False
-try:
-    from statsmodels.tsa.statespace.sarimax import SARIMAX
-    from pmdarima import auto_arima as pm_auto_arima
-    ARIMA_AVAILABLE = True
-except Exception as e:
-    SARIMAX = None
-    pm_auto_arima = None
-    print(f"⚠️ ARIMA not available: {e}")
 
 st.set_page_config(page_title="AI Forecasting", page_icon="🤖", layout="wide")
 
@@ -28,7 +18,7 @@ st.markdown('<p class="main-header">🤖 AI-Powered Forecasting</p>', unsafe_all
 
 arima_line = "- **ARIMA**: Autoregressive Integrated Moving Average with auto-parameter tuning\n" if ARIMA_AVAILABLE else ""
 
-st.markdown(f"""
+st.markdown("""
 ## Predictive Analytics for Emissions & Operational Metrics
 
 Use advanced time series models to forecast future emissions and operational performance 
@@ -36,8 +26,13 @@ under different scenarios.
 
 **Models Available:**
 - **Prophet**: Facebook's robust forecasting with seasonality and trends
-{arima_line}- **Holt-Winters**: Exponential smoothing with seasonal components
+- **ARIMA/SARIMA**: Classical statistical forecasting with customizable parameters
+- **Holt-Winters**: Exponential smoothing with seasonal components
 - **Scenario Analysis**: Business-as-usual vs decarbonization strategies
+
+**ARIMA Tuning:**
+- Use **Recommended Defaults** for quick, reliable results
+- Use **Custom Parameters** to experiment and optimize via AIC/BIC scores
 """)
 
 st.markdown("---")
@@ -83,31 +78,46 @@ try:
     data_source, target_col = forecast_target_options[forecast_target]
     
     # Model selection
-    available_models = ["Prophet", "Holt-Winters"]
-    if ARIMA_AVAILABLE:
-        available_models.insert(1, "ARIMA")
-
     model_type = st.sidebar.selectbox(
         "Model Type",
-        available_models,
+        ["Prophet", "ARIMA", "Holt-Winters"],
         help="Select forecasting algorithm"
     )
 
-    if not ARIMA_AVAILABLE:
-        st.sidebar.info("ARIMA unavailable (library compatibility issue)")
-
     # ARIMA parameters (only show if ARIMA selected)
-    if model_type == "ARIMA" and ARIMA_AVAILABLE:
-        st.sidebar.markdown("**ARIMA Parameters:**")
-        arima_p = st.sidebar.slider("p (AR order)", 0, 5, 1, help="Autoregressive order")
-        arima_d = st.sidebar.slider("d (Differencing)", 0, 2, 1, help="Degree of differencing")
-        arima_q = st.sidebar.slider("q (MA order)", 0, 5, 1, help="Moving average order")
-    
-        auto_arima = st.sidebar.checkbox(
-            "Auto ARIMA",
-            value=True,
-            help="Automatically find best (p,d,q) parameters"
+    if model_type == "ARIMA":
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("**ARIMA Configuration**")
+        
+        # Offer preset or custom
+        arima_mode = st.sidebar.radio(
+            "Parameter Selection",
+            ["Recommended Defaults", "Custom Parameters"],
+            help="Use proven defaults or tune manually"
         )
+        
+        if arima_mode == "Custom Parameters":
+            st.sidebar.markdown("**Non-Seasonal (p, d, q):**")
+            arima_p = st.sidebar.slider("p (AR order)", 0, 5, 1, 
+                                       help="Autoregressive order - how many past values")
+            arima_d = st.sidebar.slider("d (Differencing)", 0, 2, 1, 
+                                       help="Differencing order - make data stationary")
+            arima_q = st.sidebar.slider("q (MA order)", 0, 5, 1, 
+                                       help="Moving average order - past forecast errors")
+            
+            st.sidebar.markdown("**Seasonal (P, D, Q, s):**")
+            seasonal_p = st.sidebar.slider("P (Seasonal AR)", 0, 2, 1)
+            seasonal_d = st.sidebar.slider("D (Seasonal Diff)", 0, 1, 1)
+            seasonal_q = st.sidebar.slider("Q (Seasonal MA)", 0, 2, 1)
+            seasonal_m = 12  # Monthly data
+        else:
+            # Recommended defaults for business time series
+            arima_p, arima_d, arima_q = 1, 1, 1
+            seasonal_p, seasonal_d, seasonal_q = 1, 1, 1
+            seasonal_m = 12
+            
+            st.sidebar.success("Using: ARIMA(1,1,1)×(1,1,1,12)")
+            st.sidebar.info("Good for most business data with monthly seasonality")
     
     # Forecast horizon
     forecast_months = st.sidebar.slider(
@@ -226,80 +236,71 @@ try:
             forecast = model.predict(future_dates)
             
         elif model_type == "ARIMA":
-            if not ARIMA_AVAILABLE:
-                st.error("ARIMA is unavailable due to library incompatibility")
-                st.info("Please select Prophet or Holt-Winters instead")
-                st.stop()
-            
             try:
-                if auto_arima:
-                    # Auto ARIMA to find best parameters
-                    st.info("🔍 Searching for optimal ARIMA parameters...")
+                # Display model configuration
+                st.info(f"📊 Training SARIMA({arima_p},{arima_d},{arima_q})×({seasonal_p},{seasonal_d},{seasonal_q},{seasonal_m})")
+                
+                # Fit SARIMAX model
+                model = SARIMAX(
+                    train_data[target_col],
+                    order=(arima_p, arima_d, arima_q),
+                    seasonal_order=(seasonal_p, seasonal_d, seasonal_q, seasonal_m),
+                    enforce_stationarity=False,
+                    enforce_invertibility=False
+                )
+                
+                model_fit = model.fit(disp=False, maxiter=200)
+                
+                # Display model diagnostics
+                with st.expander("📈 Model Diagnostics", expanded=False):
+                    col1, col2, col3 = st.columns(3)
                     
-                    auto_model = pm_auto_arima(
-                        train_data[target_col],
-                        seasonal=True,
-                        m=12,  # Monthly seasonality
-                        stepwise=True,
-                        suppress_warnings=True,
-                        error_action='ignore',
-                        max_order=5,
-                        trace=False
-                    )
+                    with col1:
+                        st.metric("AIC", f"{model_fit.aic:.0f}", 
+                                 help="Akaike Information Criterion - Lower is better")
                     
-                    best_order = auto_model.order
-                    best_seasonal = auto_model.seasonal_order
+                    with col2:
+                        st.metric("BIC", f"{model_fit.bic:.0f}",
+                                 help="Bayesian Information Criterion - Lower is better")
                     
-                    st.success(f"✅ Best ARIMA{best_order} x {best_seasonal} found!")
+                    with col3:
+                        st.metric("Log Likelihood", f"{model_fit.llf:.0f}")
                     
-                    # Fit SARIMAX with best parameters
-                    model = SARIMAX(
-                        train_data[target_col],
-                        order=best_order,
-                        seasonal_order=best_seasonal,
-                        enforce_stationarity=False,
-                        enforce_invertibility=False
-                    ).fit(disp=False)
-                    
-                else:
-                    # Use manual parameters
-                    st.info(f"📊 Training ARIMA({arima_p},{arima_d},{arima_q})")
-                    
-                    model = SARIMAX(
-                        train_data[target_col],
-                        order=(arima_p, arima_d, arima_q),
-                        seasonal_order=(1, 1, 1, 12),  # Seasonal ARIMA
-                        enforce_stationarity=False,
-                        enforce_invertibility=False
-                    ).fit(disp=False)
+                    st.markdown("**Interpretation:**")
+                    st.markdown("- Lower AIC/BIC = Better model fit")
+                    st.markdown("- Compare different parameter combinations")
+                    st.markdown("- Typical AIC range: 500-5000 depending on data scale")
                 
                 # Predict on test set
-                test_pred_values = model.forecast(steps=len(test_data))
+                test_pred_values = model_fit.forecast(steps=len(test_data))
                 
                 # Forecast future
-                forecast_values = model.forecast(steps=len(test_data) + forecast_months)
+                forecast_steps = len(test_data) + forecast_months
+                forecast_result = model_fit.get_forecast(steps=forecast_steps)
+                forecast_values = forecast_result.predicted_mean
+                forecast_ci = forecast_result.conf_int()
                 
                 # Create forecast dataframe
                 future_dates = pd.date_range(
                     start=train_data['date'].iloc[-1],
-                    periods=len(forecast_values) + 1,
+                    periods=forecast_steps + 1,
                     freq='M'
                 )[1:]
                 
-                # Calculate confidence intervals
-                forecast_result = model.get_forecast(steps=len(forecast_values))
-                forecast_ci = forecast_result.conf_int()
-                
                 forecast = pd.DataFrame({
                     'ds': future_dates,
-                    'yhat': forecast_values,
-                    'yhat_lower': forecast_ci.iloc[:, 0],
-                    'yhat_upper': forecast_ci.iloc[:, 1]
+                    'yhat': forecast_values.values,
+                    'yhat_lower': forecast_ci.iloc[:, 0].values,
+                    'yhat_upper': forecast_ci.iloc[:, 1].values
                 })
                 
             except Exception as e:
-                st.error(f"ARIMA failed: {e}")
-                st.info("Try adjusting parameters or use Auto ARIMA")
+                st.error(f"❌ ARIMA model failed: {str(e)}")
+                st.warning("**Troubleshooting tips:**")
+                st.markdown("- Try different (p,d,q) values")
+                st.markdown("- Reduce differencing (d) if data is already stationary")
+                st.markdown("- Start with simpler model: (1,1,1)×(0,0,0,0)")
+                st.markdown("- Or switch to Prophet/Holt-Winters")
                 st.stop()
         
         else:  # Holt-Winters
