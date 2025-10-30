@@ -1033,10 +1033,12 @@ try:
             
             # Estimate investments based on industry standards
             investment_breakdown = []
+
+            #count data centers
+            num_dc = len(data[data['facility_type'] == 'Data Center']['facility_id'].unique())
             
             if pue_improvement > 0:
                 # PUE improvement typically costs $300-500K per 0.01 improvement per data center
-                num_dc = len(data[data['facility_type'] == 'Data Center']['facility_id'].unique())
                 pue_investment = pue_improvement * 400 * num_dc  # $K
                 investment_breakdown.append(('PUE Efficiency Upgrades', pue_investment))
             else:
