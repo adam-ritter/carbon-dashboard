@@ -7,6 +7,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
+import os
 
 def generate_sustainability_database():
     """Generate complete sustainability database with realistic data"""
@@ -18,6 +19,12 @@ def generate_sustainability_database():
     print("=" * 80)
     print("GENERATING CORPORATE SUSTAINABILITY DATABASE")
     print("=" * 80)
+
+    # delete existing database, if it exists
+    db_path = 'sustainability_data.db'
+    if os.path.exists(db_path):
+        print(f"Removing existing database: {db_path}")
+        os.remove(db_path)
     
     # Create schema
     print("\n📊 Creating database schema...")
