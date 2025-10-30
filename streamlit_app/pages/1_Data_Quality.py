@@ -528,7 +528,6 @@ try:
                 3. Original raw data is preserved in `sustainability_data.db`
                 """)
                 
-                st.balloons()
     
     elif use_cleaned:
         st.success("""
