@@ -162,7 +162,7 @@ with col1:
     - **SQL Database**: GHG Protocol schema
     - **Tables**: Scope 1/2/3, facilities, targets
     - **Queries**: Optimized for analytics
-    - **Validation**: Issue detection and classification
+    - **Integration**: REST API ready
     """)
 
 with col2:
@@ -191,13 +191,13 @@ st.markdown("## 📍 Navigate the Platform")
 st.markdown("""
 Use the **sidebar** to access different analysis modules:
 
-1. **💾 Data Quality** - Comprehensive data quality dashboard
-2. **📊 Emissions Overview** - Dashboard with key metrics and trends
-3. **🔬 Scope Analysis** - Deep dive into Scope 1, 2, and 3 emissions
-4. **🤖 AI Forecasting** - 12-month emissions predictions
-5. **🚨 Anomaly Detection** - Automated data quality checks
-6. **📈 Driver Analysis** - Business metric correlation and SHAP
-7. **🏭 Facility Clustering** - Peer group segmentation
+1. **📊 Emissions Overview** - Dashboard with key metrics and trends
+2. **🔬 Scope Analysis** - Deep dive into Scope 1, 2, and 3 emissions
+3. **🤖 AI Forecasting** - 12-month emissions predictions
+4. **🚨 Anomaly Detection** - Automated data quality checks
+5. **📈 Driver Analysis** - Business metric correlation and SHAP
+6. **🏭 Facility Clustering** - Peer group segmentation
+7. **💾 Data Quality** - Comprehensive data quality dashboard
 """)
 
 # Call to action
