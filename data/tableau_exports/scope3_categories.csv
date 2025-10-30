@@ -1,0 +1,9 @@
+category_id,category_name,description,typical_pct_of_scope3
+1,Purchased Goods & Services,"Servers, networking equipment, construction materials",45.0
+2,Capital Goods,"Data center construction, major equipment",15.0
+3,Fuel & Energy Related,Upstream emissions from electricity generation,8.0
+4,Upstream Transportation,Logistics and distribution,3.0
+6,Business Travel,"Employee air travel, hotels",2.0
+7,Employee Commute,Daily commuting,1.0
+11,Use of Sold Products,Customer use of cloud services,25.0
+15,Investments,Equity investments,1.0

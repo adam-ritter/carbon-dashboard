@@ -1,0 +1,21 @@
+facility_id,facility_name,region,facility_type,operational_start_date
+DC-NL-001,Amsterdam Data Center,EU,Data Center,2020-01-01
+OFF-TX-001,Austin Office,US-Central,Office,2020-01-01
+OFF-DE-001,Berlin Office,EU,Office,2020-01-01
+DC-CA-001,California Data Center,US-West,Data Center,2020-01-01
+DC-IE-001,Dublin Data Center,EU,Data Center,2020-01-01
+OFF-UK-001,London Office,EU,Office,2020-01-01
+OFF-NY-001,New York Office,US-East,Office,2020-01-01
+DC-OR-001,Oregon Data Center,US-West,Data Center,2020-01-01
+MFG-PL-001,Poland Manufacturing,EU,Manufacturing,2020-01-01
+OFF-CA-001,San Francisco Office,US-West,Office,2020-01-01
+OFF-WA-001,Seattle Campus,US-West,Office,2020-01-01
+MFG-CN-001,Shenzhen Manufacturing,APAC,Manufacturing,2020-01-01
+DC-SG-001,Singapore Data Center,APAC,Data Center,2020-01-01
+OFF-SG-001,Singapore Office,APAC,Office,2020-01-01
+DC-TX-001,Texas Data Center,US-Central,Data Center,2020-01-01
+MFG-MX-001,Tijuana Manufacturing,US-Central,Manufacturing,2020-01-01
+DC-JP-001,Tokyo Data Center,APAC,Data Center,2020-01-01
+MFG-VN-001,Vietnam Manufacturing,APAC,Manufacturing,2020-01-01
+DC-VA-001,Virginia Data Center,US-East,Data Center,2020-01-01
+DC-VA-002,Virginia Data Center 2,US-East,Data Center,2020-01-01

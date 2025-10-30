@@ -1,0 +1,3 @@
+scope,baseline_year,baseline_emissions,target_year,reduction_percent,target_emissions,sbti_aligned
+Scope 1 & 2,2020,3000000.0,2030,50.0,1500000.0,1
+Scope 3,2020,11000000.0,2030,30.0,7700000.0,1
