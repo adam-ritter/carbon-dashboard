@@ -191,8 +191,8 @@ def generate_sustainability_database():
     # Generate time series data (36 months)
     print("\n📅 Generating 36 months of emissions data...")
     
-    start_date = datetime(2022, 1, 1)
-    months = 36
+    start_date = datetime(2021, 1, 1)
+    months = 54
     
     emissions_records = []
     business_records = []
