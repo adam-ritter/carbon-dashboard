@@ -1123,9 +1123,14 @@ try:
             
             col1, col2, col3, col4 = st.columns(4)
             
+            # Calculate payback outside the column context
+            if total_investment > 0 and total_annual_returns > 0:
+                payback = total_investment / total_annual_returns
+            else:
+                payback = None
+            
             with col1:
-                if total_investment > 0 and total_annual_returns > 0:
-                    payback = total_investment / total_annual_returns
+                if payback is not None:
                     st.metric("Simple Payback", f"{payback:.1f} years")
                 else:
                     st.metric("Simple Payback", "N/A")
@@ -1207,7 +1212,7 @@ try:
                 if total_annual_returns > 1000:
                     st.markdown(f"✅ Generated ${total_annual_returns:,.0f}K annual value - strong business case")
                 
-                if payback < 3:
+                if payback is not None and payback < 3:
                     st.markdown(f"✅ {payback:.1f} year payback - exceeds typical corporate hurdle rates")
             
             with col2:
