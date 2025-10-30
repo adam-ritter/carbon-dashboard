@@ -542,12 +542,18 @@ try:
             min_value = X[feature].min()
             max_value = X[feature].max()
             
+            #fix error with step=0
+            if max_val>min_val:
+                step_size = float((max_value - min_value) / 100)
+            else:
+                step_size = 0.01
+
             scenario_values[feature] = st.slider(
                 display_name,
                 min_value=float(min_value),
                 max_value=float(max_value),
                 value=float(avg_value),
-                step=float((max_value - min_value) / 100),
+                step=step_size,
                 format="%.2f"
             )
     
