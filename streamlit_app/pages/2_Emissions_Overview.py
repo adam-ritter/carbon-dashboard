@@ -8,14 +8,6 @@ sys.path.append('..')
 from utils.data_loader import load_emissions_data, load_facilities
 import sys
 sys.path.append('..')
-from utils.data_loader import get_data_quality_status
-
-# Show data quality status
-data_status = get_data_quality_status()
-if data_status['using_cleaned']:
-    st.success(f"✅ Using {data_status['database_name']} Database - Quality issues have been resolved")
-else:
-    st.warning(f"⚠️ Using {data_status['database_name']} Database - Contains ~5% quality issues. Visit Data Quality page to generate cleaned data.")
 
 st.set_page_config(page_title="Emissions Overview", page_icon="📊", layout="wide")
 

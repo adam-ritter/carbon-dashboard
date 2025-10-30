@@ -217,12 +217,6 @@ def generate_sustainability_database():
     emissions_records = []
     business_records = []
     
-    # Track which records to corrupt for data quality issues
-    np.random.seed(42)  # For reproducible "errors"
-    total_records = len(facilities) * months
-    error_indices = np.random.choice(total_records, size=int(total_records * 0.03), replace=False)  # 3% error rate
-    skip_indices = np.random.choice(total_records, size=int(total_records * 0.02), replace=False)  # 2% missing data
-    
     record_idx = 0
     
     for month_offset in range(months):
@@ -243,11 +237,6 @@ def generate_sustainability_database():
             facility_id = facility['id']
             facility_type = facility['type']
             region = facility['region']
-            
-            # Check if this record should be skipped (missing data)
-            if record_idx in skip_indices:
-                record_idx += 1
-                continue  # Skip this record entirely
             
             # Base emissions by facility type
             if facility_type == 'Data Center':
@@ -305,38 +294,6 @@ def generate_sustainability_database():
             sqft = int(sqft_base * np.random.uniform(0.99, 1.01))
             servers = int(servers_base * growth_factor * np.random.uniform(0.95, 1.05))
             production = revenue * np.random.uniform(0.8, 1.2)
-            
-            # Introduce data quality issues
-            if record_idx in error_indices:
-                error_type = np.random.choice(['negative', 'zero', 'extreme', 'wrong_date', 'decimal_error'])
-                
-                if error_type == 'negative':
-                    # Negative emissions (data entry error)
-                    scope1 = -abs(scope1) * np.random.uniform(0.5, 2.0)
-                    
-                elif error_type == 'zero':
-                    # All zeros (system failure/missing upload)
-                    scope1 = 0
-                    scope2_location = 0
-                    scope2_market = 0
-                    scope3 = 0
-                    electricity = 0
-                    
-                elif error_type == 'extreme':
-                    # Outlier - 10x normal value (decimal point error)
-                    scope1 *= 10
-                    electricity *= 10
-                    scope2_location *= 10
-                    scope2_market *= 10
-                    
-                elif error_type == 'wrong_date':
-                    # Wrong date (future or past)
-                    wrong_date = current_date + timedelta(days=int(np.random.choice([365, -365])))
-                    current_date = wrong_date
-                    
-                elif error_type == 'decimal_error':
-                    # Decimal place error
-                    renewable_pct = min(999.0, renewable_pct * 10)  # 850% instead of 85%
             
             # Store records
             emissions_records.append((
@@ -420,23 +377,6 @@ def generate_sustainability_database():
     ''').fetchone()[0]
     
     print(f"\n💡 Average Monthly Emissions: {avg_monthly:,.0f} tonnes CO₂e")
-    
-    # Data quality summary
-    quality_stats = cursor.execute('''
-    SELECT 
-        COUNT(*) as total,
-        SUM(CASE WHEN scope1_tonnes < 0 THEN 1 ELSE 0 END) as negative_values,
-        SUM(CASE WHEN scope1_tonnes = 0 AND scope2_market_tonnes = 0 AND scope3_tonnes = 0 THEN 1 ELSE 0 END) as zero_records,
-        SUM(CASE WHEN renewable_pct > 100 THEN 1 ELSE 0 END) as invalid_percentages
-    FROM emissions_monthly
-    ''').fetchone()
-    
-    print(f"\n⚠️  Data Quality Issues (intentional):")
-    print(f"   Total Records:        {quality_stats[0]:,}")
-    print(f"   Negative Values:      {quality_stats[1]} (~{quality_stats[1]/quality_stats[0]*100:.1f}%)")
-    print(f"   Zero Records:         {quality_stats[2]} (~{quality_stats[2]/quality_stats[0]*100:.1f}%)")
-    print(f"   Invalid Percentages:  {quality_stats[3]} (~{quality_stats[3]/quality_stats[0]*100:.1f}%)")
-    print(f"   Missing Records:      ~{int(total_records * 0.02)} (~2.0%)")
     
     conn.close()
     
