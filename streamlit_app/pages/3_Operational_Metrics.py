@@ -201,7 +201,7 @@ try:
                 hovermode='x unified'
             )
             
-            st.plotly_chart(fig_pue_trend, width = 'stretch)
+            st.plotly_chart(fig_pue_trend, width = 'stretch'
             
             # Calculate improvement
             if len(monthly_pue) >= 2:
@@ -242,7 +242,7 @@ try:
                 showlegend=False
             )
             
-            st.plotly_chart(fig_pue_facility, width = 'stretch)
+            st.plotly_chart(fig_pue_facility, width = 'stretch'
         
         # PUE insights
         best_facility = facility_pue.index[0]
@@ -307,7 +307,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_cfe_trend, width = 'stretch)
+        st.plotly_chart(fig_cfe_trend, width = 'stretch'
     
     with col2:
         # CFE by region
@@ -337,7 +337,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_cfe_region, width = 'stretch)
+        st.plotly_chart(fig_cfe_region, width = 'stretch'
     
     # CFE insights
     current_cfe = monthly_cfe['cfe_pct'].iloc[-1] * 100
@@ -405,7 +405,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_water, width = 'stretch)
+        st.plotly_chart(fig_water, width = 'stretch'
     
     with col2:
         # Water intensity by facility type
@@ -432,7 +432,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_water_intensity, width = 'stretch)
+        st.plotly_chart(fig_water_intensity, width = 'stretch'
     
     # Water replenishment progress
     current_replen = monthly_water['water_replenishment_pct'].iloc[-1] * 100
@@ -495,7 +495,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_waste, width = 'stretch)
+        st.plotly_chart(fig_waste, width = 'stretch'
     
     with col2:
         # Diversion rate trend
@@ -530,7 +530,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_diversion, width = 'stretch)
+        st.plotly_chart(fig_diversion, width = 'stretch'
     
     # Waste insights
     current_diversion = monthly_waste['waste_diversion_pct'].iloc[-1] * 100
@@ -596,7 +596,7 @@ try:
             height=500
         )
         
-        st.plotly_chart(fig_radar, width = 'stretch)
+        st.plotly_chart(fig_radar, width = 'stretch'
         
         # Overall score
         overall_score = sum(scores) / len(scores)
