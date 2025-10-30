@@ -199,7 +199,7 @@ try:
             showlegend=True
         )
         
-        st.plotly_chart(fig_pred, use_container_width=True)
+        st.plotly_chart(fig_pred, width = 'stretch)
     
     with col2:
         # Residuals
@@ -224,7 +224,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_res, use_container_width=True)
+        st.plotly_chart(fig_res, width = 'stretch)
     
     st.markdown("---")
     
@@ -259,7 +259,7 @@ try:
             yaxis={'categoryorder': 'total ascending'}
         )
         
-        st.plotly_chart(fig_importance, use_container_width=True)
+        st.plotly_chart(fig_importance, width = 'stretch)
         
         # Insights
         top_feature = feature_importance_df.iloc[0]
@@ -302,7 +302,7 @@ try:
                 yaxis={'categoryorder': 'total ascending'}
             )
             
-            st.plotly_chart(fig_coef, use_container_width=True)
+            st.plotly_chart(fig_coef, width = 'stretch)
     
     st.markdown("---")
     
@@ -350,7 +350,7 @@ try:
                     yaxis={'categoryorder': 'total ascending'}
                 )
                 
-                st.plotly_chart(fig_shap, use_container_width=True)
+                st.plotly_chart(fig_shap, width = 'stretch)
             
             with col2:
                 st.markdown("**SHAP Interpretation:**")

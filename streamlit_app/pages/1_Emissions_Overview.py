@@ -517,7 +517,7 @@ try:
                         hovermode='x unified'
                     )
                     
-                    st.plotly_chart(fig_intensity_energy, use_container_width=True)
+                    st.plotly_chart(fig_intensity_energy, width = 'stretch)
                     
                     # Calculate improvement
                     if len(monthly_intensity) >= 2:
@@ -564,7 +564,7 @@ try:
                         hovermode='x unified'
                     )
                     
-                    st.plotly_chart(fig_intensity_water, use_container_width=True)
+                    st.plotly_chart(fig_intensity_water, width = 'stretch)
                     
                     # Water efficiency insight
                     if len(monthly_intensity) >= 2:
@@ -618,7 +618,7 @@ try:
                         ]
                     })
                     
-                    st.dataframe(comparison_df, use_container_width=True)
+                    st.dataframe(comparison_df, width = 'stretch)
                     
                     st.info("""
                     **Key Insight:** While absolute emissions may increase with business growth (more data centers, 

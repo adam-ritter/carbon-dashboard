@@ -209,7 +209,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_cf, use_container_width=True)
+        st.plotly_chart(fig_cf, width = 'stretch)
         
         if npv > 0:
             st.success(f"✅ **Positive NPV: ${npv:,.0f}K** - Financially attractive investment")
@@ -252,7 +252,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_sens, use_container_width=True)
+        st.plotly_chart(fig_sens, width = 'stretch)
         
         st.info("""
         **Investment Decision Framework:**
@@ -393,7 +393,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_cost, use_container_width=True)
+        st.plotly_chart(fig_cost, width = 'stretch)
         
         # Carbon pricing scenarios
         st.markdown("---")
@@ -427,7 +427,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_carbon, use_container_width=True)
+        st.plotly_chart(fig_carbon, width = 'stretch)
         
         # Find break-even carbon price
         if ppa_price > grid_price:
@@ -591,7 +591,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_region, use_container_width=True)
+        st.plotly_chart(fig_region, width = 'stretch)
         
         st.markdown("---")
         
@@ -644,7 +644,7 @@ try:
         )
         
         fig_scenarios.update_layout(height=400, template='plotly_white')
-        st.plotly_chart(fig_scenarios, use_container_width=True)
+        st.plotly_chart(fig_scenarios, width = 'stretch)
         
         # Total impact
         st.markdown("---")
@@ -746,7 +746,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_macc, use_container_width=True)
+        st.plotly_chart(fig_macc, width = 'stretch)
         
         st.markdown("---")
         
@@ -771,7 +771,7 @@ try:
             'Capital Required ($M)': '${:.0f}'
         })
         
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(styled_df, width = 'stretch)
         
         st.markdown("---")
         
@@ -838,7 +838,7 @@ try:
                     'Annual Reduction (k tonnes)': '{:.0f}',
                     'Capital Required ($M)': '${:.0f}'
                 }),
-                use_container_width=True
+                width = 'stretch
             )
             
             # Implementation timeline
@@ -880,7 +880,7 @@ try:
                 showlegend=False
             )
             
-            st.plotly_chart(fig_timeline, use_container_width=True)
+            st.plotly_chart(fig_timeline, width = 'stretch)
             
             # Cumulative impact
             st.markdown("---")
@@ -914,7 +914,7 @@ try:
                 template='plotly_white'
             )
             
-            st.plotly_chart(fig_impact, use_container_width=True)
+            st.plotly_chart(fig_impact, width = 'stretch)
             
             st.success(f"""
             **Portfolio Summary:**
