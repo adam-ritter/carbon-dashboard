@@ -324,7 +324,7 @@ def generate_sustainability_database():
                     
                 elif error_type == 'wrong_date':
                     # Wrong date (future or past)
-                    wrong_date = current_date + timedelta(days=np.random.choice([365, -365]))
+                    wrong_date = current_date + timedelta(days=int(np.random.choice([365, -365])))
                     current_date = wrong_date
                     
                 elif error_type == 'decimal_error':
