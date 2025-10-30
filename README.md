@@ -1,201 +1,409 @@
-# Corporate Carbon Dashboard
+# 🌍 Corporate Sustainability Analytics Platform
 
-## 🎯 Purpose
+A production-ready analytics dashboard for corporate carbon accounting, operational efficiency tracking, and decarbonization strategy planning. Built with real environmental report data (2020-2024).
 
-AI-powered sustainability analytics platform for corporate GHG Protocol reporting and environmental accounting. Built to showcase **ML/AI integration**, **SQL proficiency**, and **sustainability domain expertise** for technical program management roles in corporate sustainability.
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-## 🚀 Key Features
+---
 
-### Machine Learning & AI
-- **🤖 Time Series Forecasting**: Prophet & Holt-Winters for 12-month emissions predictions
-- **🚨 Anomaly Detection**: Isolation Forest & statistical methods for automated data quality
-- **📈 Regression Analysis**: Multi-model comparison with SHAP explainability for driver identification
-- **🏭 Facility Clustering**: K-means segmentation for peer group benchmarking
+## 🎯 Project Overview
 
-### Data & Analytics
-- **💾 SQL Database**: GHG Protocol-compliant schema (Scope 1/2/3)
-- **📊 Interactive Dashboards**: Streamlit app + Tableau integration
-- **📈 Real-time Calculations**: Live scenario modeling and forecasting
-- **📤 Export Capabilities**: CSV, reports, and API-ready data
+This platform demonstrates enterprise-grade sustainability analytics capabilities:
 
-### Business Value
-- **Automated Insights**: ML-powered recommendations reduce manual analysis by 80%
-- **Early Warning**: Predictive models flag target misses 6+ months ahead
-- **Data Quality**: Anomaly detection catches errors before they reach executive reports
-- **Tailored Strategies**: Clustering enables facility-specific reduction plans
+- **📊 Data Engineering**: ETL pipeline processing real environmental reports
+- **🤖 Machine Learning**: Time series forecasting with Prophet, ARIMA, and Holt-Winters
+- **💰 Financial Modeling**: ROI analysis, cost curves, scenario planning
+- **⚡ Operational Metrics**: PUE, CFE, water intensity, waste circularity
+- **📈 Interactive Dashboards**: 5 comprehensive analysis pages
 
-## 🛠️ Technology Stack
+**Key Differentiator:** Uses actual tech company environmental report data (2020-2024), not synthetic datasets.
 
-**Core:**
-- Python 3.10+
-- SQLite/PostgreSQL
-- Streamlit
-- Pandas, NumPy
-
-**ML/AI:**
-- Scikit-learn (Isolation Forest, Random Forest, Gradient Boosting)
-- Prophet (Facebook's time series forecasting)
-- SHAP (Model explainability)
-- Statsmodels (Statistical analysis)
-
-**Visualization:**
-- Plotly (Interactive charts)
-- Matplotlib/Seaborn (Statistical plots)
-- Tableau (Executive reporting)
-
-## 📊 ML Models Implemented
-
-### 1. Time Series Forecasting
-- **Algorithm**: Prophet, Holt-Winters Exponential Smoothing
-- **Input**: 36 months historical emissions
-- **Output**: 12-month forecast with 95% confidence intervals
-- **Performance**: MAPE < 10% on test set
-- **Business Use**: Budget planning, target setting, early warning
-
-### 2. Anomaly Detection
-- **Algorithm**: Isolation Forest (unsupervised ML)
-- **Input**: Multi-dimensional facility emissions data
-- **Output**: Anomaly scores and flags
-- **Performance**: 5% false positive rate
-- **Business Use**: Data quality assurance, operational issue detection
-
-### 3. Emissions Driver Analysis
-- **Algorithms**: Linear Regression, Ridge, Random Forest, Gradient Boosting
-- **Input**: Emissions + business metrics (revenue, headcount, etc.)
-- **Output**: Feature importance rankings, SHAP values
-- **Performance**: R² > 0.85 on test set
-- **Business Use**: Identify which business metrics drive emissions, target high-impact areas
-
-### 4. Facility Clustering
-- **Algorithm**: K-means clustering with PCA visualization
-- **Input**: Facility characteristics (emissions, intensity, renewable %)
-- **Output**: 4 facility archetypes/peer groups
-- **Performance**: Clear cluster separation, actionable segments
-- **Business Use**: Benchmarking, tailored reduction strategies, best practice sharing
-
-## 📁 Project Structure
-```
-corporate-carbon-dashboard/
-├── streamlit_app/
-│   ├── app.py                           # Main landing page
-│   ├── pages/
-│   │   ├── 1_📊_Emissions_Overview.py
-│   │   ├── 2_🔬_Scope_Analysis.py
-│   │   ├── 3_🤖_AI_Forecasting.py       # ML: Time series
-│   │   ├── 4_🚨_Anomaly_Detection.py    # ML: Outlier detection
-│   │   ├── 5_📈_Driver_Analysis.py      # ML: Regression + SHAP
-│   │   ├── 6_🏭_Facility_Clustering.py  # ML: K-means
-│   │   └── 7_💾_Data_Quality.py
-│   ├── utils/
-│   │   ├── data_loader.py               # SQL queries
-│   │   └── ml_models.py                 # ML model classes
-│   └── requirements.txt
-├── data/
-│   ├── sustainability_data.db           # SQLite database
-│   └── generate_sample_data.py          # Data generation script
-├── tableau/
-│   ├── executive_dashboard.twbx
-│   └── screenshots/
-├── sql/
-│   ├── schema.sql                       # Database schema
-│   └── queries.sql                      # Analysis queries
-└── README.md
-```
+---
 
 ## 🚀 Quick Start
 
-### 1. Clone Repository
+### Prerequisites
+
+- Python 3.10 or higher
+- Conda (recommended) or pip
+- Git
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/corporate-carbon-dashboard.git
-cd corporate-carbon-dashboard
+git clone https://github.com/yourusername/carbon-dashboard.git
+cd carbon-dashboard
 ```
 
-### 2. Install Dependencies
+2. **Create a virtual environment**
+
+**Using Conda (recommended):**
 ```bash
-pip install -r streamlit_app/requirements.txt
+conda create -n climate-portfolio python=3.10 -y
+conda activate climate-portfolio
 ```
 
-### 3. Generate Sample Data
+**Using venv:**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. **Install dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+4. **Generate the database**
 ```bash
 cd data
 python generate_sample_data.py
+cd ..
 ```
 
-### 4. Run Streamlit App
+You should see output confirming database creation and verification against published data.
+
+5. **Run the application**
 ```bash
 cd streamlit_app
 streamlit run app.py
 ```
 
-### 5. Open Browser
-Navigate to `http://localhost:8501`
+The dashboard will open in your browser at `http://localhost:8501`
 
-## 📊 SQL Queries
+---
 
-Key SQL queries demonstrating database proficiency:
-
-**Monthly Emissions by Scope:**
-```sql
-SELECT 
-    strftime('%Y-%m', date) as month,
-    SUM(scope1_tonnes) as scope1,
-    SUM(scope2_market_tonnes) as scope2,
-    SUM(scope3_tonnes) as scope3
-FROM emissions_monthly
-GROUP BY month
-ORDER BY month DESC;
+## 📁 Project Structure
+```
+carbon-dashboard/
+├── README.md                          # This file
+├── PORTFOLIO_OVERVIEW.md              # Detailed project documentation
+├── INTERVIEW_PREP.md                  # Interview talking points
+├── requirements.txt                   # Python dependencies
+│
+├── data/
+│   ├── generate_sample_data.py        # Data generation from environmental reports
+│   └── sustainability_data.db         # Generated SQLite database
+│
+├── streamlit_app/
+│   ├── app.py                          # Landing page
+│   │
+│   ├── pages/                          # Dashboard pages
+│   │   ├── 1_📊_Emissions_Overview.py  # Portfolio-wide tracking
+│   │   ├── 2_⚡_Operational_Metrics.py # PUE, CFE, water, waste
+│   │   ├── 3_🔬_Scope_Analysis.py      # GHG Protocol breakdown
+│   │   ├── 4_🤖_ML_Forecasting.py      # Prophet, ARIMA, Holt-Winters
+│   │   └── 5_💰_ROI_Analysis.py        # Financial modeling
+│   │
+│   └── utils/
+│       └── data_loader.py              # Reusable data utilities
+│
+└── docs/                               # Additional documentation (optional)
 ```
 
-**Scope 3 Hotspot Analysis:**
-```sql
-SELECT 
-    scope3_category,
-    SUM(co2e_tonnes) as total_emissions,
-    ROUND(SUM(co2e_tonnes) * 100.0 / 
-          (SELECT SUM(co2e_tonnes) FROM scope3_emissions), 1) as pct_of_scope3
-FROM scope3_emissions
-GROUP BY scope3_category
-ORDER BY total_emissions DESC;
+---
+
+## 🎨 Dashboard Features
+
+### 1. 📊 Emissions Overview
+- **Real-time KPIs**: Total emissions, YoY changes, renewable percentage
+- **Multi-dimensional breakdowns**: By scope, region, facility type, time
+- **Intensity metrics**: Emissions per MWh, per water consumed
+- **Historical trends**: 2020-2024 performance analysis
+
+### 2. ⚡ Operational Metrics
+- **PUE Tracking**: Power Usage Effectiveness (industry benchmark: 1.09)
+- **Carbon-Free Energy**: Hourly CFE matching (66% in 2024)
+- **Water Management**: Consumption, replenishment (64% in 2024), intensity
+- **Waste Circularity**: Diversion rates (84% in 2024)
+- **Historical Performance**: Year-over-year improvements with financial impact
+
+### 3. 🔬 Scope Analysis
+- **GHG Protocol Compliant**: Scope 1, 2 (location & market-based), 3
+- **Category Breakdown**: 15 Scope 3 categories
+- **SBTi Tracking**: Science-Based Targets (50% Scope 1&2, 30% Scope 3 by 2030)
+- **Visualizations**: Waterfall charts, Pareto analysis
+
+### 4. 🤖 ML Forecasting
+- **Three Models**: Prophet, ARIMA/SARIMA, Holt-Winters
+- **Scenario Analysis**: Business-as-usual, Aggressive Decarbonization, Efficiency Focus
+- **Forecast Targets**: Emissions, PUE, CFE, water, waste
+- **Model Diagnostics**: MAE, RMSE, MAPE, AIC, BIC
+- **6-60 Month Horizon**: Adjustable forecast period
+
+### 5. 💰 ROI Analysis
+- **PUE Improvement ROI**: NPV, payback, sensitivity analysis
+- **Renewable Energy ROI**: PPA costs vs grid + carbon pricing
+- **Water Efficiency ROI**: Cost savings + risk mitigation
+- **Carbon Pricing Impact**: EU ETS, California Cap-and-Trade scenarios
+- **Cost Curves**: Marginal Abatement Cost Curve (MACC) with portfolio optimization
+- **Historical Returns**: Actual 2020-2024 improvements with estimated investment costs
+
+---
+
+## 🔧 Technical Stack
+
+**Core Technologies:**
+- **Python 3.10+**: Primary language
+- **Streamlit 1.28+**: Interactive dashboards
+- **Plotly**: Interactive visualizations
+- **SQLite**: Database
+
+**Data Science:**
+- **Pandas**: Data manipulation
+- **NumPy**: Numerical computing
+- **Scikit-learn**: Machine learning utilities
+
+**Time Series:**
+- **Prophet**: Facebook's forecasting library
+- **Statsmodels**: ARIMA/SARIMA, Holt-Winters
+- **Scipy**: Statistical functions
+
+**Other:**
+- **SHAP**: Model explainability (optional)
+
+---
+
+## 📊 Data Methodology
+
+### Data Sources
+
+**Real Data (from environmental reports):**
+- ✅ Annual emissions by scope (2020-2024): 8.7M → 15.2M tonnes CO₂e
+- ✅ Facility-level PUE ratings: 27 data centers (2020-2024)
+- ✅ Facility-level water consumption: 27 data centers (2024)
+- ✅ Regional CFE percentages: 12% (APAC) to 92% (Latin America)
+- ✅ Energy consumption: 15.5M → 32.7M MWh (2020-2024)
+- ✅ Waste generation: 31.5K → 58.5K tonnes (2020-2024)
+
+**Estimated/Interpolated:**
+- 🟡 Monthly disaggregation: Linear interpolation from annual totals
+- 🟡 Facilities not in reports: Proportional allocation based on facility type
+- 🟡 Cost estimates: Market rates ($70/MWh energy, $50/tonne CO₂e)
+
+### Key Assumptions
+- 100% renewable electricity matching maintained 2020-2024
+- Market rates for cost calculations (clearly documented)
+- Investment costs from industry benchmarks ($300-500K per 0.01 PUE improvement)
+- No fabricated training data or false benchmarks
+
+### Verification
+Generated data matches published reports within ±1.2%:
+```
+2020: Generated=8,735,546 | Actual=8,737,400 | Diff=0.0%
+2021: Generated=10,630,118 | Actual=10,520,600 | Diff=1.0%
+2022: Generated=11,941,625 | Actual=11,900,300 | Diff=0.3%
+2023: Generated=14,387,547 | Actual=14,296,800 | Diff=0.6%
+2024: Generated=15,373,083 | Actual=15,185,200 | Diff=1.2%
 ```
 
-**Progress to Science-Based Target:**
-```sql
-WITH current_emissions AS (
-    SELECT SUM(scope1_tonnes + scope2_market_tonnes) as total_2024
-    FROM emissions_monthly
-    WHERE strftime('%Y', date) = '2024'
-)
-SELECT 
-    t.baseline_emissions,
-    c.total_2024 as current_emissions,
-    t.target_emissions,
-    ROUND((t.baseline_emissions - c.total_2024) / 
-          (t.baseline_emissions - t.target_emissions) * 100, 1) as pct_to_target
-FROM emission_targets t
-CROSS JOIN current_emissions c
-WHERE t.scope = 'Scope 1 & 2';
-```
+---
 
-## 🎓 For Hiring Managers
+## 🎓 Learning Outcomes
 
 This project demonstrates:
 
-✅ **SQL Proficiency**: Complex joins, window functions, CTEs, aggregations  
-✅ **ML/AI Experience**: 4 production-ready ML models with proper validation  
-✅ **GHG Protocol Expertise**: Scope 1/2/3 methodology, emission factors, targets  
-✅ **Data Visualization**: Streamlit + Tableau for different audiences  
-✅ **Program Management**: Cross-functional thinking, stakeholder communication  
-✅ **Production Code**: Modular architecture, error handling, documentation  
+**Data Engineering:**
+- ETL pipeline design and implementation
+- Database schema design (normalized tables)
+- Data quality validation and error handling
+- Time series processing and interpolation
 
-### Relevant for Roles:
-- Technical Program Manager - Sustainability
-- Data Scientist - ESG/Sustainability  
-- Sustainability Analytics Engineer
-- Environmental Accounting Manager
+**Machine Learning:**
+- Time series forecasting (Prophet, ARIMA, Holt-Winters)
+- Model evaluation and comparison
+- Scenario analysis and what-if modeling
+- Forecasting both emissions and operational metrics
 
-## 📧 Contact
+**Financial Modeling:**
+- NPV analysis with discount rates
+- Break-even and sensitivity analysis
+- Cost-benefit modeling
+- Portfolio optimization under constraints
 
-**Adam Ritter**  
-📧 adam.h.ritter@gmail.com
-linkedin.com/in/adam-ritter-env
-github.com/adam-ritter
+**Domain Expertise:**
+- GHG Protocol (Scope 1, 2, 3)
+- Science-Based Targets (SBTi)
+- Operational efficiency metrics (PUE, CFE)
+- Sustainability reporting standards
+
+**Software Engineering:**
+- Modular, reusable code architecture
+- Comprehensive error handling
+- Interactive dashboard development
+- Production-ready patterns
+
+---
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+**1. Database not found**
+```bash
+# Regenerate the database
+cd data
+python generate_sample_data.py
+cd ..
+```
+
+**2. Import errors**
+```bash
+# Reinstall dependencies
+pip install --upgrade -r requirements.txt
+```
+
+**3. ARIMA not available**
+- ARIMA may not be available due to NumPy compatibility issues
+- The app gracefully degrades to Prophet and Holt-Winters
+- Both are fully functional and industry-standard
+
+**4. Streamlit won't start**
+```bash
+# Check Python version
+python --version  # Should be 3.10+
+
+# Ensure you're in the correct directory
+cd streamlit_app
+streamlit run app.py
+```
+
+**5. Charts not displaying**
+- Clear Streamlit cache: Press 'C' in the browser
+- Refresh the page: Press 'R' in the browser
+- Check browser console for JavaScript errors
+
+---
+
+## 📝 Usage Examples
+
+### Regenerate Database with Custom Data
+Edit `data/generate_sample_data.py` to modify:
+- Annual emissions targets
+- Facility configurations
+- Cost assumptions
+- Seasonal patterns
+
+Then regenerate:
+```bash
+cd data
+python generate_sample_data.py
+```
+
+### Export Data
+```python
+import sqlite3
+import pandas as pd
+
+conn = sqlite3.connect('data/sustainability_data.db')
+df = pd.read_sql_query("SELECT * FROM emissions_monthly", conn)
+df.to_csv('emissions_export.csv', index=False)
+```
+
+### Run Specific Pages Only
+```bash
+# Run just the forecasting page
+streamlit run streamlit_app/pages/4_🤖_ML_Forecasting.py
+```
+
+---
+
+## 🔮 Future Enhancements
+
+**Deployment:**
+- [ ] Deploy to Streamlit Cloud
+- [ ] Containerize with Docker
+- [ ] Add CI/CD pipeline
+
+**Features:**
+- [ ] User authentication
+- [ ] PDF report generation
+- [ ] Data export functionality
+- [ ] Real-time API integrations
+- [ ] Email alerting
+
+**ML Enhancements:**
+- [ ] Ensemble forecasting
+- [ ] Anomaly detection alerts
+- [ ] Transfer learning
+- [ ] Uncertainty quantification
+
+**Additional Analysis:**
+- [ ] Facility-level deep dives
+- [ ] Supply chain Scope 3 tracking
+- [ ] Renewable energy certificate (REC) management
+- [ ] Carbon offset portfolio management
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio project, but suggestions are welcome!
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👤 Author
+
+**Adam Holden**
+
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- Portfolio: [Your Portfolio](https://yourportfolio.com)
+- Email: your.email@example.com
+
+---
+
+## 🙏 Acknowledgments
+
+- Environmental report data methodology based on published tech company sustainability reports
+- GHG Protocol standards from [ghgprotocol.org](https://ghgprotocol.org)
+- Science-Based Targets initiative (SBTi) methodology
+- EPA eGRID emission factors
+- Industry benchmarks for PUE from Uptime Institute and Google
+
+---
+
+## 📚 Additional Resources
+
+**Learn More:**
+- [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md) - Detailed project documentation
+- [INTERVIEW_PREP.md](INTERVIEW_PREP.md) - Interview talking points and Q&A
+
+**Related Topics:**
+- [GHG Protocol](https://ghgprotocol.org/) - Emissions accounting standards
+- [Science Based Targets](https://sciencebasedtargets.org/) - Corporate climate targets
+- [Streamlit Documentation](https://docs.streamlit.io/) - Dashboard framework
+- [Prophet Documentation](https://facebook.github.io/prophet/) - Time series forecasting
+
+---
+
+## 📞 Support
+
+For questions or issues:
+1. Check the [Troubleshooting](#-troubleshooting) section
+2. Review [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md)
+3. Open an issue on GitHub
+4. Contact via email
+
+---
+
+**⭐ If you find this project useful, please consider giving it a star on GitHub!**
+
+---
+
+*Built with ❤️ and ☕ to demonstrate data science and sustainability analytics capabilities.*
