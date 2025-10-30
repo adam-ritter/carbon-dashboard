@@ -1042,12 +1042,14 @@ try:
             has_pue_improvement = pue_change > 0.01
             has_cfe_increase = cfe_change > 0.05
             has_water_reduction = water_change < 0
+
+            #count data centers
+            num_dc = len(data[data['facility_type'] == 'Data Center']['facility_id'].unique())
             
             if has_pue_improvement or has_cfe_increase or has_water_reduction:
                 # Calculate ROI for actual improvements
                 st.markdown("**Efficiency Gains & Financial Impact:**")
                 
-                num_dc = len(data[data['facility_type'] == 'Data Center']['facility_id'].unique())
                 
                 returns_breakdown = []
                 investment_breakdown = []
