@@ -301,13 +301,26 @@ try:
         col1, col2 = st.columns(2)
         
         with col1:
-            target_renewable_pct = st.slider(
-                "Target Renewable %",
-                min_value=int(current_renewable_pct),
-                max_value=100,
-                value=min(100, int(current_renewable_pct) + 20),
-                step=5
-            )
+            # Handle case where already at 100%
+            if current_renewable_pct >= 99:
+                st.success("✅ Already at 100% renewable electricity match!")
+                target_renewable_pct = 100
+                
+                st.info("""
+                **Next Steps:**
+                - Move from annual matching to 24/7 hourly matching
+                - Increase Carbon-Free Energy (CFE) percentage
+                - Add battery storage for grid stability
+                - Explore renewable hydrogen for hard-to-abate sectors
+                """)
+            else:
+                target_renewable_pct = st.slider(
+                    "Target Renewable %",
+                    min_value=int(current_renewable_pct),
+                    max_value=100,
+                    value=min(100, int(current_renewable_pct) + 20),
+                    step=5
+                )
             
             ppa_price = st.number_input(
                 "PPA Price ($/MWh)",

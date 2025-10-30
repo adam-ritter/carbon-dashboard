@@ -147,33 +147,59 @@ def get_monthly_allocation(date):
     year = date.year
     month = date.month
     
-    # Get annual data
+    # Get annual data for current year
     emissions = ANNUAL_EMISSIONS.get(year, ANNUAL_EMISSIONS[2024])
     energy = ANNUAL_ENERGY.get(year, ANNUAL_ENERGY[2024])
     water = ANNUAL_WATER.get(year, ANNUAL_WATER[2024])
     waste = ANNUAL_WASTE.get(year, ANNUAL_WASTE[2024])
     
-    # Seasonal factors
+    # Get next year's data for smooth transitions
+    next_year = year + 1
+    next_emissions = ANNUAL_EMISSIONS.get(next_year, emissions)
+    next_energy = ANNUAL_ENERGY.get(next_year, energy)
+    next_water = ANNUAL_WATER.get(next_year, water)
+    next_waste = ANNUAL_WASTE.get(next_year, waste)
+    
+    # Calculate year progress (0 in January, approaching 1 in December)
+    year_progress = (month - 1) / 12
+    
+    # Smooth interpolation between years (blend 20% of next year in later months)
+    blend_factor = year_progress * 0.2
+    
+    def blend(current, next_val):
+        return current * (1 - blend_factor) + next_val * blend_factor
+    
+    # Blended annual values
+    scope1_annual = blend(emissions['scope1'], next_emissions['scope1'])
+    scope2_location_annual = blend(emissions['scope2_location'], next_emissions['scope2_location'])
+    scope2_market_annual = blend(emissions['scope2_market'], next_emissions['scope2_market'])
+    scope3_annual = blend(emissions['scope3'], next_emissions['scope3'])
+    electricity_annual = blend(energy['electricity'], next_energy['electricity'])
+    fuel_annual = blend(energy['fuel'], next_energy['fuel'])
+    water_annual = blend(water['consumption'], next_water['consumption'])
+    waste_annual = blend(waste['total'], next_waste['total'])
+    
+    # Reduced seasonal factors (less dramatic)
     if month in [6, 7, 8]:  # Summer
-        seasonal_energy = 1.12  # Higher cooling
-        seasonal_water = 1.15  # More evaporative cooling
+        seasonal_energy = 1.05  # Reduced from 1.12
+        seasonal_water = 1.08   # Reduced from 1.15
     elif month in [12, 1, 2]:  # Winter
-        seasonal_energy = 1.08
-        seasonal_water = 0.95
+        seasonal_energy = 1.03  # Reduced from 1.08
+        seasonal_water = 0.97   # Reduced from 0.95
     else:
         seasonal_energy = 1.0
         seasonal_water = 1.0
     
     return {
-        'scope1': emissions['scope1'] / 12,
-        'scope2_location': emissions['scope2_location'] / 12 * seasonal_energy,
-        'scope2_market': emissions['scope2_market'] / 12 * seasonal_energy,
-        'scope3': emissions['scope3'] / 12,
-        'electricity': energy['electricity'] / 12 * seasonal_energy,
-        'fuel': energy['fuel'] / 12,
-        'water_consumption': water['consumption'] / 12 * seasonal_water,
+        'scope1': scope1_annual / 12,
+        'scope2_location': scope2_location_annual / 12 * seasonal_energy,
+        'scope2_market': scope2_market_annual / 12 * seasonal_energy,
+        'scope3': scope3_annual / 12,
+        'electricity': electricity_annual / 12 * seasonal_energy,
+        'fuel': fuel_annual / 12,
+        'water_consumption': water_annual / 12 * seasonal_water,
         'water_replenishment_pct': water['replenishment_pct'],
-        'waste_total': waste['total'] / 12,
+        'waste_total': waste_annual / 12,
         'waste_diversion_pct': waste['diversion_pct'],
         'renewable_pct': 1.00,  # 100% renewable match
     }
