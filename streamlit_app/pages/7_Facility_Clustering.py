@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
+from plotly.subplots import make_subplots
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
@@ -209,7 +210,7 @@ try:
         yaxis_title=f'PC2 ({explained_var[1]*100:.1f}% variance)'
     )
     
-    st.plotly_chart(fig_pca, width = 'stretch'
+    st.plotly_chart(fig_pca, width = 'stretch')
     
     st.markdown("---")
     
@@ -326,7 +327,7 @@ try:
                     'pue': '{:.3f}',
                     'cfe_pct': '{:.1%}'
                 }),
-                width = 'stretch
+                width = 'stretch'
             )
     
     st.markdown("---")
@@ -391,7 +392,7 @@ try:
     
     fig_comparison.update_layout(height=400, template='plotly_white', showlegend=False)
     
-    st.plotly_chart(fig_comparison, width = 'stretch'
+    st.plotly_chart(fig_comparison, width = 'stretch')
     
     st.markdown("---")
     
@@ -499,7 +500,7 @@ try:
         height=500
     )
     
-    st.plotly_chart(fig_spider, width = 'stretch'
+    st.plotly_chart(fig_spider, width = 'stretch')
     
     st.markdown("---")
     
@@ -570,7 +571,7 @@ try:
             'Cost per Tonne': '${:.0f}',
             'Priority Score': '{:.0f}'
         }).background_gradient(subset=['Priority Score'], cmap='RdYlGn'),
-        width = 'stretch
+        width = 'stretch'
     )
     
     st.info("""

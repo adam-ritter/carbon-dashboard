@@ -505,7 +505,7 @@ try:
         legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
     )
     
-    st.plotly_chart(fig, width = 'stretch'
+    st.plotly_chart(fig, width = 'stretch')
     
     # Forecast statistics
     st.markdown("---")
@@ -595,7 +595,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_comparison, width = 'stretch'
+        st.plotly_chart(fig_comparison, width = 'stretch')
         
         # Cumulative reduction comparison
         st.markdown("#### 📉 Cumulative Emissions Reduction")
@@ -615,7 +615,7 @@ try:
             })
         
         reduction_df = pd.DataFrame(reduction_summary)
-        st.dataframe(reduction_df, width = 'stretch'
+        st.dataframe(reduction_df, width = 'stretch')
     
     st.markdown("---")
     

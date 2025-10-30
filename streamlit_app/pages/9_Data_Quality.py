@@ -211,7 +211,7 @@ try:
         }
     ))
     fig_gauge.update_layout(height=300)
-    st.plotly_chart(fig_gauge, width = 'stretch'
+    st.plotly_chart(fig_gauge, width = 'stretch')
     
     st.markdown("---")
     
@@ -246,9 +246,9 @@ try:
         yaxis={'categoryorder': 'total ascending'}
     )
     
-    st.plotly_chart(fig_complete, width = 'stretch'
+    st.plotly_chart(fig_complete, width = 'stretch')
     
-    st.dataframe(completeness_display, width = 'stretch'
+    st.dataframe(completeness_display, width = 'stretch')
     
     st.markdown("---")
     
@@ -300,9 +300,9 @@ try:
         yaxis={'categoryorder': 'total ascending'}
     )
     
-    st.plotly_chart(fig_consistency, width = 'stretch'
+    st.plotly_chart(fig_consistency, width = 'stretch')
     
-    st.dataframe(consistency_summary, width = 'stretch'
+    st.dataframe(consistency_summary, width = 'stretch')
     
     if consistency_issues > 0:
         st.warning(f"⚠️ Found {consistency_issues} consistency issues requiring investigation")
@@ -331,9 +331,9 @@ try:
             title='Outlier Records by Date'
         )
         fig_outliers.update_layout(height=400, template='plotly_white')
-        st.plotly_chart(fig_outliers, width = 'stretch'
+        st.plotly_chart(fig_outliers, width = 'stretch')
         
-        st.dataframe(outliers_display.head(20), width = 'stretch'
+        st.dataframe(outliers_display.head(20), width = 'stretch')
         
         st.info("""
         **Recommended Actions:**
@@ -410,8 +410,8 @@ try:
             yaxis={'categoryorder': 'total ascending'}
         )
         
-        st.plotly_chart(fig_continuity, width = 'stretch'
-        st.dataframe(continuity_display, width = 'stretch'
+        st.plotly_chart(fig_continuity, width = 'stretch')
+        st.dataframe(continuity_display, width = 'stretch')
     else:
         st.success("✅ All facilities have complete monthly reporting!")
     
