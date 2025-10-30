@@ -159,7 +159,7 @@ class AnomalyDetector:
             #statistical method using z-scores
             z_scores = np.abs(stats.zscore(X, axis=0))
             df['anomaly_flag'] = (z_scores > 3).any(axis=1).astype(int) * -1 + 1
-            df['anomaly_score'] = -zscores.max(axis=1)
+            df['anomaly_score'] = -z_scores.max(axis=1)
 
         return df
     
