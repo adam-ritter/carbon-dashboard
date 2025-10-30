@@ -543,7 +543,7 @@ try:
             max_value = X[feature].max()
             
             #fix error with step=0
-            if max_val>min_val:
+            if max_value>min_value:
                 step_size = float((max_value - min_value) / 100)
             else:
                 step_size = 0.01
