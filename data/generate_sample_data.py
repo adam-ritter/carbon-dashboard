@@ -16,21 +16,15 @@ def generate_sustainability_database():
     print("GENERATING CORPORATE SUSTAINABILITY DATABASE")
     print("=" * 80)
     
-    # Delete BOTH existing databases if they exist
-    raw_db_path = 'sustainability_data.db'
-    clean_db_path = 'sustainability_data_clean.db'
+    # delete db if exists
+    db_path = 'sustainability_data.db'
 
-    if os.path.exists(raw_db_path):
-        print(f"🗑️  Removing existing raw database: {raw_db_path}")
-        os.remove(raw_db_path)
-
-    if os.path.exists(clean_db_path):
-        print(f"🗑️  Removing existing cleaned database: {clean_db_path}")
-        os.remove(clean_db_path)
-        print("    (Users will need to regenerate cleaned data from Data Quality page)")
+    if os.path.exists(db_path):
+        print(f"🗑️  Removing existing database: {db_path}")
+        os.remove(db_path)
     
     # Connect to database
-    conn = sqlite3.connect(raw_db_path)
+    conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
     
     # Create schema
