@@ -312,8 +312,10 @@ try:
             'total_emissions', 'anomaly_score'
         ]].copy()
         
-        top_anomalies['date'] = top_anomalies['date'].dt.strftime('%Y-%m')
-        top_anomalies['severity'] = pd.cut(
+        # Format date for display only
+        display_anomalies = top_anomalies.copy()
+        display_anomalies['date'] = display_anomalies['date'].dt.strftime('%Y-%m')
+        display_anomalies['severity'] = pd.cut(
             -top_anomalies['anomaly_score'],
             bins=3,
             labels=['Medium', 'High', 'Critical']
@@ -321,7 +323,7 @@ try:
         
         # Display table
         st.dataframe(
-            top_anomalies.style.format({
+            display_anomalies.style.format({
                 'scope1_tonnes': '{:,.0f}',
                 'scope2_market_tonnes': '{:,.0f}',
                 'scope3_tonnes': '{:,.0f}',
@@ -340,147 +342,113 @@ try:
             # Select anomaly
             selected_anomaly_idx = st.selectbox(
                 "Select Anomaly to Investigate",
-                range(len(top_anomalies)),
-                format_func=lambda i: f"{top_anomalies.iloc[i]['date']} - {top_anomalies.iloc[i]['facility_name']} ({top_anomalies.iloc[i]['total_emissions']:,.0f} tonnes)"
+                range(len(display_anomalies)),
+                format_func=lambda i: f"{display_anomalies.iloc[i]['date']} - {display_anomalies.iloc[i]['facility_name']} ({display_anomalies.iloc[i]['total_emissions']:,.0f} tonnes)"
             )
             
-            selected = top_anomalies.iloc[selected_anomaly_idx]
+            selected_display = display_anomalies.iloc[selected_anomaly_idx]
+            
+            # Get original row using index (top_anomalies preserves original index)
+            original_idx = top_anomalies.index[selected_anomaly_idx]
+            anomaly_row = plot_anomalies.loc[original_idx]
             
             # Anomaly details
             st.markdown(f"""
             <div class="anomaly-high">
             <h4>📋 Selected Anomaly</h4>
             <ul>
-                <li><strong>Date:</strong> {selected['date']}</li>
-                <li><strong>Facility:</strong> {selected['facility_name']} ({selected['facility_type']})</li>
-                <li><strong>Region:</strong> {selected['region']}</li>
-                <li><strong>Total Emissions:</strong> {selected['total_emissions']:,.0f} tonnes CO₂e</li>
-                <li><strong>Anomaly Score:</strong> {selected['anomaly_score']:.3f}</li>
-                <li><strong>Severity:</strong> {selected['severity']}</li>
+                <li><strong>Date:</strong> {selected_display['date']}</li>
+                <li><strong>Facility:</strong> {selected_display['facility_name']} ({selected_display['facility_type']})</li>
+                <li><strong>Region:</strong> {selected_display['region']}</li>
+                <li><strong>Total Emissions:</strong> {selected_display['total_emissions']:,.0f} tonnes CO₂e</li>
+                <li><strong>Anomaly Score:</strong> {selected_display['anomaly_score']:.3f}</li>
+                <li><strong>Severity:</strong> {selected_display['severity']}</li>
             </ul>
             </div>
             """, unsafe_allow_html=True)
             
-            # Get facility context - SAFE ACCESS
-            matching_anomaly = plot_anomalies[
-                (plot_anomalies['facility_name'] == selected['facility_name']) &
-                (plot_anomalies['date'] == pd.to_datetime(selected['date']))
-            ]
+            # Get facility context using facility_id from original row
+            facility_id = anomaly_row['facility_id']
+            anomaly_date = anomaly_row['date']
+            facility_history = data[data['facility_id'] == facility_id].sort_values('date')
             
-            if len(matching_anomaly) > 0:
-                facility_id = matching_anomaly['facility_id'].iloc[0]
-                facility_history = data[data['facility_id'] == facility_id].sort_values('date')
+            if len(facility_history) > 0:
+                col1, col2 = st.columns(2)
                 
-                if len(facility_history) > 0:
-                    col1, col2 = st.columns(2)
+                with col1:
+                    # vs. Facility average
+                    facility_avg = facility_history['total_emissions'].mean()
+                    current_emissions = selected_display['total_emissions']
+                    deviation = ((current_emissions - facility_avg) / facility_avg) * 100
                     
-                    with col1:
-                        # vs. Facility average
-                        facility_avg = facility_history['total_emissions'].mean()
-                        deviation = ((selected['total_emissions'] - facility_avg) / facility_avg) * 100
+                    st.metric(
+                        "vs. Facility Average",
+                        f"{deviation:+.0f}%",
+                        f"{current_emissions - facility_avg:+,.0f} tonnes"
+                    )
+                
+                with col2:
+                    # vs. Prior month using original datetime
+                    prior_month = facility_history[
+                        facility_history['date'] < anomaly_date
+                    ].tail(1)
+                    
+                    if len(prior_month) > 0:
+                        prior_emissions = prior_month['total_emissions'].iloc[0]
+                        mom_change = ((current_emissions - prior_emissions) / prior_emissions) * 100
                         st.metric(
-                            "vs. Facility Average",
-                            f"{deviation:+.0f}%",
-                            f"{selected['total_emissions'] - facility_avg:+,.0f} tonnes"
+                            "vs. Prior Month",
+                            f"{mom_change:+.0f}%",
+                            f"{current_emissions - prior_emissions:+,.0f} tonnes"
                         )
-                    
-                    with col2:
-                        # vs. Prior month
-                        prior_month = facility_history[
-                            facility_history['date'] < pd.to_datetime(selected['date'])
-                        ].tail(1)
-                        
-                        if len(prior_month) > 0:
-                            mom_change = ((selected['total_emissions'] - prior_month['total_emissions'].iloc[0]) / 
-                                          prior_month['total_emissions'].iloc[0]) * 100
-                            st.metric(
-                                "vs. Prior Month",
-                                f"{mom_change:+.0f}%",
-                                f"{selected['total_emissions'] - prior_month['total_emissions'].iloc[0]:+,.0f} tonnes"
-                            )
-                        else:
-                            st.info("No prior month available")
-                    
-                    # Facility trend chart
-                    fig_trend = go.Figure()
-                    
+                    else:
+                        st.info("No prior month available")
+                
+                # Facility trend chart
+                fig_trend = go.Figure()
+                
+                fig_trend.add_trace(go.Scatter(
+                    x=facility_history['date'],
+                    y=facility_history['total_emissions'],
+                    mode='lines+markers',
+                    name='Historical Trend',
+                    line=dict(color='lightblue', width=2),
+                    marker=dict(size=6)
+                ))
+                
+                # Highlight anomaly using original datetime
+                anomaly_point = facility_history[
+                    facility_history['date'] == anomaly_date
+                ]
+                
+                if len(anomaly_point) > 0:
                     fig_trend.add_trace(go.Scatter(
-                        x=facility_history['date'],
-                        y=facility_history['total_emissions'],
-                        mode='lines+markers',
-                        name='Historical',
-                        line=dict(color='lightblue', width=2),
-                        marker=dict(size=6)
+                        x=anomaly_point['date'],
+                        y=anomaly_point['total_emissions'],
+                        mode='markers',
+                        name='Anomaly',
+                        marker=dict(size=20, color='red', symbol='x', line=dict(width=3))
                     ))
-                    
-                    # Highlight anomaly
-                    anomaly_point = facility_history[
-                        facility_history['date'] == pd.to_datetime(selected['date'])
-                    ]
-                    
-                    if len(anomaly_point) > 0:
-                        fig_trend.add_trace(go.Scatter(
-                            x=anomaly_point['date'],
-                            y=anomaly_point['total_emissions'],
-                            mode='markers',
-                            name='Anomaly',
-                            marker=dict(size=20, color='red', symbol='x', line=dict(width=3))
-                        ))
-                    
-                    # Average line
-                    fig_trend.add_hline(
-                        y=facility_avg,
-                        line_dash="dash",
-                        line_color="gray",
-                        annotation_text="Facility Avg"
-                    )
-                    
-                    fig_trend.update_layout(
-                        title=f'{selected["facility_name"]} - Emissions Trend',
-                        xaxis_title='Date',
-                        yaxis_title='Emissions (tonnes CO₂e)',
-                        height=400,
-                        template='plotly_white'
-                    )
-                    
-                    st.plotly_chart(fig_trend, width='stretch')
+                
+                # Average line
+                fig_trend.add_hline(
+                    y=facility_avg,
+                    line_dash="dash",
+                    line_color="gray",
+                    annotation_text="Facility Avg"
+                )
+                
+                fig_trend.update_layout(
+                    title=f'{selected_display["facility_name"]} - Emissions Trend',
+                    xaxis_title='Date',
+                    yaxis_title='Emissions (tonnes CO₂e)',
+                    height=400,
+                    template='plotly_white'
+                )
+                
+                st.plotly_chart(fig_trend, width='stretch')
             else:
-                st.warning("Could not load facility context for this anomaly")
-            
-            # Investigation checklist
-            st.markdown("""
-            ### ✅ Investigation Checklist
-            
-            **Data Verification:**
-            - [ ] Verify data entry accuracy
-            - [ ] Check utility bills match reported values
-            - [ ] Confirm emission factors used
-            
-            **Operational Context:**
-            - [ ] Check for maintenance shutdowns
-            - [ ] Review production volume changes
-            - [ ] Identify new equipment or processes
-            
-            **Resolution:**
-            - [ ] Document findings
-            - [ ] Correct data if error found
-            - [ ] Flag for management if material
-            """)
-            
-            # Action buttons
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                if st.button("✅ Mark as Verified", type="primary"):
-                    st.success("Marked as verified")
-            
-            with col2:
-                if st.button("🔧 Needs Correction"):
-                    st.warning("Flagged for correction")
-            
-            with col3:
-                if st.button("🚨 Escalate"):
-                    st.error("Escalated to management")
+                st.warning("No facility history available")
     
     else:
         st.success("✅ No anomalies detected! All data points are within normal ranges.")
@@ -509,14 +477,20 @@ try:
         - **Anomaly Rate:** {anomaly_rate:.1f}% of all data points
         - **Facilities Affected:** {facilities_with_anomalies} of {total_facilities} ({facilities_with_anomalies/total_facilities*100:.0f}%)
         - **Recent Trend (3 months):** {recent_rate:.1f}% anomaly rate
+        - **Trend Direction:** {'⚠️ Increasing' if recent_rate > anomaly_rate else '✅ Decreasing'} anomaly frequency
         
         **Top Risk Facilities:**
         1. {anomalies_by_facility.index[0] if len(anomalies_by_facility) > 0 else 'N/A'} - {anomalies_by_facility.iloc[0] if len(anomalies_by_facility) > 0 else 0} anomalies
         2. {anomalies_by_facility.index[1] if len(anomalies_by_facility) > 1 else 'N/A'} - {anomalies_by_facility.iloc[1] if len(anomalies_by_facility) > 1 else 0} anomalies
         3. {anomalies_by_facility.index[2] if len(anomalies_by_facility) > 2 else 'N/A'} - {anomalies_by_facility.iloc[2] if len(anomalies_by_facility) > 2 else 0} anomalies
+        
+        **Recommended Actions:**
+        - {"🔴 High priority" if anomaly_rate > 10 else "🟡 Standard"} review of flagged data points
+        - {"🔴 Implement" if facilities_with_anomalies/total_facilities > 0.5 else "✅ Continue"} enhanced data quality controls
+        - {"🔴 Urgent" if recent_rate > anomaly_rate * 1.5 else "🟢 Routine"} investigation of recent anomalies
         """)
     else:
-        st.info("No anomalies detected with current settings.")
+        st.info("✅ No anomalies detected with current settings.")
     
     # Export
     st.markdown("---")
@@ -527,34 +501,58 @@ try:
         
         with col1:
             # CSV export
-            csv = plot_anomalies[['date', 'facility_id', 'facility_name', 'total_emissions', 'anomaly_score']].to_csv(index=False)
+            export_data = plot_anomalies[[
+                'date', 'facility_id', 'facility_name', 'region', 'facility_type',
+                'scope1_tonnes', 'scope2_market_tonnes', 'scope3_tonnes',
+                'total_emissions', 'anomaly_score'
+            ]].copy()
+            export_data['date'] = export_data['date'].dt.strftime('%Y-%m-%d')
+            
+            csv = export_data.to_csv(index=False)
             st.download_button(
                 label="📥 Download Anomalies (CSV)",
                 data=csv,
-                file_name=f"anomalies_{pd.Timestamp.now().strftime('%Y%m%d')}.csv",
+                file_name=f"anomalies_{detection_method}_{pd.Timestamp.now().strftime('%Y%m%d')}.csv",
                 mime="text/csv"
             )
         
         with col2:
             # Report
+            anomalies_by_facility = plot_anomalies.groupby('facility_name').size().sort_values(ascending=False)
+            top_anomalies_for_report = plot_anomalies.nsmallest(10, 'anomaly_score')
+            
             report = f"""
 ANOMALY DETECTION REPORT
 Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
 
-Method: {detection_method.upper()}
-Contamination: {contamination:.1%}
+METHOD: {detection_method.upper()}
+Settings:
+- Contamination: {contamination:.1%}
+- Z-Score Threshold: {zscore_threshold if detection_method != 'isolation_forest' else 'N/A'}
 
-Anomalies: {len(plot_anomalies):,}
-Rate: {len(plot_anomalies)/len(data)*100:.1f}%
+SUMMARY:
+- Total Data Points: {len(data):,}
+- Anomalies Detected: {len(plot_anomalies):,} ({len(plot_anomalies)/len(data)*100:.1f}%)
+- Facilities Affected: {facilities_with_anomalies}/{total_facilities}
+- Recent Anomaly Rate (3mo): {recent_rate:.1f}%
 
-TOP ANOMALIES:
-{chr(10).join([f"- {row['facility_name']}: {row['total_emissions']:,.0f} tonnes" for _, row in plot_anomalies.head(5).iterrows()])}
+TOP FACILITIES WITH ANOMALIES:
+{chr(10).join([f"{i+1}. {name}: {count} anomalies" for i, (name, count) in enumerate(anomalies_by_facility.head(5).items())])}
+
+HIGH-PRIORITY ANOMALIES FOR INVESTIGATION:
+{chr(10).join([f"- {row['date'].strftime('%Y-%m-%d')}: {row['facility_name']} ({row['total_emissions']:,.0f} tonnes, score: {row['anomaly_score']:.3f})" for _, row in top_anomalies_for_report.iterrows()])}
+
+RECOMMENDATIONS:
+- Review and verify all high-priority anomalies
+- Investigate facilities with multiple anomalies
+- Update data collection procedures for repeat offenders
+- Schedule follow-up analysis in 30 days
             """
             
             st.download_button(
                 label="📄 Download Report (TXT)",
                 data=report,
-                file_name=f"anomaly_report.txt",
+                file_name=f"anomaly_report_{pd.Timestamp.now().strftime('%Y%m%d')}.txt",
                 mime="text/plain"
             )
     else:
