@@ -253,7 +253,7 @@ try:
     st.subheader("📊 Model Performance Comparison")
     
     # Highlight best model
-    best_model_idx = comparison['Test R²'].idxmax()
+    best_model_idx = comparison['Test R2'].idxmax()
     
     def highlight_best(row):
         if row.name == best_model_idx:
@@ -265,17 +265,17 @@ try:
             .format({
                 'CV R² (mean)': '{:.3f}',
                 'CV R² (std)': '{:.3f}',
-                'Test R²': '{:.3f}',
+                'Test R2': '{:.3f}',
                 'MAE': '{:,.0f}',
                 'RMSE': '{:,.0f}'
             })
             .apply(highlight_best, axis=1)
-            .background_gradient(subset=['Test R²'], cmap='Greens'),
+            .background_gradient(subset=['Test R2'], cmap='Greens'),
         width = 'stretch'
     )
     
     best_model_name = comparison.loc[best_model_idx, 'Model']
-    best_r2 = comparison.loc[best_model_idx, 'Test R²']
+    best_r2 = comparison.loc[best_model_idx, 'Test R2']
     
     st.info(f"""
     **🏆 Best Model:** {best_model_name}  
