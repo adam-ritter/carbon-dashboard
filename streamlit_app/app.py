@@ -3,6 +3,17 @@ import streamlit as st
 import warnings
 import traceback
 import sys
+from utils.data_loader import get_data_quality_status
+
+# ... existing imports ...
+
+# After page title, add status
+data_status = get_data_quality_status()
+
+if data_status['using_cleaned']:
+    st.info("ℹ️ **Data Status:** Using cleaned database (quality issues resolved)")
+else:
+    st.warning("⚠️ **Data Note:** Using raw database with intentional quality issues (~5%). Visit **Data Quality** page to generate cleaned data for accurate analysis.")
 
 def warning_with_traceback(message, category, filename, lineno, file=None, line=None):
     log = file if hasattr(file, 'write') else sys.stderr

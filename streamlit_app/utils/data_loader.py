@@ -1,30 +1,51 @@
 """
 Data loading utilities for sustainability dashboard
+Automatically uses cleaned database if available
 """
 
 import pandas as pd
 import sqlite3
+import os
 from typing import Optional, List, Tuple
 from datetime import datetime
 
-def get_db_connection(db_path: str = '../data/sustainability_data.db'):
-    """Create database connection"""
+def get_database_path():
+    """
+    Return path to cleaned database if it exists, otherwise raw database
+    This allows seamless switching between raw and cleaned data
+    """
+    cleaned_path = '../data/sustainability_data_clean.db'
+    raw_path = '../data/sustainability_data.db'
+    
+    if os.path.exists(cleaned_path):
+        return cleaned_path
+    else:
+        return raw_path
+
+def get_db_connection(db_path: Optional[str] = None):
+    """
+    Create database connection
+    If no path specified, uses cleaned DB if available, otherwise raw DB
+    """
+    if db_path is None:
+        db_path = get_database_path()
     return sqlite3.connect(db_path)
 
 def load_emissions_data(
     facility_ids: Optional[List[str]] = None,
     start_date: Optional[str] = None,
     end_date: Optional[str] = None,
-    db_path: str = '../data/sustainability_data.db'
+    db_path: Optional[str] = None
 ) -> pd.DataFrame:
     """
     Load emissions data with optional filters
+    Automatically uses cleaned database if available
     
     Args:
         facility_ids: List of facility IDs to filter
         start_date: Start date (YYYY-MM-DD)
         end_date: End date (YYYY-MM-DD)
-        db_path: Path to database
+        db_path: Path to database (if None, uses cleaned DB if available)
         
     Returns:
         DataFrame with emissions data
@@ -77,9 +98,12 @@ def load_emissions_data(
 
 def load_business_metrics(
     facility_ids: Optional[List[str]] = None,
-    db_path: str = '../data/sustainability_data.db'
+    db_path: Optional[str] = None
 ) -> pd.DataFrame:
-    """Load business metrics data"""
+    """
+    Load business metrics data
+    Automatically uses cleaned database if available
+    """
     conn = get_db_connection(db_path)
     
     query = """
@@ -113,8 +137,11 @@ def load_business_metrics(
     
     return df
 
-def load_facilities(db_path: str = '../data/sustainability_data.db') -> pd.DataFrame:
-    """Load facility information"""
+def load_facilities(db_path: Optional[str] = None) -> pd.DataFrame:
+    """
+    Load facility information
+    Automatically uses cleaned database if available
+    """
     conn = get_db_connection(db_path)
     
     query = """
@@ -134,8 +161,11 @@ def load_facilities(db_path: str = '../data/sustainability_data.db') -> pd.DataF
     
     return df
 
-def load_emission_factors(db_path: str = '../data/sustainability_data.db') -> pd.DataFrame:
-    """Load emission factors"""
+def load_emission_factors(db_path: Optional[str] = None) -> pd.DataFrame:
+    """
+    Load emission factors
+    Automatically uses cleaned database if available
+    """
     conn = get_db_connection(db_path)
     
     query = """
@@ -157,8 +187,11 @@ def load_emission_factors(db_path: str = '../data/sustainability_data.db') -> pd
     
     return df
 
-def load_targets(db_path: str = '../data/sustainability_data.db') -> pd.DataFrame:
-    """Load emission targets"""
+def load_targets(db_path: Optional[str] = None) -> pd.DataFrame:
+    """
+    Load emission targets
+    Automatically uses cleaned database if available
+    """
     conn = get_db_connection(db_path)
     
     query = """
@@ -218,8 +251,11 @@ def calculate_emission_intensity(
     
     return merged
 
-def get_summary_statistics(db_path: str = '../data/sustainability_data.db') -> dict:
-    """Get summary statistics for dashboard"""
+def get_summary_statistics(db_path: Optional[str] = None) -> dict:
+    """
+    Get summary statistics for dashboard
+    Automatically uses cleaned database if available
+    """
     conn = get_db_connection(db_path)
     
     stats = {}
@@ -277,3 +313,22 @@ def get_summary_statistics(db_path: str = '../data/sustainability_data.db') -> d
     conn.close()
     
     return stats
+
+def is_using_cleaned_data() -> bool:
+    """Check if currently using cleaned database"""
+    return os.path.exists('../data/sustainability_data_clean.db')
+
+def get_data_quality_status() -> dict:
+    """
+    Get current data quality status
+    Returns information about which database is being used
+    """
+    using_cleaned = is_using_cleaned_data()
+    current_path = get_database_path()
+    
+    return {
+        'using_cleaned': using_cleaned,
+        'database_path': current_path,
+        'database_name': 'Cleaned' if using_cleaned else 'Raw',
+        'status': '✅ Clean' if using_cleaned else '⚠️ Raw (contains quality issues)'
+    }
