@@ -173,7 +173,7 @@ SELECT
           (t.baseline_emissions - t.target_emissions) * 100, 1) as pct_to_target
 FROM emission_targets t
 CROSS JOIN current_emissions c
-WHERE t.scope = 'Scope 1+2';
+WHERE t.scope = 'Scope 1 & 2';
 ```
 
 ## 🎓 For Hiring Managers

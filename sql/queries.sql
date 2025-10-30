@@ -118,7 +118,7 @@ SELECT
         ELSE 'Behind Target'
     END as status
 FROM current_emissions ce
-CROSS JOIN (SELECT * FROM target_info WHERE scope = 'Scope 1+2') ti_scope12
+CROSS JOIN (SELECT * FROM target_info WHERE scope = 'Scope 1 & 2') ti_scope12
 WHERE ce.year >= ti_scope12.baseline_year
 ORDER BY ce.year;
 

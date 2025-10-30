@@ -154,7 +154,7 @@ def generate_sustainability_database():
     print("\n🎯 Setting emission targets...")
     
     targets_data = [
-        ('Scope 1+2', 2020, 3000000, 2030, 50, 1500000, True),
+        ('Scope 1 & 2', 2020, 3000000, 2030, 50, 1500000, True),
         ('Scope 3', 2020, 11000000, 2030, 30, 7700000, True),
     ]
     

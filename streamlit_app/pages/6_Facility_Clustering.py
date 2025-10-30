@@ -86,8 +86,8 @@ n_clusters = st.sidebar.slider(
 
 clustering_features = st.sidebar.multiselect(
     "Clustering Features",
-    ['Avg Scope 1+2', 'Avg Scope 3', 'Emission Intensity', 'Renewable Energy %', 'Facility Size', 'Region'],
-    default=['Avg Scope 1+2', 'Avg Scope 3', 'Emission Intensity', 'Renewable Energy %'],
+    ['Avg Scope 1 & 2', 'Avg Scope 3', 'Emission Intensity', 'Renewable Energy %', 'Facility Size', 'Region'],
+    default=['Avg Scope 1 & 2', 'Avg Scope 3', 'Emission Intensity', 'Renewable Energy %'],
     help="Characteristics to use for clustering"
 )
 
@@ -182,7 +182,7 @@ try:
         
         # Map feature selection
         feature_map = {
-            'Avg Scope 1+2': 'avg_scope12',
+            'Avg Scope 1 & 2': 'avg_scope12',
             'Avg Scope 3': 'avg_scope3',
             'Emission Intensity': 'emission_intensity',
             'Renewable Energy %': 'avg_renewable_pct',
@@ -352,7 +352,7 @@ try:
     }).round(0)
     
     cluster_profiles.columns = [
-        'Scope 1+2 Mean', 'Scope 1+2 Std',
+        'Scope 1 & 2 Mean', 'Scope 1 & 2 Std',
         'Scope 3 Mean', 'Scope 3 Std',
         'Intensity Mean', 'Intensity Std',
         'Renewable % Mean', 'Renewable % Std',
@@ -386,7 +386,7 @@ try:
     with col1:
         avg_scope12 = cluster_data['avg_scope12'].mean()
         st.metric(
-            "Avg Scope 1+2",
+            "Avg Scope 1 & 2",
             f"{avg_scope12:,.0f} tonnes/mo",
             help="Average monthly operational emissions"
         )
@@ -418,14 +418,14 @@ try:
     
     cluster_facilities.columns = [
         'Facility', 'Region', 'Type',
-        'Avg Scope 1+2', 'Avg Scope 3', 'Intensity',
+        'Avg Scope 1 & 2', 'Avg Scope 3', 'Intensity',
         'Renewable %', 'Total Emissions'
     ]
     
     st.dataframe(
         cluster_facilities.style
             .format({
-                'Avg Scope 1+2': '{:,.0f}',
+                'Avg Scope 1 & 2': '{:,.0f}',
                 'Avg Scope 3': '{:,.0f}',
                 'Intensity': '{:,.0f}',
                 'Renewable %': '{:.0f}',
@@ -441,7 +441,7 @@ try:
     
     # Normalize features for radar chart
     features_for_radar = ['avg_scope12', 'avg_scope3', 'emission_intensity', 'avg_renewable_pct']
-    feature_labels = ['Scope 1+2', 'Scope 3', 'Intensity', 'Renewable %']
+    feature_labels = ['Scope 1 & 2', 'Scope 3', 'Intensity', 'Renewable %']
     
     normalized_data = clustered_data[features_for_radar].copy()
     for col in features_for_radar:
@@ -597,7 +597,7 @@ try:
         
         cluster_export.columns = [
             'Facility ID', 'Facility Name', 'Region', 'Type',
-            'Cluster', 'Avg Scope 1+2', 'Avg Scope 3', 'Intensity',
+            'Cluster', 'Avg Scope 1 & 2', 'Avg Scope 3', 'Intensity',
             'Renewable %', 'Total Emissions'
         ]
         
@@ -627,7 +627,7 @@ CLUSTER DISTRIBUTION:
 CLUSTER PROFILES:
 {chr(10).join([f"""
 Cluster {cid}: {recommendations[cid]['type']}
-- Avg Scope 1+2: {cluster_profiles.loc[cid, 'Scope 1+2 Mean']:,.0f} tonnes/mo
+- Avg Scope 1 & 2: {cluster_profiles.loc[cid, 'Scope 1 & 2 Mean']:,.0f} tonnes/mo
 - Avg Intensity: {cluster_profiles.loc[cid, 'Intensity Mean']:,.0f} t/$M
 - Renewable %: {cluster_profiles.loc[cid, 'Renewable % Mean']:.0f}%
 - Strategy: {recommendations[cid]['type']}

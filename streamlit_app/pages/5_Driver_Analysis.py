@@ -66,7 +66,7 @@ st.sidebar.header("🎛️ Analysis Settings")
 
 target_scope = st.sidebar.selectbox(
     "Emissions Scope to Analyze",
-    ['Scope 1+2 (Operational)', 'Scope 1', 'Scope 2', 'Scope 3', 'Total'],
+    ['Scope 1 & 2 (Operational)', 'Scope 1', 'Scope 2', 'Scope 3', 'Total'],
     help="Which emissions to analyze"
 )
 
@@ -165,7 +165,7 @@ try:
     
     # Map target selection
     target_map = {
-        'Scope 1+2 (Operational)': 'scope12',
+        'Scope 1 & 2 (Operational)': 'scope12',
         'Scope 1': 'scope1',
         'Scope 2': 'scope2',
         'Scope 3': 'scope3',
