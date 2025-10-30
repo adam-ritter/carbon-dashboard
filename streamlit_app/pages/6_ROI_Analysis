@@ -209,7 +209,7 @@ try:
             hovermode='x unified'
         )
         
-        st.plotly_chart(fig_cf, width = 'stretch'
+        st.plotly_chart(fig_cf, width = 'stretch')
         
         if npv > 0:
             st.success(f"✅ **Positive NPV: ${npv:,.0f}K** - Financially attractive investment")
@@ -252,7 +252,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_sens, width = 'stretch'
+        st.plotly_chart(fig_sens, width = 'stretch')
         
         st.info("""
         **Investment Decision Framework:**
@@ -393,7 +393,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_cost, width = 'stretch'
+        st.plotly_chart(fig_cost, width = 'stretch')
         
         # Carbon pricing scenarios
         st.markdown("---")
@@ -427,7 +427,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_carbon, width = 'stretch'
+        st.plotly_chart(fig_carbon, width = 'stretch')
         
         # Find break-even carbon price
         if ppa_price > grid_price:
@@ -591,7 +591,7 @@ try:
             template='plotly_white'
         )
         
-        st.plotly_chart(fig_region, width = 'stretch'
+        st.plotly_chart(fig_region, width = 'stretch')
         
         st.markdown("---")
         
@@ -644,7 +644,7 @@ try:
         )
         
         fig_scenarios.update_layout(height=400, template='plotly_white')
-        st.plotly_chart(fig_scenarios, width = 'stretch'
+        st.plotly_chart(fig_scenarios, width = 'stretch')
         
         # Total impact
         st.markdown("---")
@@ -746,7 +746,7 @@ try:
             showlegend=False
         )
         
-        st.plotly_chart(fig_macc, width = 'stretch'
+        st.plotly_chart(fig_macc, width = 'stretch')
         
         st.markdown("---")
         
@@ -771,7 +771,7 @@ try:
             'Capital Required ($M)': '${:.0f}'
         })
         
-        st.dataframe(styled_df, width = 'stretch'
+        st.dataframe(styled_df, width = 'stretch')
         
         st.markdown("---")
         
@@ -838,7 +838,7 @@ try:
                     'Annual Reduction (k tonnes)': '{:.0f}',
                     'Capital Required ($M)': '${:.0f}'
                 }),
-                width = 'stretch
+                width = 'stretch'
             )
             
             # Implementation timeline
@@ -880,7 +880,7 @@ try:
                 showlegend=False
             )
             
-            st.plotly_chart(fig_timeline, width = 'stretch'
+            st.plotly_chart(fig_timeline, width = 'stretch')
             
             # Cumulative impact
             st.markdown("---")
@@ -914,7 +914,7 @@ try:
                 template='plotly_white'
             )
             
-            st.plotly_chart(fig_impact, width = 'stretch'
+            st.plotly_chart(fig_impact, width = 'stretch')
             
             st.success(f"""
             **Portfolio Summary:**
@@ -966,6 +966,286 @@ try:
             - Supply chain availability
             - Financing terms
             """)
+
+        st.markdown("---")
+    
+    # ====================
+    # HISTORICAL ROI ANALYSIS
+    # ====================
+    st.markdown("### 📊 Historical Investment Returns")
+    st.markdown("""
+    Analyze the ROI of actual efficiency improvements delivered between 2020-2024.
+    All metrics based on real operational data, with investment estimates using industry-standard costs.
+    """)
+    
+    # Calculate historical improvements
+    try:
+        yearly_data = data.groupby(data['date'].dt.year).agg({
+            'pue': 'mean',
+            'cfe_pct': 'mean',
+            'water_consumption_gallons': 'sum',
+            'electricity_mwh': 'sum',
+            'total_emissions': 'sum',
+            'energy_cost_usd': 'sum',
+            'water_cost_usd': 'sum'
+        }).reset_index()
+        
+        yearly_data.columns = ['year', 'pue', 'cfe_pct', 'water_consumption', 'electricity', 
+                               'emissions', 'energy_cost', 'water_cost']
+        
+        # Filter to complete years
+        yearly_data = yearly_data[(yearly_data['year'] >= 2020) & (yearly_data['year'] <= 2024)]
+        
+        if len(yearly_data) >= 2:
+            first_year = yearly_data.iloc[0]
+            last_year = yearly_data.iloc[-1]
+            years_span = int(last_year['year'] - first_year['year'])
+            
+            st.markdown(f"#### 💼 Portfolio Performance ({int(first_year['year'])}-{int(last_year['year'])})")
+            
+            # Calculate improvements
+            pue_improvement = first_year['pue'] - last_year['pue']
+            cfe_increase = last_year['cfe_pct'] - first_year['cfe_pct']
+            water_reduction = first_year['water_consumption'] - last_year['water_consumption']
+            
+            col1, col2, col3 = st.columns(3)
+            
+            with col1:
+                st.metric("PUE Improvement", f"{pue_improvement:.3f}")
+                st.markdown(f"From {first_year['pue']:.3f} → {last_year['pue']:.3f}")
+            
+            with col2:
+                st.metric("CFE Increase", f"{cfe_increase*100:+.0f}%")
+                st.markdown(f"From {first_year['cfe_pct']*100:.0f}% → {last_year['cfe_pct']*100:.0f}%")
+            
+            with col3:
+                water_reduction_pct = (water_reduction / first_year['water_consumption']) * 100
+                if water_reduction > 0:
+                    st.metric("Water Reduction", f"{water_reduction_pct:.1f}%")
+                    st.markdown(f"Saved {water_reduction/1_000_000:.0f}M gallons/year")
+                else:
+                    st.metric("Water Change", f"{water_reduction_pct:+.1f}%")
+            
+            st.markdown("---")
+            
+            # ROI Analysis
+            st.markdown(f"#### 💰 Investment ROI Analysis")
+            
+            # Estimate investments based on industry standards
+            investment_breakdown = []
+            
+            if pue_improvement > 0:
+                # PUE improvement typically costs $300-500K per 0.01 improvement per data center
+                num_dc = len(data[data['facility_type'] == 'Data Center']['facility_id'].unique())
+                pue_investment = pue_improvement * 400 * num_dc  # $K
+                investment_breakdown.append(('PUE Efficiency Upgrades', pue_investment))
+            else:
+                pue_investment = 0
+            
+            if cfe_increase > 0.05:
+                # Renewable PPAs typically have no upfront cost, but some have ~$100K in contracting
+                renewable_investment = 100  # $K for contracting, minimal
+                investment_breakdown.append(('Renewable Energy Contracts', renewable_investment))
+            else:
+                renewable_investment = 0
+            
+            if abs(water_reduction_pct) > 5:
+                # Water efficiency projects: ~$500K for closed-loop systems
+                water_investment = 500  # $K
+                investment_breakdown.append(('Water Efficiency Systems', water_investment))
+            else:
+                water_investment = 0
+            
+            total_investment = pue_investment + renewable_investment + water_investment
+            
+            # Calculate annual returns
+            returns_breakdown = []
+            
+            # Energy cost savings
+            if pue_improvement > 0:
+                annual_electricity = last_year['electricity']
+                energy_saved = annual_electricity * (pue_improvement / first_year['pue'])
+                energy_cost_savings = energy_saved * 70 / 1000  # $K at $70/MWh
+                returns_breakdown.append(('Energy Cost Savings', energy_cost_savings))
+            else:
+                energy_cost_savings = 0
+            
+            # Carbon cost savings
+            if cfe_increase > 0:
+                carbon_avoided = last_year['electricity'] * 0.35 * cfe_increase  # tonnes
+                carbon_savings = carbon_avoided * 50 / 1000  # $K at $50/tonne
+                returns_breakdown.append(('Carbon Cost Avoidance', carbon_savings))
+            else:
+                carbon_savings = 0
+            
+            # Water cost savings
+            if water_reduction > 0:
+                water_cost_savings = (water_reduction / 1000) * 8.5 / 1000  # $K at $8.5/1000gal
+                returns_breakdown.append(('Water Cost Savings', water_cost_savings))
+            else:
+                water_cost_savings = 0
+            
+            total_annual_returns = energy_cost_savings + carbon_savings + water_cost_savings
+            
+            # Display investment breakdown
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**💵 Estimated Investment**")
+                
+                if len(investment_breakdown) > 0:
+                    for category, amount in investment_breakdown:
+                        st.markdown(f"- {category}: ${amount:,.0f}K")
+                    
+                    st.markdown(f"**Total Investment:** ${total_investment:,.0f}K")
+                else:
+                    st.markdown("- Minimal capital investment")
+                    st.markdown("- Primarily operational improvements")
+                
+                st.info(f"Investment estimates based on industry-standard costs for similar improvements across {num_dc} data centers")
+            
+            with col2:
+                st.markdown("**💚 Annual Returns**")
+                
+                for category, amount in returns_breakdown:
+                    st.markdown(f"- {category}: ${amount:,.0f}K/year")
+                
+                st.markdown(f"**Total Annual Returns:** ${total_annual_returns:,.0f}K/year")
+                
+                if total_annual_returns > 0:
+                    st.success(f"✅ ${total_annual_returns:,.0f}K annual value created")
+            
+            # ROI metrics
+            st.markdown("---")
+            st.markdown("#### 📈 ROI Metrics")
+            
+            col1, col2, col3, col4 = st.columns(4)
+            
+            with col1:
+                if total_investment > 0 and total_annual_returns > 0:
+                    payback = total_investment / total_annual_returns
+                    st.metric("Simple Payback", f"{payback:.1f} years")
+                else:
+                    st.metric("Simple Payback", "N/A")
+            
+            with col2:
+                if total_investment > 0:
+                    roi_pct = (total_annual_returns / total_investment) * 100
+                    st.metric("Annual ROI", f"{roi_pct:.0f}%")
+                else:
+                    st.metric("Annual ROI", "Strong")
+            
+            with col3:
+                cumulative_returns = total_annual_returns * years_span
+                st.metric(f"{years_span}-Year Returns", f"${cumulative_returns:,.0f}K")
+            
+            with col4:
+                if total_investment > 0:
+                    net_value = cumulative_returns - total_investment
+                    st.metric("Net Value Created", f"${net_value:,.0f}K")
+                else:
+                    st.metric("Net Value Created", f"${cumulative_returns:,.0f}K")
+            
+            # Visualization
+            st.markdown("---")
+            st.markdown("#### 📊 Cumulative Value Creation")
+            
+            # Calculate cumulative cash flow
+            years_range = range(0, years_span + 4)  # Project 3 more years
+            cumulative_cf = []
+            
+            for year in years_range:
+                if year == 0:
+                    cf = -total_investment
+                else:
+                    cf = -total_investment + (total_annual_returns * year)
+                cumulative_cf.append(cf)
+            
+            fig_value = go.Figure()
+            
+            fig_value.add_trace(go.Scatter(
+                x=list(years_range),
+                y=cumulative_cf,
+                mode='lines+markers',
+                name='Cumulative Value',
+                line=dict(color='green', width=3),
+                marker=dict(size=8),
+                fill='tozeroy',
+                fillcolor='rgba(39, 174, 96, 0.2)'
+            ))
+            
+            fig_value.add_hline(y=0, line_dash='dash', line_color='red', 
+                               annotation_text='Break-even')
+            
+            fig_value.update_layout(
+                title=f'Cumulative Value Creation from Efficiency Improvements',
+                xaxis_title=f'Years from {int(first_year["year"])}',
+                yaxis_title='Cumulative Value ($K)',
+                height=400,
+                template='plotly_white'
+            )
+            
+            st.plotly_chart(fig_value, use_container_width=True)
+            
+            # Key insights
+            st.markdown("---")
+            st.markdown("#### 💡 Key Insights")
+            
+            col1, col2 = st.columns(2)
+            
+            with col1:
+                st.markdown("**Performance Highlights:**")
+                
+                if pue_improvement > 0:
+                    st.markdown(f"✅ PUE improved {pue_improvement:.3f} - demonstrating operational excellence")
+                
+                if cfe_increase > 0.10:
+                    st.markdown(f"✅ CFE increased {cfe_increase*100:.0f}% - accelerating decarbonization")
+                
+                if total_annual_returns > 1000:
+                    st.markdown(f"✅ Generated ${total_annual_returns:,.0f}K annual value - strong business case")
+                
+                if payback < 3:
+                    st.markdown(f"✅ {payback:.1f} year payback - exceeds typical corporate hurdle rates")
+            
+            with col2:
+                st.markdown("**Strategic Implications:**")
+                
+                st.markdown("- Efficiency investments deliver measurable ROI")
+                st.markdown("- Decarbonization aligned with cost reduction")
+                st.markdown("- Portfolio improvements demonstrate at scale")
+                st.markdown("- Proven track record supports future investments")
+            
+            st.success("""
+            **Bottom Line:** Sustainability investments between 2020-2024 delivered strong financial returns 
+            while simultaneously reducing environmental impact. This demonstrates that decarbonization and 
+            profitability are aligned, not competing objectives.
+            """)
+            
+            st.info("""
+            **Methodology:**
+            - **Improvements:** Calculated from actual operational data (2020-2024)
+            - **Investments:** Estimated using industry-standard costs for similar projects
+            - **Energy Savings:** Based on actual consumption data at market rates ($70/MWh)
+            - **Carbon Value:** Calculated at $50/tonne (conservative estimate)
+            - **Payback:** Simple payback calculation (Investment / Annual Returns)
+            
+            Investment estimates are conservative and based on industry benchmarks for:
+            - PUE improvements: $300-500K per 0.01 improvement per data center
+            - Renewable PPAs: Minimal upfront (contracts, not purchases)
+            - Water systems: $500K for closed-loop cooling upgrades
+            """)
+        
+        else:
+            st.warning("Need at least 2 years of data for historical ROI analysis")
+    
+    except Exception as e:
+        st.warning(f"Could not calculate historical ROI: {e}")
+
+except Exception as e:
+    st.error(f"Error: {e}")
+    import traceback
+    st.code(traceback.format_exc())
 
 except Exception as e:
     st.error(f"Error: {e}")
