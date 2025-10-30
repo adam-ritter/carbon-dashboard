@@ -611,41 +611,61 @@ try:
     
     with col2:
         # Export summary report
+    
+        # Pre-calculate all values to avoid f-string issues
+        cluster_summaries = []
+        for cid in range(n_clusters):
+            try:
+                # Safely get cluster profile values
+                scope1_val = cluster_profiles.loc[cid, ('scope1_tonnes', 'mean')] if ('scope1_tonnes', 'mean') in cluster_profiles.columns else 0
+                scope2_val = cluster_profiles.loc[cid, ('scope2_market_tonnes', 'mean')] if ('scope2_market_tonnes', 'mean') in cluster_profiles.columns else 0
+                scope12_val = scope1_val + scope2_val
+            
+                intensity_val = cluster_profiles.loc[cid, ('intensity', 'mean')] if ('intensity', 'mean') in cluster_profiles.columns else 0
+                renewable_val = cluster_profiles.loc[cid, ('renewable_pct', 'mean')] if ('renewable_pct', 'mean') in cluster_profiles.columns else 0
+            
+                cluster_type = recommendations[cid]['type'] if cid in recommendations else 'Unknown'
+            
+                summary = f"""
+    Cluster {cid}: {cluster_type}
+    - Avg Scope 1 and 2: {scope12_val:,.0f} tonnes/mo
+    - Avg Intensity: {intensity_val:,.0f} t/$M
+    - Renewable %: {renewable_val:.0f}%
+    - Strategy: {cluster_type}
+    """
+                cluster_summaries.append(summary)
+            except Exception as e:
+                cluster_summaries.append(f"Cluster {cid}: Error generating summary")
+    
         report = f"""
-FACILITY CLUSTERING ANALYSIS REPORT
-Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
+    FACILITY CLUSTERING ANALYSIS REPORT
+    Generated: {pd.Timestamp.now().strftime('%Y-%m-%d %H:%M')}
 
-CLUSTERING PARAMETERS:
-- Number of Clusters: {n_clusters}
-- Features Used: {', '.join(clustering_features)}
-- Total Facilities: {len(data)}
+    CLUSTERING PARAMETERS:
+    - Number of Clusters: {n_clusters}
+    - Features Used: {', '.join(clustering_features)}
+    - Total Facilities: {len(data)}
 
-CLUSTER DISTRIBUTION:
-{chr(10).join([f"Cluster {cid}: {count} facilities ({count/len(data)*100:.0f}%)" 
-               for cid, count in cluster_counts.items()])}
+    CLUSTER DISTRIBUTION:
+    {chr(10).join([f"Cluster {cid}: {count} facilities ({count/len(data)*100:.0f}%)" 
+                for cid, count in cluster_counts.items()])}
 
-CLUSTER PROFILES:
-{chr(10).join([f"""
-Cluster {cid}: {recommendations[cid]['type']}
-- Avg Scope 1 & 2: {cluster_profiles.loc[cid, 'Scope 1 & 2 Mean']:,.0f} tonnes/mo
-- Avg Intensity: {cluster_profiles.loc[cid, 'Intensity Mean']:,.0f} t/$M
-- Renewable %: {cluster_profiles.loc[cid, 'Renewable % Mean']:.0f}%
-- Strategy: {recommendations[cid]['type']}
-""" for cid in range(n_clusters)])}
+    CLUSTER PROFILES:
+    {chr(10).join(cluster_summaries)}
 
-KEY RECOMMENDATIONS:
-1. Share best practices from high-performing clusters
-2. Provide targeted support to high-intensity clusters
-3. Set cluster-specific reduction targets
-4. Monitor progress within peer groups quarterly
+    KEY RECOMMENDATIONS:
+    1. Share best practices from high-performing clusters
+    2. Provide targeted support to high-intensity clusters
+    3. Set cluster-specific reduction targets
+    4. Monitor progress within peer groups quarterly
 
-NEXT STEPS:
-- Communicate cluster assignments to facility managers
-- Schedule cluster-specific workshops
-- Establish cluster benchmark dashboards
-- Re-cluster annually to track movement
-        """
-        
+    NEXT STEPS:
+    - Communicate cluster assignments to facility managers
+    - Schedule cluster-specific workshops
+    - Establish cluster benchmark dashboards
+    - Re-cluster annually to track movement
+    """
+    
         st.download_button(
             label="📄 Download Report (TXT)",
             data=report,
