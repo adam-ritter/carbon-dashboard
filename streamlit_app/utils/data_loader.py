@@ -1,18 +1,16 @@
 """
 Data loading utilities for sustainability dashboard
-Automatically uses cleaned database if available
+Loads emissions and operational metrics from database
 """
 
 import pandas as pd
 import sqlite3
 import os
-from typing import Optional, List, Tuple
-from datetime import datetime
+from typing import Optional, List
 
 def get_database_path():
     """
     Return path to cleaned database if it exists, otherwise raw database
-    This allows seamless switching between raw and cleaned data
     """
     cleaned_path = '../data/sustainability_data_clean.db'
     raw_path = '../data/sustainability_data.db'
@@ -39,7 +37,6 @@ def load_emissions_data(
 ) -> pd.DataFrame:
     """
     Load emissions data with optional filters
-    Automatically uses cleaned database if available
     
     Args:
         facility_ids: List of facility IDs to filter
@@ -96,28 +93,50 @@ def load_emissions_data(
     
     return df
 
-def load_business_metrics(
+def load_operational_metrics(
     facility_ids: Optional[List[str]] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
     db_path: Optional[str] = None
 ) -> pd.DataFrame:
     """
-    Load business metrics data
-    Automatically uses cleaned database if available
+    Load operational metrics (energy, water, waste, efficiency)
+    
+    Args:
+        facility_ids: List of facility IDs to filter
+        start_date: Start date (YYYY-MM-DD)
+        end_date: End date (YYYY-MM-DD)
+        db_path: Path to database
+        
+    Returns:
+        DataFrame with operational metrics
     """
     conn = get_db_connection(db_path)
     
     query = """
     SELECT 
-        b.facility_id,
+        o.metric_id,
+        o.facility_id,
         f.facility_name,
-        b.date,
-        b.revenue_millions,
-        b.headcount,
-        b.square_feet,
-        b.server_count,
-        b.production_volume
-    FROM business_metrics b
-    JOIN facilities f ON b.facility_id = f.facility_id
+        f.region,
+        f.facility_type,
+        o.date,
+        o.fuel_consumption_mwh,
+        o.renewable_electricity_mwh,
+        o.cfe_pct,
+        o.pue,
+        o.water_withdrawal_gallons,
+        o.water_discharge_gallons,
+        o.water_consumption_gallons,
+        o.water_replenishment_pct,
+        o.waste_generated_tons,
+        o.waste_diverted_tons,
+        o.waste_diversion_pct,
+        o.energy_cost_usd,
+        o.water_cost_usd,
+        o.carbon_cost_usd
+    FROM facility_operational_metrics o
+    JOIN facilities f ON o.facility_id = f.facility_id
     WHERE 1=1
     """
     
@@ -125,10 +144,90 @@ def load_business_metrics(
     
     if facility_ids:
         placeholders = ','.join('?' * len(facility_ids))
-        query += f" AND b.facility_id IN ({placeholders})"
+        query += f" AND o.facility_id IN ({placeholders})"
         params.extend(facility_ids)
     
-    query += " ORDER BY b.date, b.facility_id"
+    if start_date:
+        query += " AND o.date >= ?"
+        params.append(start_date)
+    
+    if end_date:
+        query += " AND o.date <= ?"
+        params.append(end_date)
+    
+    query += " ORDER BY o.date, o.facility_id"
+    
+    df = pd.read_sql_query(query, conn, params=params)
+    df['date'] = pd.to_datetime(df['date'])
+    
+    conn.close()
+    
+    return df
+
+def load_combined_metrics(
+    facility_ids: Optional[List[str]] = None,
+    start_date: Optional[str] = None,
+    end_date: Optional[str] = None,
+    db_path: Optional[str] = None
+) -> pd.DataFrame:
+    """
+    Load emissions and operational metrics combined
+    
+    Returns:
+        DataFrame with both emissions and operational data joined
+    """
+    conn = get_db_connection(db_path)
+    
+    query = """
+    SELECT 
+        e.facility_id,
+        f.facility_name,
+        f.region,
+        f.facility_type,
+        e.date,
+        e.scope1_tonnes,
+        e.scope2_location_tonnes,
+        e.scope2_market_tonnes,
+        e.scope3_tonnes,
+        (e.scope1_tonnes + e.scope2_market_tonnes + e.scope3_tonnes) as total_emissions,
+        e.electricity_mwh,
+        e.renewable_pct,
+        o.fuel_consumption_mwh,
+        o.renewable_electricity_mwh,
+        o.cfe_pct,
+        o.pue,
+        o.water_withdrawal_gallons,
+        o.water_discharge_gallons,
+        o.water_consumption_gallons,
+        o.water_replenishment_pct,
+        o.waste_generated_tons,
+        o.waste_diverted_tons,
+        o.waste_diversion_pct,
+        o.energy_cost_usd,
+        o.water_cost_usd,
+        o.carbon_cost_usd
+    FROM emissions_monthly e
+    JOIN facilities f ON e.facility_id = f.facility_id
+    LEFT JOIN facility_operational_metrics o ON e.facility_id = o.facility_id AND e.date = o.date
+    WHERE 1=1
+    """
+    
+    params = []
+    
+    if facility_ids:
+        placeholders = ','.join('?' * len(facility_ids))
+        query += f" AND e.facility_id IN ({placeholders})"
+        params.extend(facility_ids)
+    
+    if start_date:
+        query += " AND e.date >= ?"
+        params.append(start_date)
+    
+    if end_date:
+        query += " AND e.date <= ?"
+        params.append(end_date)
+    
+    query += " ORDER BY e.date, e.facility_id"
     
     df = pd.read_sql_query(query, conn, params=params)
     df['date'] = pd.to_datetime(df['date'])
@@ -138,10 +237,7 @@ def load_business_metrics(
     return df
 
 def load_facilities(db_path: Optional[str] = None) -> pd.DataFrame:
-    """
-    Load facility information
-    Automatically uses cleaned database if available
-    """
+    """Load facility information"""
     conn = get_db_connection(db_path)
     
     query = """
@@ -162,10 +258,7 @@ def load_facilities(db_path: Optional[str] = None) -> pd.DataFrame:
     return df
 
 def load_emission_factors(db_path: Optional[str] = None) -> pd.DataFrame:
-    """
-    Load emission factors
-    Automatically uses cleaned database if available
-    """
+    """Load emission factors"""
     conn = get_db_connection(db_path)
     
     query = """
@@ -188,10 +281,7 @@ def load_emission_factors(db_path: Optional[str] = None) -> pd.DataFrame:
     return df
 
 def load_targets(db_path: Optional[str] = None) -> pd.DataFrame:
-    """
-    Load emission targets
-    Automatically uses cleaned database if available
-    """
+    """Load emission targets"""
     conn = get_db_connection(db_path)
     
     query = """
@@ -213,48 +303,9 @@ def load_targets(db_path: Optional[str] = None) -> pd.DataFrame:
     
     return df
 
-def calculate_emission_intensity(
-    emissions: pd.DataFrame,
-    business_metrics: pd.DataFrame,
-    intensity_type: str = 'revenue'
-) -> pd.DataFrame:
-    """
-    Calculate emission intensity metrics
-    
-    Args:
-        emissions: Emissions DataFrame
-        business_metrics: Business metrics DataFrame
-        intensity_type: 'revenue', 'headcount', 'square_feet'
-        
-    Returns:
-        DataFrame with intensity metrics
-    """
-    merged = emissions.merge(
-        business_metrics,
-        on=['facility_id', 'date'],
-        how='inner'
-    )
-    
-    if intensity_type == 'revenue':
-        merged['intensity'] = merged['total_emissions'] / merged['revenue_millions']
-        unit = 'tonnes CO₂e / $M revenue'
-    elif intensity_type == 'headcount':
-        merged['intensity'] = merged['total_emissions'] / merged['headcount']
-        unit = 'tonnes CO₂e / employee'
-    elif intensity_type == 'square_feet':
-        merged['intensity'] = merged['total_emissions'] / (merged['square_feet'] / 1000)
-        unit = 'tonnes CO₂e / 1000 sqft'
-    else:
-        raise ValueError(f"Unknown intensity type: {intensity_type}")
-    
-    merged['intensity_unit'] = unit
-    
-    return merged
-
 def get_summary_statistics(db_path: Optional[str] = None) -> dict:
     """
     Get summary statistics for dashboard
-    Automatically uses cleaned database if available
     """
     conn = get_db_connection(db_path)
     
@@ -309,6 +360,19 @@ def get_summary_statistics(db_path: Optional[str] = None) -> dict:
     
     if len(yoy) > 0:
         stats['yoy_change'] = yoy.iloc[0].to_dict()
+    
+    # Operational metrics summary
+    operational = pd.read_sql_query("""
+    SELECT 
+        AVG(pue) as avg_pue,
+        AVG(cfe_pct) as avg_cfe,
+        AVG(water_replenishment_pct) as avg_water_replen,
+        AVG(waste_diversion_pct) as avg_waste_diversion
+    FROM facility_operational_metrics
+    WHERE pue IS NOT NULL
+    """, conn).iloc[0].to_dict()
+    
+    stats['operational'] = operational
     
     conn.close()
     

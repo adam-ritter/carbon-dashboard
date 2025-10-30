@@ -442,6 +442,198 @@ try:
     for insight in insights:
         st.markdown(insight)
     
+    # ============================================
+    # NEW SECTION: INTENSITY METRICS
+    # ============================================
+    st.markdown("---")
+    st.markdown("### 📉 Emissions Intensity Metrics")
+    st.markdown("""
+    **Why intensity matters:** Absolute emissions may grow with business expansion, but intensity 
+    (emissions per unit of activity) shows operational efficiency improvements.
+    """)
+    
+    # Calculate intensity metrics
+    try:
+        # Load operational metrics for intensity calculations
+        from utils.data_loader import load_combined_metrics
+        
+        combined_data = load_combined_metrics(start_date=start_date, end_date=end_date)
+        
+        if len(combined_data) > 0:
+            # Monthly aggregates
+            monthly_intensity = combined_data.groupby(pd.Grouper(key='date', freq='M')).agg({
+                'total_emissions': 'sum',
+                'electricity_mwh': 'sum',
+                'water_consumption_gallons': 'sum'
+            }).reset_index()
+            
+            # Calculate intensities
+            monthly_intensity['emissions_per_mwh'] = (
+                monthly_intensity['total_emissions'] / monthly_intensity['electricity_mwh']
+            ) * 1000  # kg CO2e per MWh
+            
+            monthly_intensity['emissions_per_mgal_water'] = (
+                monthly_intensity['total_emissions'] / (monthly_intensity['water_consumption_gallons'] / 1_000_000)
+            )  # tonnes per million gallons
+            
+            # Remove infinities and NaNs
+            monthly_intensity = monthly_intensity.replace([np.inf, -np.inf], np.nan).dropna()
+            
+            if len(monthly_intensity) > 0:
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    # Emissions per MWh trend
+                    fig_intensity_energy = go.Figure()
+                    
+                    fig_intensity_energy.add_trace(go.Scatter(
+                        x=monthly_intensity['date'],
+                        y=monthly_intensity['emissions_per_mwh'],
+                        mode='lines+markers',
+                        name='Emissions Intensity',
+                        line=dict(color='#3498db', width=3),
+                        marker=dict(size=6)
+                    ))
+                    
+                    # Add trendline
+                    z = np.polyfit(range(len(monthly_intensity)), monthly_intensity['emissions_per_mwh'], 1)
+                    p = np.poly1d(z)
+                    
+                    fig_intensity_energy.add_trace(go.Scatter(
+                        x=monthly_intensity['date'],
+                        y=p(range(len(monthly_intensity))),
+                        mode='lines',
+                        name='Trend',
+                        line=dict(color='red', width=2, dash='dash')
+                    ))
+                    
+                    fig_intensity_energy.update_layout(
+                        title='Emissions Intensity per Energy Consumption',
+                        xaxis_title='Date',
+                        yaxis_title='kg CO₂e per MWh',
+                        height=400,
+                        template='plotly_white',
+                        hovermode='x unified'
+                    )
+                    
+                    st.plotly_chart(fig_intensity_energy, use_container_width=True)
+                    
+                    # Calculate improvement
+                    if len(monthly_intensity) >= 2:
+                        first_value = monthly_intensity['emissions_per_mwh'].iloc[0]
+                        last_value = monthly_intensity['emissions_per_mwh'].iloc[-1]
+                        pct_change = ((last_value - first_value) / first_value) * 100
+                        
+                        if pct_change < 0:
+                            st.success(f"✅ Emissions intensity improved {abs(pct_change):.1f}% over the period")
+                        else:
+                            st.warning(f"⚠️ Emissions intensity increased {pct_change:.1f}% over the period")
+                
+                with col2:
+                    # Emissions per water consumed
+                    fig_intensity_water = go.Figure()
+                    
+                    fig_intensity_water.add_trace(go.Scatter(
+                        x=monthly_intensity['date'],
+                        y=monthly_intensity['emissions_per_mgal_water'],
+                        mode='lines+markers',
+                        name='Water Intensity',
+                        line=dict(color='#1abc9c', width=3),
+                        marker=dict(size=6)
+                    ))
+                    
+                    # Add trendline
+                    z_water = np.polyfit(range(len(monthly_intensity)), monthly_intensity['emissions_per_mgal_water'], 1)
+                    p_water = np.poly1d(z_water)
+                    
+                    fig_intensity_water.add_trace(go.Scatter(
+                        x=monthly_intensity['date'],
+                        y=p_water(range(len(monthly_intensity))),
+                        mode='lines',
+                        name='Trend',
+                        line=dict(color='red', width=2, dash='dash')
+                    ))
+                    
+                    fig_intensity_water.update_layout(
+                        title='Emissions per Water Consumption',
+                        xaxis_title='Date',
+                        yaxis_title='Tonnes CO₂e per Million Gallons',
+                        height=400,
+                        template='plotly_white',
+                        hovermode='x unified'
+                    )
+                    
+                    st.plotly_chart(fig_intensity_water, use_container_width=True)
+                    
+                    # Water efficiency insight
+                    if len(monthly_intensity) >= 2:
+                        first_water = monthly_intensity['emissions_per_mgal_water'].iloc[0]
+                        last_water = monthly_intensity['emissions_per_mgal_water'].iloc[-1]
+                        water_pct_change = ((last_water - first_water) / first_water) * 100
+                        
+                        if water_pct_change < 0:
+                            st.success(f"✅ Water efficiency improved {abs(water_pct_change):.1f}% over the period")
+                        else:
+                            st.info(f"ℹ️ Water intensity changed {water_pct_change:+.1f}% (may reflect facility mix changes)")
+                
+                # Comparison table
+                st.markdown("---")
+                st.markdown("#### 📊 Absolute vs Intensity Metrics")
+                
+                # Compare first and last year
+                if len(monthly_intensity) >= 12:
+                    first_year = monthly_intensity.head(12).agg({
+                        'total_emissions': 'sum',
+                        'electricity_mwh': 'sum',
+                        'emissions_per_mwh': 'mean'
+                    })
+                    
+                    last_year = monthly_intensity.tail(12).agg({
+                        'total_emissions': 'sum',
+                        'electricity_mwh': 'sum',
+                        'emissions_per_mwh': 'mean'
+                    })
+                    
+                    comparison_df = pd.DataFrame({
+                        'Metric': [
+                            'Total Emissions (tonnes)',
+                            'Total Electricity (MWh)',
+                            'Emissions Intensity (kg/MWh)'
+                        ],
+                        'First Year': [
+                            f"{first_year['total_emissions']:,.0f}",
+                            f"{first_year['electricity_mwh']:,.0f}",
+                            f"{first_year['emissions_per_mwh']:.1f}"
+                        ],
+                        'Latest Year': [
+                            f"{last_year['total_emissions']:,.0f}",
+                            f"{last_year['electricity_mwh']:,.0f}",
+                            f"{last_year['emissions_per_mwh']:.1f}"
+                        ],
+                        'Change': [
+                            f"{((last_year['total_emissions'] - first_year['total_emissions']) / first_year['total_emissions'] * 100):+.1f}%",
+                            f"{((last_year['electricity_mwh'] - first_year['electricity_mwh']) / first_year['electricity_mwh'] * 100):+.1f}%",
+                            f"{((last_year['emissions_per_mwh'] - first_year['emissions_per_mwh']) / first_year['emissions_per_mwh'] * 100):+.1f}%"
+                        ]
+                    })
+                    
+                    st.dataframe(comparison_df, use_container_width=True)
+                    
+                    st.info("""
+                    **Key Insight:** While absolute emissions may increase with business growth (more data centers, 
+                    more compute capacity), improving intensity metrics shows operational efficiency gains through:
+                    - Renewable energy adoption (reduces grid emissions per MWh)
+                    - PUE improvements (less energy per unit of IT load)
+                    - Water efficiency (less cooling energy per gallon)
+                    """)
+            else:
+                st.warning("Insufficient data for intensity calculations")
+        else:
+            st.info("Enable operational metrics to see intensity trends")
+    
+    except Exception as e:
+        st.warning(f"Could not calculate intensity metrics: {e}")
+
     st.markdown("---")
     
     # Export

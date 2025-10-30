@@ -9,3 +9,4 @@ shap
 scipy
 sqlite3
 sqlalchemy
+pmdarima
