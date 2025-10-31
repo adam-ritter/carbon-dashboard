@@ -618,7 +618,7 @@ try:
                         ]
                     })
                     
-                    st.dataframe(comparison_df, width = use_container_width=True)
+                    st.dataframe(comparison_df, use_container_width=True)
                     
                     st.info("""
                     **Key Insight:** While absolute emissions may increase with business growth (more data centers, 
