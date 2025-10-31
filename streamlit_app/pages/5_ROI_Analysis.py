@@ -784,7 +784,7 @@ try:
             'Capital Required ($M)': '${:.0f}'
         })
         
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(styled_df, width="stretch")
         
         st.markdown("---")
         
@@ -851,7 +851,7 @@ try:
                     'Annual Reduction (k tonnes)': '{:.0f}',
                     'Capital Required ($M)': '${:.0f}'
                 }),
-                use_container_width=True
+                width=True
             )
             
             # Implementation timeline

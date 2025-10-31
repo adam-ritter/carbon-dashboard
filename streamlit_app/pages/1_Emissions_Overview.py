@@ -351,7 +351,7 @@ try:
     regional_totals['Scope 2'] = regional_totals['Scope 2'].apply(lambda x: f"{x:,.0f}")
     regional_totals['Scope 3'] = regional_totals['Scope 3'].apply(lambda x: f"{x:,.0f}")
     
-    st.dataframe(regional_totals, use_container_width=True)
+    st.dataframe(regional_totals, width="stretch")
     
     st.markdown("---")
     
@@ -409,7 +409,7 @@ try:
     yearly_display['YoY Change'] = yearly_display['YoY Change'].apply(lambda x: f"{x:+.1f}%" if pd.notna(x) else "N/A")
     yearly_display.columns = ['Year', 'Scope 1', 'Scope 2', 'Scope 3', 'Total Emissions', 'YoY Change']
     
-    st.dataframe(yearly_display, use_container_width=True)
+    st.dataframe(yearly_display, width=True)
     
     st.markdown("---")
     
@@ -618,7 +618,7 @@ try:
                         ]
                     })
                     
-                    st.dataframe(comparison_df, use_container_width=True)
+                    st.dataframe(comparison_df, width=True)
                     
                     st.info("""
                     **Key Insight:** While absolute emissions may increase with business growth (more data centers, 
