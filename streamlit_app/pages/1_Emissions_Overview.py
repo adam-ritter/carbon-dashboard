@@ -401,7 +401,7 @@ try:
     
     fig_yoy.update_layout(height=400, showlegend=False, template='plotly_white')
     
-    st.plotly_chart(fig_yoy, width = 'stretch')
+    st.plotly_chart(fig_yoy, width = "stretch")
     
     # YoY table
     yearly_display = yearly_totals.copy()
