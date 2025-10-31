@@ -86,10 +86,7 @@ with col1:
     - Science-Based Target tracking and progress
     
     **🤖 Machine Learning & AI**
-    - Time series forecasting (Prophet, Holt-Winters)
-    - Anomaly detection (Isolation Forest, Z-score)
-    - Emissions driver analysis (Random Forest, SHAP)
-    - Facility clustering and segmentation (K-means, PCA)
+    - Time series forecasting (Prophet, Holt-Winters, ARIMA)
     
     **📈 Operational Metrics & Efficiency**
     - Real facility-level water consumption data
@@ -119,7 +116,6 @@ with col2:
     - Scikit-learn
     - Facebook Prophet
     - Statsmodels
-    - SHAP (explainability)
     
     **Visualization:**
     - Streamlit
@@ -436,10 +432,7 @@ with col1:
     
     ### Machine Learning
     - ✅ **Time Series**: Prophet, ARIMA, Holt-Winters forecasting
-    - ✅ **Anomaly Detection**: Isolation Forest, statistical outlier methods
     - ✅ **Supervised Learning**: Regression, classification, ensemble models
-    - ✅ **Unsupervised Learning**: K-means, PCA, hierarchical clustering
-    - ✅ **Model Explainability**: SHAP values, feature importance analysis
     """)
 
 with col2:
