@@ -851,7 +851,7 @@ try:
                     'Annual Reduction (k tonnes)': '{:.0f}',
                     'Capital Required ($M)': '${:.0f}'
                 }),
-                width=True
+                width='stretch'
             )
             
             # Implementation timeline
