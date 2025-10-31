@@ -156,7 +156,7 @@ try:
         scope3_table.columns = ['Category','Description','Estimated Emissions','% of Scope 3']
         scope3_table['Estimated Emissions'] = scope3_table['Estimated Emissions'].apply(lambda x: f"{x:,.0f}")
         scope3_table['% of Scope 3'] = scope3_table['% of Scope 3'].apply(lambda x: f"{x:.1f}%")
-        st.dataframe(scope3_table, width = 'stretch')
+        st.dataframe(scope3_table, use_container_width=True)
         
         top_3_pct = scope3_breakdown.head(3)['typical_pct_of_scope3'].sum()
         st.success(f"**80/20 Rule:** Top 3 categories = {top_3_pct:.0f}% of Scope 3")

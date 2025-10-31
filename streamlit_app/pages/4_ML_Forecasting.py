@@ -614,7 +614,7 @@ try:
             })
         
         reduction_df = pd.DataFrame(reduction_summary)
-        st.dataframe(reduction_df, width = 'stretch')
+        st.dataframe(reduction_df, use_container_width=True)
     
     st.markdown("---")
     
