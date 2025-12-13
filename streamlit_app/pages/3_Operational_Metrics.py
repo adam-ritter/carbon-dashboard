@@ -11,7 +11,7 @@ from utils.data_loader import load_combined_metrics, load_facilities
 st.set_page_config(page_title="Operational Metrics", page_icon="⚡", layout="wide")
 
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #16a085;}</style>', unsafe_allow_html=True)
-st.markdown('<p class="main-header">⚡ Operational Efficiency Metrics</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header"> Operational Efficiency Metrics</p>', unsafe_allow_html=True)
 
 st.markdown("""
 ## Beyond Emissions: Operational Performance
@@ -448,7 +448,7 @@ try:
     # ====================
     # WASTE CIRCULARITY
     # ====================
-    st.markdown("### ♻️ Waste & Circular Economy")
+    st.markdown("###  Waste & Circular Economy")
     st.markdown("""
     Waste diversion demonstrates circular economy progress:
     - **Recycling**: Traditional material recovery

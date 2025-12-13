@@ -85,7 +85,7 @@ try:
         st.markdown("---")
     
     if scope_focus in ["All Scopes", "Scope 2"]:
-        st.markdown("### ⚡ Scope 2: Indirect Emissions (Electricity)")
+        st.markdown("###  Scope 2: Indirect Emissions (Electricity)")
         st.info("**Accounting Methods:** Location-based (grid average) vs Market-based (PPAs/RECs)")
         
         col1, col2 = st.columns(2)

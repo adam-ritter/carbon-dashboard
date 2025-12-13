@@ -144,7 +144,7 @@ try:
     st.markdown("---")
     
     # Monthly Trend
-    st.markdown("### 📈 Monthly Emissions Trend")
+    st.markdown("###  Monthly Emissions Trend")
     
     monthly_totals = filtered_df.groupby('month').agg({
         'scope1_tonnes': 'sum',
