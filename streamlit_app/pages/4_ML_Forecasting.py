@@ -14,7 +14,7 @@ from utils.data_loader import load_emissions_data, load_combined_metrics, load_t
 st.set_page_config(page_title="AI Forecasting", page_icon="🤖", layout="wide")
 
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #9b59b6;}</style>', unsafe_allow_html=True)
-st.markdown('<p class="main-header">🤖 AI-Powered Forecasting</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header"> AI-Powered Forecasting</p>', unsafe_allow_html=True)
 
 st.markdown("""
 ## Predictive Analytics for Emissions & Operational Metrics
@@ -50,10 +50,10 @@ try:
         st.error("No data available")
         st.stop()
     
-    st.success(f"✅ Loaded {len(emissions_data):,} records for forecasting")
+    st.success(f" Loaded {len(emissions_data):,} records for forecasting")
     
     # Sidebar Configuration
-    st.sidebar.header("⚙️ Forecast Configuration")
+    st.sidebar.header(" Forecast Configuration")
     
     # Target selection
     forecast_target_options = {
@@ -129,7 +129,7 @@ try:
     
     # Scenario selection
     st.sidebar.markdown("---")
-    st.sidebar.subheader("📊 Scenario Analysis")
+    st.sidebar.subheader(" Scenario Analysis")
     
     scenario = st.sidebar.selectbox(
         "Decarbonization Scenario",
@@ -200,7 +200,7 @@ try:
     st.markdown("---")
     
     # Train models
-    st.markdown("### 📈 Model Training & Forecasting")
+    st.markdown("###  Model Training & Forecasting")
     
     with st.spinner("Training model..."):
         
@@ -236,7 +236,7 @@ try:
         elif model_type == "ARIMA":
             try:
                 # Display model configuration
-                st.info(f"📊 Training SARIMA({arima_p},{arima_d},{arima_q})×({seasonal_p},{seasonal_d},{seasonal_q},{seasonal_m})")
+                st.info(f" Training SARIMA({arima_p},{arima_d},{arima_q})×({seasonal_p},{seasonal_d},{seasonal_q},{seasonal_m})")
                 
                 # Fit SARIMAX model
                 model = SARIMAX(
@@ -250,7 +250,7 @@ try:
                 model_fit = model.fit(disp=False, maxiter=200)
                 
                 # Display model diagnostics
-                with st.expander("📈 Model Diagnostics", expanded=False):
+                with st.expander(" Model Diagnostics", expanded=False):
                     col1, col2, col3 = st.columns(3)
                     
                     with col1:
@@ -373,7 +373,7 @@ try:
             increases = np.minimum(1.0, current_cfe + np.arange(len(future_forecast)) * monthly_increase)
             forecast.loc[forecast['ds'] > test_data['date'].max(), 'yhat'] = increases
     
-    st.success("✅ Model trained successfully!")
+    st.success(" Model trained successfully!")
     
     # Calculate test set metrics
     test_mae = mean_absolute_error(test_data[target_col], test_pred_values)
@@ -394,7 +394,7 @@ try:
     st.markdown("---")
     
     # Visualization
-    st.markdown(f"### 📊 {forecast_target} Forecast")
+    st.markdown(f"###  {forecast_target} Forecast")
     st.markdown(f"**Scenario:** {scenario}")
     
     fig = go.Figure()
@@ -508,7 +508,7 @@ try:
     
     # Forecast statistics
     st.markdown("---")
-    st.markdown("### 📊 Forecast Statistics")
+    st.markdown("###  Forecast Statistics")
     
     col1, col2 = st.columns(2)
     
@@ -537,16 +537,16 @@ try:
             
             if data_source == 'emissions':
                 reduction_pct = (1 - scenario_adjustments[scenario]) * 100
-                st.success(f"✅ {reduction_pct:.0f}% reduction vs business-as-usual")
+                st.success(f" {reduction_pct:.0f}% reduction vs business-as-usual")
             elif target_col == 'pue' and scenario == 'Efficiency Focus':
-                st.success(f"✅ Accelerated PUE improvement (0.001/month)")
+                st.success(f" Accelerated PUE improvement (0.001/month)")
             elif target_col == 'cfe_pct' and scenario == 'Aggressive Decarbonization':
-                st.success(f"✅ Accelerated CFE growth toward 100%")
+                st.success(f" Accelerated CFE growth toward 100%")
     
     # Scenario comparison
     if data_source == 'emissions':
         st.markdown("---")
-        st.markdown("### 🔄 Scenario Comparison")
+        st.markdown("###  Scenario Comparison")
         
         # Run all scenarios
         scenario_results = {}
@@ -597,7 +597,7 @@ try:
         st.plotly_chart(fig_comparison, width = 'stretch')
         
         # Cumulative reduction comparison
-        st.markdown("#### 📉 Cumulative Emissions Reduction")
+        st.markdown("####  Cumulative Emissions Reduction")
         
         bau_total = scenario_results['Business as Usual'].sum()
         
@@ -626,9 +626,9 @@ try:
     with col1:
         st.markdown("**Model Performance:**")
         if test_mape < 10:
-            st.success(f"✅ Excellent accuracy (MAPE: {test_mape:.1f}%)")
+            st.success(f" Excellent accuracy (MAPE: {test_mape:.1f}%)")
         elif test_mape < 20:
-            st.info(f"ℹ️ Good accuracy (MAPE: {test_mape:.1f}%)")
+            st.info(f" Good accuracy (MAPE: {test_mape:.1f}%)")
         else:
             st.warning(f"⚠️ Moderate accuracy (MAPE: {test_mape:.1f}%) - Consider more data or features")
         
@@ -637,9 +637,9 @@ try:
         uncertainty_pct = (uncertainty / future_forecast['yhat'].mean()) * 100
         
         if uncertainty_pct < 20:
-            st.success(f"✅ High confidence (±{uncertainty_pct:.0f}%)")
+            st.success(f" High confidence (±{uncertainty_pct:.0f}%)")
         elif uncertainty_pct < 40:
-            st.info(f"ℹ️ Moderate confidence (±{uncertainty_pct:.0f}%)")
+            st.info(f" Moderate confidence (±{uncertainty_pct:.0f}%)")
         else:
             st.warning(f"⚠️ Lower confidence (±{uncertainty_pct:.0f}%) - High variability")
     
@@ -648,23 +648,23 @@ try:
         
         if data_source == 'emissions':
             if pct_change > 10:
-                st.warning(f"⚠️ Emissions projected to increase {pct_change:.0f}% - intervention needed")
+                st.warning(f" Emissions projected to increase {pct_change:.0f}% - intervention needed")
             elif pct_change > 0:
-                st.info(f"ℹ️ Emissions growing {pct_change:.0f}% - consider acceleration of decarbonization")
+                st.info(f" Emissions growing {pct_change:.0f}% - consider acceleration of decarbonization")
             else:
-                st.success(f"✅ Emissions declining {abs(pct_change):.0f}% - on track")
+                st.success(f" Emissions declining {abs(pct_change):.0f}% - on track")
         
         elif target_col == 'pue':
             if forecast_end < 1.10:
-                st.success(f"✅ PUE improving to {forecast_end:.3f} - industry-leading")
+                st.success(f" PUE improving to {forecast_end:.3f} - industry-leading")
             else:
-                st.info(f"ℹ️ PUE at {forecast_end:.3f} - opportunity for efficiency improvements")
+                st.info(f" PUE at {forecast_end:.3f} - opportunity for efficiency improvements")
         
         elif target_col == 'cfe_pct':
             if forecast_end > 0.80:
-                st.success(f"✅ CFE reaching {forecast_end*100:.0f}% - excellent progress")
+                st.success(f" CFE reaching {forecast_end*100:.0f}% - excellent progress")
             else:
-                st.info(f"ℹ️ CFE at {forecast_end*100:.0f}% - consider additional renewable contracts")
+                st.info(f" CFE at {forecast_end*100:.0f}% - consider additional renewable contracts")
 
 except Exception as e:
     st.error(f"Error: {e}")

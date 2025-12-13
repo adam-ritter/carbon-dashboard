@@ -30,7 +30,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<p class="main-header">📊 Emissions Overview</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header"> Emissions Overview</p>', unsafe_allow_html=True)
 
 st.markdown("""
 ## Executive Dashboard
@@ -60,7 +60,7 @@ try:
     emissions_df, facilities_df = get_overview_data()
     
     # Sidebar filters
-    st.sidebar.header("🎛️ Filters")
+    st.sidebar.header(" Filters")
     
     years = sorted(emissions_df['year'].unique())
     selected_years = st.sidebar.multiselect(
@@ -87,7 +87,7 @@ try:
         st.stop()
     
     # Key Metrics
-    st.markdown("### 🎯 Key Performance Indicators")
+    st.markdown("###  Key Performance Indicators")
     
     # Calculate metrics
     latest_year = filtered_df['year'].max()
@@ -197,7 +197,7 @@ try:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown("### 🔬 Emissions by Scope")
+        st.markdown("###  Emissions by Scope")
         
         scope_data = pd.DataFrame({
             'Scope': ['Scope 1', 'Scope 2', 'Scope 3'],
@@ -235,7 +235,7 @@ try:
             )
     
     with col2:
-        st.markdown("### 🏭 Top 10 Emitting Facilities")
+        st.markdown("###  Top 10 Emitting Facilities")
         
         facility_totals = latest_year_data.groupby('facility_id').agg({
             'total_emissions': 'sum'
@@ -276,7 +276,7 @@ try:
     st.markdown("---")
     
     # Regional Breakdown
-    st.markdown("### 🌍 Regional Analysis")
+    st.markdown("###  Regional Analysis")
     
     # Debug: Check what columns we have
     if 'region' not in latest_year_data.columns:
@@ -356,7 +356,7 @@ try:
     st.markdown("---")
     
     # Year-over-Year Comparison
-    st.markdown("### 📊 Year-over-Year Comparison")
+    st.markdown("###  Year-over-Year Comparison")
     
     yearly_totals = filtered_df.groupby('year').agg({
         'scope1_tonnes': 'sum',
@@ -414,27 +414,27 @@ try:
     st.markdown("---")
     
     # Key Insights
-    st.markdown("### 💡 Key Insights")
+    st.markdown("###  Key Insights")
     
     insights = []
     
     # Insight 1: Dominant scope
     if scope3_pct > 70:
-        insights.append(f"🔴 **Scope 3 dominates** at {scope3_pct:.0f}% of total footprint - supply chain decarbonization is critical")
+        insights.append(f" **Scope 3 dominates** at {scope3_pct:.0f}% of total footprint - supply chain decarbonization is critical")
     
     # Insight 2: YoY trend
     if yoy_change > 5:
-        insights.append(f"📈 **Emissions increased** {yoy_change:.1f}% YoY - reduction efforts need acceleration")
+        insights.append(f" **Emissions increased** {yoy_change:.1f}% YoY - reduction efforts need acceleration")
     elif yoy_change < -5:
-        insights.append(f"📉 **Emissions decreased** {abs(yoy_change):.1f}% YoY - on positive trajectory")
+        insights.append(f" **Emissions decreased** {abs(yoy_change):.1f}% YoY - on positive trajectory")
     else:
-        insights.append(f"➡️ **Emissions stable** ({yoy_change:+.1f}% YoY) - incremental progress")
+        insights.append(f" **Emissions stable** ({yoy_change:+.1f}% YoY) - incremental progress")
     
     # Insight 3: Renewable energy
     if avg_renewable < 50:
-        insights.append(f"⚠️ **Low renewable energy** at {avg_renewable:.0f}% - major opportunity for Scope 2 reduction")
+        insights.append(f" **Low renewable energy** at {avg_renewable:.0f}% - major opportunity for Scope 2 reduction")
     elif avg_renewable > 75:
-        insights.append(f"✅ **High renewable energy** at {avg_renewable:.0f}% - strong progress on Scope 2")
+        insights.append(f" **High renewable energy** at {avg_renewable:.0f}% - strong progress on Scope 2")
     
     # Insight 4: Facility concentration
     top_3_pct = (facility_totals.head(3)['total_emissions'].sum() / total_emissions) * 100
@@ -447,7 +447,7 @@ try:
     # NEW SECTION: INTENSITY METRICS
     # ============================================
     st.markdown("---")
-    st.markdown("### 📉 Emissions Intensity Metrics")
+    st.markdown("###  Emissions Intensity Metrics")
     st.markdown("""
     **Why intensity matters:** Absolute emissions may grow with business expansion, but intensity 
     (emissions per unit of activity) shows operational efficiency improvements.
@@ -579,7 +579,7 @@ try:
                 
                 # Comparison table
                 st.markdown("---")
-                st.markdown("#### 📊 Absolute vs Intensity Metrics")
+                st.markdown("####  Absolute vs Intensity Metrics")
                 
                 # Compare first and last year
                 if len(monthly_intensity) >= 12:
@@ -638,14 +638,14 @@ try:
     st.markdown("---")
     
     # Export
-    st.markdown("### 💾 Export Data")
+    st.markdown("###  Export Data")
     
     col1, col2 = st.columns(2)
     
     with col1:
         csv = filtered_df.to_csv(index=False)
         st.download_button(
-            label="📥 Download Emissions Data (CSV)",
+            label=" Download Emissions Data (CSV)",
             data=csv,
             file_name=f"emissions_overview_{latest_year}.csv",
             mime="text/csv"
@@ -667,7 +667,7 @@ try:
         summary_csv = summary_df.to_csv(index=False)
         
         st.download_button(
-            label="📊 Download Summary (CSV)",
+            label=" Download Summary (CSV)",
             data=summary_csv,
             file_name=f"emissions_summary_{latest_year}.csv",
             mime="text/csv"

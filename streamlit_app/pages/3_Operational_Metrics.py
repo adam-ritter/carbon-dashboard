@@ -51,10 +51,10 @@ try:
         st.error("No operational data available")
         st.stop()
     
-    st.success(f"✅ Loaded {len(data):,} records across {data['facility_id'].nunique()} facilities")
+    st.success(f" Loaded {len(data):,} records across {data['facility_id'].nunique()} facilities")
     
     # Sidebar filters
-    st.sidebar.header("🎛️ Filters")
+    st.sidebar.header(" Filters")
     
     # Date range
     min_date = data['date'].min()
@@ -96,7 +96,7 @@ try:
     # ====================
     # KEY METRICS
     # ====================
-    st.markdown("### 📊 Current Performance")
+    st.markdown("###  Current Performance")
     
     # Get latest month's data
     latest_month = data['date'].max()
@@ -154,7 +154,7 @@ try:
     # ====================
     # PUE ANALYSIS
     # ====================
-    st.markdown("### ⚡ Power Usage Effectiveness (PUE)")
+    st.markdown("###  Power Usage Effectiveness (PUE)")
     st.markdown("""
     PUE measures data center energy efficiency: **Total Facility Energy / IT Equipment Energy**
     - **1.0** = Perfect (100% of energy goes to IT)
@@ -211,9 +211,9 @@ try:
                 improvement_pct = (improvement / first_pue) * 100
                 
                 if improvement > 0:
-                    st.success(f"✅ PUE improved by {improvement:.3f} ({improvement_pct:.1f}%) over the period")
+                    st.success(f" PUE improved by {improvement:.3f} ({improvement_pct:.1f}%) over the period")
                 else:
-                    st.info(f"ℹ️ PUE changed by {improvement:.3f} ({improvement_pct:+.1f}%)")
+                    st.info(f" PUE changed by {improvement:.3f} ({improvement_pct:+.1f}%)")
         
         with col2:
             # PUE by facility
@@ -263,7 +263,7 @@ try:
     # ====================
     # CARBON-FREE ENERGY
     # ====================
-    st.markdown("### 🌱 Carbon-Free Energy (CFE)")
+    st.markdown("###  Carbon-Free Energy (CFE)")
     st.markdown("""
     CFE measures the percentage of electricity matched with carbon-free sources **on an hourly basis**.
     - **Hourly matching** is harder than annual 100% renewable claims
@@ -342,18 +342,18 @@ try:
     # CFE insights
     current_cfe = monthly_cfe['cfe_pct'].iloc[-1] * 100
     if current_cfe >= 70:
-        st.success(f"✅ Excellent CFE performance ({current_cfe:.0f}%) - among industry leaders")
+        st.success(f" Excellent CFE performance ({current_cfe:.0f}%) - among industry leaders")
     elif current_cfe >= 50:
-        st.info(f"ℹ️ Good CFE progress ({current_cfe:.0f}%) - continue renewable expansion")
+        st.info(f" Good CFE progress ({current_cfe:.0f}%) - continue renewable expansion")
     else:
-        st.warning(f"⚠️ CFE at {current_cfe:.0f}% - significant opportunity for renewable PPAs")
+        st.warning(f" CFE at {current_cfe:.0f}% - significant opportunity for renewable PPAs")
     
     st.markdown("---")
     
     # ====================
     # WATER MANAGEMENT
     # ====================
-    st.markdown("### 💧 Water Management")
+    st.markdown("###  Water Management")
     st.markdown("""
     Water efficiency is critical for:
     - **Cost reduction**: Water and wastewater treatment expenses
@@ -437,11 +437,11 @@ try:
     # Water replenishment progress
     current_replen = monthly_water['water_replenishment_pct'].iloc[-1] * 100
     if current_replen >= 80:
-        st.success(f"✅ Excellent water replenishment ({current_replen:.0f}%) - approaching 100% goal")
+        st.success(f" Excellent water replenishment ({current_replen:.0f}%) - approaching 100% goal")
     elif current_replen >= 50:
-        st.info(f"ℹ️ Good progress on water replenishment ({current_replen:.0f}%)")
+        st.info(f" Good progress on water replenishment ({current_replen:.0f}%)")
     else:
-        st.warning(f"⚠️ Water replenishment at {current_replen:.0f}% - opportunity to expand programs")
+        st.warning(f" Water replenishment at {current_replen:.0f}% - opportunity to expand programs")
     
     st.markdown("---")
     
@@ -535,9 +535,9 @@ try:
     # Waste insights
     current_diversion = monthly_waste['waste_diversion_pct'].iloc[-1] * 100
     if current_diversion >= 85:
-        st.success(f"✅ Excellent waste diversion ({current_diversion:.0f}%) - world-class circular economy")
+        st.success(f" Excellent waste diversion ({current_diversion:.0f}%) - world-class circular economy")
     elif current_diversion >= 75:
-        st.info(f"ℹ️ Good waste diversion ({current_diversion:.0f}%) - approaching best practice")
+        st.info(f" Good waste diversion ({current_diversion:.0f}%) - approaching best practice")
     else:
         st.warning(f"⚠️ Waste diversion at {current_diversion:.0f}% - opportunity to improve recycling programs")
     
@@ -546,7 +546,7 @@ try:
     # ====================
     # INTEGRATED VIEW
     # ====================
-    st.markdown("### 🎯 Integrated Performance Dashboard")
+    st.markdown("###  Integrated Performance Dashboard")
     
     # Create normalized scores (0-100) for radar chart
     latest_full = data[data['date'] == data['date'].max()]
@@ -605,16 +605,16 @@ try:
         
         with col2:
             if overall_score >= 80:
-                st.success(f"🌟 **Overall Performance: {overall_score:.0f}/100** - Industry Leader")
+                st.success(f" **Overall Performance: {overall_score:.0f}/100** - Industry Leader")
             elif overall_score >= 65:
-                st.info(f"✅ **Overall Performance: {overall_score:.0f}/100** - Strong Performance")
+                st.info(f" **Overall Performance: {overall_score:.0f}/100** - Strong Performance")
             else:
-                st.warning(f"⚠️ **Overall Performance: {overall_score:.0f}/100** - Opportunity for Improvement")
+                st.warning(f" **Overall Performance: {overall_score:.0f}/100** - Opportunity for Improvement")
     
     st.markdown("---")
     
     # Key takeaways
-    st.markdown("### 💡 Key Insights & Recommendations")
+    st.markdown("###  Key Insights & Recommendations")
     
     col1, col2 = st.columns(2)
     
@@ -623,13 +623,13 @@ try:
         
         strengths = []
         if 'pue_score' in locals() and pue_score > 80:
-            strengths.append("✅ Industry-leading PUE efficiency")
+            strengths.append(" Industry-leading PUE efficiency")
         if cfe_score > 70:
-            strengths.append("✅ Strong carbon-free energy progress")
+            strengths.append(" Strong carbon-free energy progress")
         if water_replen_score > 60:
-            strengths.append("✅ Good water replenishment momentum")
+            strengths.append(" Good water replenishment momentum")
         if waste_div_score > 80:
-            strengths.append("✅ Excellent waste diversion rates")
+            strengths.append(" Excellent waste diversion rates")
         
         if strengths:
             for strength in strengths:
@@ -642,25 +642,25 @@ try:
         
         opportunities = []
         if 'pue_score' in locals() and pue_score < 70:
-            opportunities.append("🎯 PUE improvement programs (HVAC, containment)")
+            opportunities.append(" PUE improvement programs (HVAC, containment)")
         if cfe_score < 60:
-            opportunities.append("🎯 Accelerate renewable energy procurement")
+            opportunities.append(" Accelerate renewable energy procurement")
         if water_replen_score < 50:
-            opportunities.append("🎯 Expand water replenishment initiatives")
+            opportunities.append(" Expand water replenishment initiatives")
         if waste_div_score < 75:
-            opportunities.append("🎯 Enhance recycling and circular programs")
+            opportunities.append(" Enhance recycling and circular programs")
         
         if opportunities:
             for opp in opportunities:
                 st.markdown(opp)
         else:
-            st.markdown("✅ Maintain excellence across all metrics")
+            st.markdown(" Maintain excellence across all metrics")
     st.markdown("---")
     
     # ====================
     # HISTORICAL PERFORMANCE ANALYSIS
     # ====================
-    st.markdown("### 📊 Historical Performance & Improvement Trends")
+    st.markdown("###  Historical Performance & Improvement Trends")
     st.markdown("""
     Track efficiency improvements across the portfolio over time. All metrics based on 
     actual operational data from 2020-2024.
@@ -688,7 +688,7 @@ try:
         last_year = yearly_metrics.iloc[-1]
         years_span = int(last_year['year'] - first_year['year'])
         
-        st.markdown(f"#### 🎯 Portfolio Improvements ({int(first_year['year'])}-{int(last_year['year'])})")
+        st.markdown(f"####  Portfolio Improvements ({int(first_year['year'])}-{int(last_year['year'])})")
         
         col1, col2, col3, col4 = st.columns(4)
         
@@ -704,7 +704,7 @@ try:
             )
             
             if pue_improvement > 0:
-                st.success("✅ Efficiency improved")
+                st.success(" Efficiency improved")
             else:
                 st.info("→ Stable efficiency")
         
@@ -720,9 +720,9 @@ try:
             )
             
             if cfe_improvement > 0:
-                st.success("✅ More carbon-free")
+                st.success(" More carbon-free")
             else:
-                st.warning("⚠️ CFE declined")
+                st.warning(" CFE declined")
         
         with col3:
             water_improvement = first_year['water_per_mwh'] - last_year['water_per_mwh']
@@ -736,7 +736,7 @@ try:
             )
             
             if water_improvement > 0:
-                st.success("✅ More efficient")
+                st.success(" More efficient")
             else:
                 st.info("→ Stable usage")
         
@@ -752,14 +752,14 @@ try:
             )
             
             if waste_improvement > 0:
-                st.success("✅ Improved")
+                st.success(" Improved")
             else:
                 st.info("→ Stable")
         
         st.markdown("---")
         
         # Financial impact of improvements
-        st.markdown("#### 💰 Financial Impact of Efficiency Gains")
+        st.markdown("####  Financial Impact of Efficiency Gains")
         
         col1, col2 = st.columns(2)
         
@@ -786,7 +786,7 @@ try:
                 emissions_avoided = annual_energy_saved * 0.35  # Average grid factor
                 st.markdown(f"- **Emissions Avoided:** {emissions_avoided:,.0f} tonnes CO₂e/year")
                 
-                st.success(f"✅ {years_span}-year improvement delivering ${annual_cost_savings:,.0f}K annual value")
+                st.success(f" {years_span}-year improvement delivering ${annual_cost_savings:,.0f}K annual value")
             else:
                 st.info("PUE remained stable - maintaining industry-leading efficiency")
         
@@ -811,14 +811,14 @@ try:
                 # Regulatory benefit
                 st.markdown(f"- **EU ETS Savings:** ${emissions_avoided * 85 / 1000:,.0f}K/year at €85/tonne")
                 
-                st.success(f"✅ CFE growth delivering ${carbon_value:,.0f}K+ annual carbon value")
+                st.success(f" CFE growth delivering ${carbon_value:,.0f}K+ annual carbon value")
             else:
                 st.info("Maintaining high CFE levels")
         
         st.markdown("---")
         
         # Best vs opportunity facilities
-        st.markdown("#### 🏆 Internal Benchmarking: Best Performers vs Opportunities")
+        st.markdown("####  Internal Benchmarking: Best Performers vs Opportunities")
         
         # Data center comparison
         dc_comparison = data[data['facility_type'] == 'Data Center'].groupby('facility_name').agg({
@@ -836,7 +836,7 @@ try:
             col1, col2 = st.columns(2)
             
             with col1:
-                st.markdown("**🥇 Best Practice Example**")
+                st.markdown("** Best Practice Example**")
                 st.markdown(f"**Facility:** {best_pue_facility['facility_name']}")
                 st.markdown(f"- PUE: **{best_pue_facility['pue']:.3f}**")
                 st.markdown(f"- CFE: {best_pue_facility['cfe_pct']*100:.0f}%")
@@ -844,7 +844,7 @@ try:
                 st.success("Industry-leading performance")
             
             with col2:
-                st.markdown("**🎯 Improvement Opportunity**")
+                st.markdown("** Improvement Opportunity**")
                 st.markdown(f"**Facility:** {worst_pue_facility['facility_name']}")
                 st.markdown(f"- PUE: **{worst_pue_facility['pue']:.3f}**")
                 st.markdown(f"- Gap: {worst_pue_facility['pue'] - best_pue_facility['pue']:.3f}")
@@ -861,7 +861,7 @@ try:
         st.markdown("---")
         
         # Trajectory projection
-        st.markdown("#### 📈 Improvement Trajectory to 2030")
+        st.markdown("####  Improvement Trajectory to 2030")
         
         # Fit linear trend to PUE
         if len(yearly_metrics) >= 3:
@@ -888,11 +888,11 @@ try:
                 st.markdown(f"- Annual Rate: {-slope:.4f}/year")
                 
                 if projected_2030 < 1.08:
-                    st.success("✅ On track to exceed industry best practice")
+                    st.success(" On track to exceed industry best practice")
                 elif projected_2030 < 1.10:
-                    st.info("ℹ️ Projected to maintain industry-leading levels")
+                    st.info(" Projected to maintain industry-leading levels")
                 else:
-                    st.warning("⚠️ May need accelerated improvement programs")
+                    st.warning(" May need accelerated improvement programs")
             
             with col2:
                 st.markdown("**Financial Implications (by 2030):**")
@@ -914,7 +914,7 @@ try:
                     st.markdown(f"- **Est. Investment:** ${estimated_investment:,.0f}K")
                     st.markdown(f"- **Payback:** ~2-3 years")
                     
-                    st.success("✅ Strong ROI for continued efficiency investments")
+                    st.success(" Strong ROI for continued efficiency investments")
                 else:
                     st.info("Maintaining world-class efficiency levels")
         

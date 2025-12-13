@@ -13,7 +13,7 @@ sys.path.append('..')
 st.set_page_config(page_title="Scope Analysis", page_icon="🔬", layout="wide")
 
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #2ca02c;}</style>', unsafe_allow_html=True)
-st.markdown('<p class="main-header">🔬 Scope Analysis</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header"> Scope Analysis</p>', unsafe_allow_html=True)
 
 st.markdown("""
 ## GHG Protocol Scope Breakdown
@@ -41,7 +41,7 @@ def get_scope_data():
 try:
     emissions_df, facilities_df, scope3_categories = get_scope_data()
     
-    st.sidebar.header("🎛️ Analysis Options")
+    st.sidebar.header(" Analysis Options")
     selected_year = st.sidebar.selectbox("Select Year", sorted(emissions_df['year'].unique(), reverse=True))
     scope_focus = st.sidebar.radio("Focus Area", ["All Scopes", "Scope 1", "Scope 2", "Scope 3"])
     
@@ -52,7 +52,7 @@ try:
     total_scope3 = year_data['scope3_tonnes'].sum()
     total_all = total_scope1 + total_scope2_market + total_scope3
     
-    st.markdown(f"### 📊 {selected_year} Scope Overview")
+    st.markdown(f"###  {selected_year} Scope Overview")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Scope 1 (Direct)", f"{total_scope1/1000:.1f}K tonnes", f"{(total_scope1/total_all)*100:.1f}%")
@@ -66,7 +66,7 @@ try:
     st.markdown("---")
     
     if scope_focus in ["All Scopes", "Scope 1"]:
-        st.markdown("### 🔥 Scope 1: Direct Emissions")
+        st.markdown("###  Scope 1: Direct Emissions")
         st.info("**Sources:** Backup generators, natural gas heating, fleet vehicles, refrigerants")
         
         col1, col2 = st.columns(2)
@@ -109,7 +109,7 @@ try:
         st.markdown("---")
     
     if scope_focus in ["All Scopes", "Scope 3"]:
-        st.markdown("### 🔗 Scope 3: Value Chain Emissions")
+        st.markdown("###  Scope 3: Value Chain Emissions")
         st.info("**Top Categories:** Purchased goods (45%), Use of sold products (25%), Capital goods (15%)")
         
         scope3_breakdown = scope3_categories.copy()
@@ -151,7 +151,7 @@ try:
             fig_pareto.update_layout(title='Pareto Analysis', height=450, template='plotly_white')
             st.plotly_chart(fig_pareto, width = 'stretch')
         
-        st.markdown("#### 📋 Scope 3 Categories")
+        st.markdown("####  Scope 3 Categories")
         scope3_table = scope3_breakdown[['category_name','description','estimated_tonnes','typical_pct_of_scope3']].copy()
         scope3_table.columns = ['Category','Description','Estimated Emissions','% of Scope 3']
         scope3_table['Estimated Emissions'] = scope3_table['Estimated Emissions'].apply(lambda x: f"{x:,.0f}")
@@ -162,7 +162,7 @@ try:
         st.success(f"**80/20 Rule:** Top 3 categories = {top_3_pct:.0f}% of Scope 3")
         st.markdown("---")
     
-    st.markdown("### 📊 All Scopes - Stacked Area")
+    st.markdown("###  All Scopes - Stacked Area")
     monthly_all = year_data.groupby('month').agg({'scope1_tonnes':'sum','scope2_market_tonnes':'sum','scope3_tonnes':'sum'}).reset_index().sort_values('month')
     fig_all = go.Figure()
     fig_all.add_trace(go.Scatter(x=monthly_all['month'], y=monthly_all['scope1_tonnes'], name='Scope 1', mode='lines', stackgroup='one', fillcolor='rgba(255,127,14,0.6)'))
@@ -172,7 +172,7 @@ try:
     st.plotly_chart(fig_all, width = 'stretch')
     
     st.markdown("---")
-    st.markdown("### 🎯 Reduction Priorities")
+    st.markdown("###  Reduction Priorities")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("**Scope 1:** Electrify heating, EV fleet, renewable diesel - 20% reduction possible")
@@ -182,7 +182,7 @@ try:
         st.markdown("**Scope 3:** Supplier engagement, circular economy, SBTs - 30% reduction possible")
     
     csv = monthly_all.to_csv(index=False)
-    st.download_button("📥 Download Scope Data", csv, f"scope_analysis_{selected_year}.csv", "text/csv")
+    st.download_button(" Download Scope Data", csv, f"scope_analysis_{selected_year}.csv", "text/csv")
 
 except Exception as e:
     st.error(f"Error: {e}")

@@ -79,23 +79,23 @@ with col1:
     This dashboard demonstrates a **complete end-to-end analytics workflow** for corporate carbon accounting 
     based on real environmental report data:
     
-    **📊 Carbon Accounting & Reporting**
+    ** Carbon Accounting & Reporting**
     - GHG Protocol-aligned Scope 1, 2, 3 tracking
     - Data based on actual tech company reports (2020-2024)
     - Multi-facility, multi-region monitoring
     - Science-Based Target tracking and progress
     
-    **🤖 Machine Learning & AI**
+    ** Machine Learning & AI**
     - Time series forecasting (Prophet, Holt-Winters, ARIMA)
     
-    **📈 Operational Metrics & Efficiency**
+    ** Operational Metrics & Efficiency**
     - Real facility-level water consumption data
     - PUE (Power Usage Effectiveness) tracking
     - Carbon-free energy (CFE) hourly matching
     - Waste circularity and diversion rates
     - ROI analysis for efficiency investments
     
-    **💰 Financial Analysis**
+    ** Financial Analysis**
     - Cost modeling (energy, water, carbon pricing)
     - ROI of decarbonization strategies
     - Efficiency investment payback analysis
@@ -104,7 +104,7 @@ with col1:
 
 with col2:
     st.markdown("""
-    ### 🛠️ Technical Stack
+    ###  Technical Stack
     
     **Data & Engineering:**
     - Python, Pandas, NumPy
@@ -135,7 +135,7 @@ st.markdown("---")
 try:
     stats = get_summary_statistics()
     
-    st.markdown("## 📊 Current Performance Snapshot")
+    st.markdown("##  Current Performance Snapshot")
     
     # Top-level KPIs
     col1, col2, col3, col4, col5 = st.columns(5)
@@ -240,7 +240,7 @@ try:
     st.markdown("---")
     
     # Emissions breakdown visualization
-    st.markdown("### 📈 Emissions by Scope")
+    st.markdown("###  Emissions by Scope")
     
     col1, col2 = st.columns([2, 1])
     
@@ -317,7 +317,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown("""
     <div class="feature-box">
-    <h4>📊 Emissions Overview</h4>
+    <h4> Emissions Overview</h4>
     <ul>
         <li>Real-time KPI tracking</li>
         <li>Multi-dimensional analysis</li>
@@ -330,7 +330,7 @@ with col1:
     
     st.markdown("""
     <div class="feature-box">
-    <h4>🔬 Scope Analysis</h4>
+    <h4> Scope Analysis</h4>
     <ul>
         <li>GHG Protocol breakdown</li>
         <li>Scope 3 category analysis</li>
@@ -342,7 +342,7 @@ with col1:
     
     st.markdown("""
     <div class="feature-box">
-    <h4>🤖 AI Forecasting</h4>
+    <h4> AI Forecasting</h4>
     <ul>
         <li>Prophet time series</li>
         <li>Holt-Winters smoothing</li>
@@ -355,7 +355,7 @@ with col1:
 with col2:
     st.markdown("""
     <div class="feature-box">
-    <h4>🚨 Anomaly Detection</h4>
+    <h4> Anomaly Detection</h4>
     <ul>
         <li>Isolation Forest (ML)</li>
         <li>Statistical Z-score</li>
@@ -367,7 +367,7 @@ with col2:
     
     st.markdown("""
     <div class="feature-box">
-    <h4>📈 Driver Analysis</h4>
+    <h4> Driver Analysis</h4>
     <ul>
         <li>Operational metrics</li>
         <li>Feature importance</li>
@@ -379,7 +379,7 @@ with col2:
     
     st.markdown("""
     <div class="feature-box">
-    <h4>🏭 Facility Clustering</h4>
+    <h4> Facility Clustering</h4>
     <ul>
         <li>K-means segmentation</li>
         <li>PCA visualization</li>
@@ -392,7 +392,7 @@ with col2:
 with col3:
     st.markdown("""
     <div class="feature-box">
-    <h4>💾 Data Quality</h4>
+    <h4> Data Quality</h4>
     <ul>
         <li>5-dimensional validation</li>
         <li>Completeness checks</li>
@@ -404,7 +404,7 @@ with col3:
     
     st.markdown("""
     <div class="feature-box">
-    <h4>💰 ROI Analysis</h4>
+    <h4> ROI Analysis</h4>
     <ul>
         <li>Efficiency investments</li>
         <li>Renewable energy ROI</li>
@@ -417,44 +417,44 @@ with col3:
 st.markdown("---")
 
 # Skills Demonstrated
-st.markdown("## 🎯 Skills Demonstrated")
+st.markdown("##  Skills Demonstrated")
 
 col1, col2 = st.columns(2)
 
 with col1:
     st.markdown("""
     ### Data Engineering & Analytics
-    - ✅ **Real Data Integration**: Based on actual environmental reports (2020-2024)
-    - ✅ **SQL & Databases**: Complex queries, joins, aggregations, schema design
-    - ✅ **Python Data Stack**: Pandas, NumPy, efficient data manipulation
-    - ✅ **Data Modeling**: Operational metrics, emissions tracking, cost modeling
-    - ✅ **Statistical Analysis**: Trends, correlations, hypothesis testing
+    -  **Real Data Integration**: Based on actual environmental reports (2020-2024)
+    -  **SQL & Databases**: Complex queries, joins, aggregations, schema design
+    -  **Python Data Stack**: Pandas, NumPy, efficient data manipulation
+    -  **Data Modeling**: Operational metrics, emissions tracking, cost modeling
+    -  **Statistical Analysis**: Trends, correlations, hypothesis testing
     
     ### Machine Learning
-    - ✅ **Time Series**: Prophet, ARIMA, Holt-Winters forecasting
-    - ✅ **Supervised Learning**: Regression, classification, ensemble models
+    -  **Time Series**: Prophet, ARIMA, Holt-Winters forecasting
+    -  **Supervised Learning**: Regression, classification, ensemble models
     """)
 
 with col2:
     st.markdown("""
     ### Domain Expertise
-    - ✅ **Sustainability Metrics**: Emissions, PUE, CFE, water intensity
-    - ✅ **GHG Protocol**: Scope 1, 2, 3 accounting standards
-    - ✅ **Industry Benchmarks**: Tech sector sustainability performance
-    - ✅ **Financial Analysis**: ROI, cost modeling, carbon pricing
+    -  **Sustainability Metrics**: Emissions, PUE, CFE, water intensity
+    -  **GHG Protocol**: Scope 1, 2, 3 accounting standards
+    -  **Industry Benchmarks**: Tech sector sustainability performance
+    -  **Financial Analysis**: ROI, cost modeling, carbon pricing
     
     ### Software Engineering
-    - ✅ **Modular Architecture**: Reusable components, clean code structure
-    - ✅ **Interactive Dashboards**: Streamlit, Plotly visualizations
-    - ✅ **Documentation**: Comprehensive inline and external docs
-    - ✅ **Best Practices**: Error handling, logging, maintainability
-    - ✅ **Production Ready**: Scalable, enterprise-grade patterns
+    -  **Modular Architecture**: Reusable components, clean code structure
+    -  **Interactive Dashboards**: Streamlit, Plotly visualizations
+    -  **Documentation**: Comprehensive inline and external docs
+    -  **Best Practices**: Error handling, logging, maintainability
+    -  **Production Ready**: Scalable, enterprise-grade patterns
     """)
 
 st.markdown("---")
 
 # Data Sources
-st.markdown("## 📚 Data Sources & Methodology")
+st.markdown("##  Data Sources & Methodology")
 
 st.markdown("""
 ### Real Environmental Data
@@ -488,24 +488,24 @@ This dashboard uses actual data from major tech company environmental reports:
 st.markdown("---")
 
 # Getting Started
-st.markdown("## 🚀 Getting Started")
+st.markdown("##  Getting Started")
 
 st.markdown("""
 ### Recommended Navigation Path:
 
-1. **📊 Emissions Overview** - Review emissions landscape and trends
-2. **🔬 Scope Analysis** - Deep dive into GHG Protocol breakdown
-3. **⚡ Operational Metrics** - Explore efficiency and resource use
-4. **🤖 AI Forecasting** - Predictive models and scenario planning
-5. **📈 Driver Analysis** - Understand what drives emissions
-6. **💰 ROI Analysis** - Financial impact of decarbonization strategies
-7. **🏭 Facility Clustering** - Benchmark and segment facilities
-8. **🚨 Anomaly Detection** - Investigate unusual patterns
-9. **💾 Data Quality** - Validation and quality assurance
+1. ** Emissions Overview** - Review emissions landscape and trends
+2. ** Scope Analysis** - Deep dive into GHG Protocol breakdown
+3. ** Operational Metrics** - Explore efficiency and resource use
+4. ** AI Forecasting** - Predictive models and scenario planning
+5. ** Driver Analysis** - Understand what drives emissions
+6. ** ROI Analysis** - Financial impact of decarbonization strategies
+7. ** Facility Clustering** - Benchmark and segment facilities
+8. ** Anomaly Detection** - Investigate unusual patterns
+9. ** Data Quality** - Validation and quality assurance
 
 ---
 
-### 💼 Real-World Applications
+###  Real-World Applications
 
 **For Sustainability Teams:**
 - Track progress toward Science-Based Targets
@@ -527,7 +527,7 @@ st.markdown("---")
 
 st.markdown("""
 <div style='text-align: center; color: #666; padding: 2rem;'>
-    <p>🌍 Corporate Sustainability Analytics Platform</p>
+    <p> Corporate Sustainability Analytics Platform</p>
     <p>Demonstrating Enterprise-Grade Data Engineering, ML & Analytics</p>
     <p><em>Based on real environmental report data with operational insights</em></p>
 </div>

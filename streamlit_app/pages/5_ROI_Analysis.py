@@ -11,7 +11,7 @@ from utils.data_loader import load_combined_metrics, load_facilities
 st.set_page_config(page_title="ROI Analysis", page_icon="💰", layout="wide")
 
 st.markdown('<style>.main-header {font-size: 2.5rem; font-weight: 700; color: #27ae60;}</style>', unsafe_allow_html=True)
-st.markdown('<p class="main-header">💰 ROI & Financial Analysis</p>', unsafe_allow_html=True)
+st.markdown('<p class="main-header"> ROI & Financial Analysis</p>', unsafe_allow_html=True)
 
 st.markdown("""
 ## Return on Investment for Decarbonization Strategies
@@ -43,10 +43,10 @@ try:
         st.error("No data available")
         st.stop()
     
-    st.success(f"✅ Loaded {len(data):,} records for financial analysis")
+    st.success(f" Loaded {len(data):,} records for financial analysis")
     
     # Sidebar - Analysis Selection
-    st.sidebar.header("💼 Analysis Type")
+    st.sidebar.header(" Analysis Type")
     
     analysis_type = st.sidebar.radio(
         "Select Analysis",
@@ -65,7 +65,7 @@ try:
     # 1. PUE IMPROVEMENT ROI
     # ====================
     if analysis_type == "PUE Improvement ROI":
-        st.markdown("### ⚡ Data Center Efficiency Investment Analysis")
+        st.markdown("###  Data Center Efficiency Investment Analysis")
         st.markdown("""
         **PUE (Power Usage Effectiveness)** measures data center efficiency. Lower PUE means more energy 
         goes to IT equipment vs cooling/infrastructure.
@@ -101,7 +101,7 @@ try:
         st.markdown("---")
         
         # ROI Calculator
-        st.markdown("### 🧮 PUE Improvement Calculator")
+        st.markdown("###  PUE Improvement Calculator")
         
         col1, col2 = st.columns(2)
         
@@ -162,7 +162,7 @@ try:
         
         # 10-year NPV analysis
         st.markdown("---")
-        st.markdown("### 📊 10-Year Financial Projection")
+        st.markdown("###  10-Year Financial Projection")
         
         discount_rate = st.slider("Discount Rate (%)", 3.0, 10.0, 6.0, 0.5)
         
@@ -212,13 +212,13 @@ try:
         st.plotly_chart(fig_cf, width = 'stretch')
         
         if npv > 0:
-            st.success(f"✅ **Positive NPV: ${npv:,.0f}K** - Financially attractive investment")
+            st.success(f" **Positive NPV: ${npv:,.0f}K** - Financially attractive investment")
         else:
-            st.warning(f"⚠️ **Negative NPV: ${npv:,.0f}K** - May not meet financial hurdle rate")
+            st.warning(f" **Negative NPV: ${npv:,.0f}K** - May not meet financial hurdle rate")
         
         # Sensitivity analysis
         st.markdown("---")
-        st.markdown("### 🎯 Sensitivity Analysis")
+        st.markdown("###  Sensitivity Analysis")
         
         # Vary energy price and capital cost
         energy_prices = np.linspace(40, 120, 20)
@@ -265,7 +265,7 @@ try:
     # 2. RENEWABLE ENERGY ROI
     # ====================
     elif analysis_type == "Renewable Energy ROI":
-        st.markdown("### 🌞 Renewable Energy Investment Analysis")
+        st.markdown("###  Renewable Energy Investment Analysis")
         st.markdown("""
         Compare the cost of renewable energy (PPAs, on-site solar) vs grid electricity 
         with carbon pricing considerations.
@@ -296,14 +296,14 @@ try:
         st.markdown("---")
         
         # ROI Calculator
-        st.markdown("### 🧮 Renewable Energy Calculator")
+        st.markdown("###  Renewable Energy Calculator")
         
         col1, col2 = st.columns(2)
         
         with col1:
             # Handle case where already at 100%
             if current_renewable_pct >= 99:
-                st.success("✅ Already at 100% renewable electricity match!")
+                st.success(" Already at 100% renewable electricity match!")
                 target_renewable_pct = 100
                 
                 st.info("""
@@ -374,13 +374,13 @@ try:
             st.metric("Carbon Value", f"${carbon_value:,.0f}K/month")
             
             if net_cost < 0:
-                st.success(f"✅ Net Savings: ${abs(net_cost):,.0f}K/month")
+                st.success(f" Net Savings: ${abs(net_cost):,.0f}K/month")
             else:
-                st.warning(f"⚠️ Net Cost: ${net_cost:,.0f}K/month (${cost_per_tonne:.2f}/tonne)")
+                st.warning(f" Net Cost: ${net_cost:,.0f}K/month (${cost_per_tonne:.2f}/tonne)")
         
         # Cost breakdown
         st.markdown("---")
-        st.markdown("### 💵 Cost Comparison")
+        st.markdown("###  Cost Comparison")
         
         cost_breakdown = pd.DataFrame({
             'Component': ['Renewable Energy Cost', 'Grid Cost Avoided', 'Carbon Value', 'Net Position'],
@@ -410,7 +410,7 @@ try:
         
         # Carbon pricing scenarios
         st.markdown("---")
-        st.markdown("### 🌍 Carbon Pricing Scenarios")
+        st.markdown("###  Carbon Pricing Scenarios")
         
         carbon_prices = np.array([0, 25, 50, 75, 100, 150, 200])
         net_costs = []
@@ -454,13 +454,13 @@ try:
             - California Cap-and-Trade: ~$30/tonne
             """)
         else:
-            st.success("✅ Renewables already cheaper than grid electricity - no carbon price needed!")
+            st.success(" Renewables already cheaper than grid electricity - no carbon price needed!")
     
     # ====================
     # 3. WATER EFFICIENCY ROI
     # ====================
     elif analysis_type == "Water Efficiency ROI":
-        st.markdown("### 💧 Water Conservation Investment Analysis")
+        st.markdown("###  Water Conservation Investment Analysis")
         st.markdown("""
         Water efficiency in data centers reduces:
         1. **Direct costs**: Water purchase and wastewater treatment
@@ -489,7 +489,7 @@ try:
         st.markdown("---")
         
         # ROI Calculator
-        st.markdown("### 🧮 Water Efficiency Calculator")
+        st.markdown("###  Water Efficiency Calculator")
         
         col1, col2 = st.columns(2)
         
@@ -555,7 +555,7 @@ try:
     # 4. CARBON PRICING IMPACT
     # ====================
     elif analysis_type == "Carbon Pricing Impact":
-        st.markdown("### 💸 Carbon Pricing Scenario Analysis")
+        st.markdown("###  Carbon Pricing Scenario Analysis")
         st.markdown("""
         Model the financial impact of carbon pricing mechanisms:
         - **EU ETS**: ~€85/tonne ($92/tonne)
@@ -577,7 +577,7 @@ try:
             'total_emissions': 'mean'
         }).reset_index()
         
-        st.markdown("### 📊 Current Emissions by Region")
+        st.markdown("###  Current Emissions by Region")
         
         fig_region = go.Figure()
         
@@ -609,7 +609,7 @@ try:
         st.markdown("---")
         
         # Carbon pricing scenarios
-        st.markdown("### 💰 Carbon Cost Scenarios")
+        st.markdown("###  Carbon Cost Scenarios")
         
         col1, col2, col3 = st.columns(3)
         
@@ -661,7 +661,7 @@ try:
         
         # Total impact
         st.markdown("---")
-        st.markdown("### 🌍 Total Company Impact")
+        st.markdown("###  Total Company Impact")
         
         total_by_scenario = cost_df.groupby('Scenario')['Annual Cost ($M)'].sum().reset_index()
         
@@ -687,7 +687,7 @@ try:
     # 5. DECARBONIZATION COST CURVE
     # ====================
     elif analysis_type == "Decarbonization Cost Curve":
-        st.markdown("### 📉 Marginal Abatement Cost Curve (MACC)")
+        st.markdown("###  Marginal Abatement Cost Curve (MACC)")
         st.markdown("""
         Prioritize decarbonization initiatives by cost-effectiveness ($/tonne CO₂e reduced).
         
@@ -764,7 +764,7 @@ try:
         st.markdown("---")
         
         # Initiative details
-        st.markdown("### 📋 Initiative Portfolio")
+        st.markdown("###  Initiative Portfolio")
         
         # Color code the table
         def color_cost(val):
@@ -789,7 +789,7 @@ try:
         st.markdown("---")
         
         # Portfolio optimization
-        st.markdown("### 🎯 Portfolio Optimization")
+        st.markdown("###  Portfolio Optimization")
         
         col1, col2 = st.columns(2)
         
@@ -856,7 +856,7 @@ try:
             
             # Implementation timeline
             st.markdown("---")
-            st.markdown("### 📅 Implementation Timeline")
+            st.markdown("###  Implementation Timeline")
             
             timeline_data = []
             for _, row in selected_df.iterrows():
@@ -897,7 +897,7 @@ try:
             
             # Cumulative impact
             st.markdown("---")
-            st.markdown("### 📈 Cumulative Impact Projection")
+            st.markdown("###  Cumulative Impact Projection")
             
             years = np.arange(0, 6)
             cumulative_reduction = np.zeros(6)
@@ -938,7 +938,7 @@ try:
             """)
         
         st.markdown("---")
-        st.markdown("### 💡 Key Insights")
+        st.markdown("###  Key Insights")
         
         col1, col2 = st.columns(2)
         
@@ -985,7 +985,7 @@ try:
     # ====================
     # HISTORICAL ROI ANALYSIS
     # ====================
-    st.markdown("### 📊 Historical Performance Analysis")
+    st.markdown("###  Historical Performance Analysis")
     st.markdown("""
     Analyze actual operational improvements and cost trends from 2020-2024.
     """)
@@ -1013,7 +1013,7 @@ try:
             last_year = yearly_data.iloc[-1]
             years_span = int(last_year['year'] - first_year['year'])
             
-            st.markdown(f"#### 💼 Portfolio Trends ({int(first_year['year'])}-{int(last_year['year'])})")
+            st.markdown(f"####  Portfolio Trends ({int(first_year['year'])}-{int(last_year['year'])})")
             
             # Calculate changes
             pue_change = first_year['pue'] - last_year['pue']
@@ -1049,7 +1049,7 @@ try:
             st.markdown("---")
             
             # Contextual analysis
-            st.markdown("#### 📊 Performance Context")
+            st.markdown("####  Performance Context")
             
             # Check if there were meaningful improvements
             has_pue_improvement = pue_change > 0.01
@@ -1081,12 +1081,12 @@ try:
                     
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.success(f"✅ **PUE Improvement:** {pue_change:.3f}")
+                        st.success(f" **PUE Improvement:** {pue_change:.3f}")
                         st.markdown(f"- Energy Saved: {energy_saved:,.0f} MWh/year")
                         st.markdown(f"- Cost Savings: ${energy_cost_savings:,.0f}K/year")
                     
                     with col2:
-                        st.info(f"💵 **Est. Investment:** ${pue_investment:,.0f}K")
+                        st.info(f" **Est. Investment:** ${pue_investment:,.0f}K")
                         if energy_cost_savings > 0:
                             payback = pue_investment / energy_cost_savings
                             st.markdown(f"- Payback: {payback:.1f} years")
@@ -1102,7 +1102,7 @@ try:
                     investment_breakdown.append(('Renewable Contracts', renewable_investment))
                     returns_breakdown.append(('Carbon Value', carbon_value_conservative))
                     
-                    st.success(f"✅ **CFE Increase:** {cfe_change*100:.0f}%")
+                    st.success(f" **CFE Increase:** {cfe_change*100:.0f}%")
                     st.markdown(f"- Carbon Avoided: {carbon_avoided:,.0f} tonnes/year")
                     st.markdown(f"- Carbon Value: ${carbon_value_conservative:,.0f}K/year (at $50/tonne)")
                     st.markdown(f"- EU ETS Value: ${carbon_value_eu:,.0f}K/year (at €85/tonne)")
@@ -1114,7 +1114,7 @@ try:
                     
                     if total_returns > 0:
                         st.markdown("---")
-                        st.markdown("**📈 Combined ROI:**")
+                        st.markdown("** Combined ROI:**")
                         
                         col1, col2, col3 = st.columns(3)
                         
@@ -1163,14 +1163,14 @@ try:
                     st.markdown(f"- From {intensity_2020:.0f} → {intensity_2024:.0f} kg CO₂e/MWh")
                     
                     if intensity_improvement > 0:
-                        st.success("✅ Improved efficiency per unit of energy")
+                        st.success(" Improved efficiency per unit of energy")
                     else:
                         st.info("→ Maintained efficiency despite growth")
             
             st.markdown("---")
             
             # Future opportunities
-            st.markdown("#### 🎯 Opportunities for Further Improvement")
+            st.markdown("####  Opportunities for Further Improvement")
             
             col1, col2 = st.columns(2)
             
