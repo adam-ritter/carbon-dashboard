@@ -1,8 +1,8 @@
 # Corporate Sustainability Analytics Platform - Portfolio Overview
 
-**Author:** Adam Holden  
+**Author:** Adam Ritter  
 **Tech Stack:** Python, Streamlit, Plotly, Scikit-learn, Prophet, Statsmodels  
-**Data Source:** Based on actual tech company environmental reports (2020-2024)  
+**Data Source:** Based on Google's environmental reports (2020-2024)  
 **Live Demo:** [Link to deployed app if hosted]
 
 ---
@@ -42,7 +42,7 @@ carbon-dashboard/
 
 ## Key Features by Page
 
-### 1. 📊 Emissions Overview
+### 1.  Emissions Overview
 **Purpose:** Portfolio-wide emissions tracking and trend analysis
 
 **Key Features:**
@@ -56,14 +56,9 @@ carbon-dashboard/
 - Plotly interactive visualizations
 - Intensity calculations showing efficiency gains despite growth
 
-**Interview Talking Points:**
-- "I implemented intensity metrics to separate operational efficiency from business growth"
-- "The dashboard uses real data from published environmental reports, with monthly disaggregation"
-- "Intensity decreased 15% even as absolute emissions grew 74% - showing efficiency improvements"
-
 ---
 
-### 2. ⚡ Operational Metrics
+### 2.  Operational Metrics
 **Purpose:** Track key operational efficiency indicators beyond emissions
 
 **Key Features:**
@@ -78,16 +73,10 @@ carbon-dashboard/
 - Actual water consumption by location
 - Year-over-year improvement calculations
 - Cost savings from efficiency gains
-
-**Interview Talking Points:**
-- "I tracked operational metrics that directly drive emissions - PUE, CFE, water, waste"
-- "Used actual facility-level data from environmental reports where available"
-- "Calculated financial impact: PUE improvement of 0.01 saved ~$X million annually"
-- "CFE is hourly matching, which is harder than 100% annual renewable claims"
-
+- 
 ---
 
-### 3. 🔬 Scope Analysis
+### 3.  Scope Analysis
 **Purpose:** GHG Protocol-compliant emissions breakdown
 
 **Key Features:**
@@ -102,14 +91,9 @@ carbon-dashboard/
 - Market-based vs location-based Scope 2
 - SBTi alignment (50% Scope 1&2, 30% Scope 3 by 2030)
 
-**Interview Talking Points:**
-- "Implemented GHG Protocol standards - the global framework for emissions accounting"
-- "Scope 3 is 75% of total emissions, typical for tech companies"
-- "Tracked progress toward Science-Based Targets validated by SBTi"
-
 ---
 
-### 4. 🤖 ML Forecasting
+### 4.  ML Forecasting
 **Purpose:** Predictive analytics for emissions and operational metrics
 
 **Key Features:**
@@ -125,21 +109,9 @@ carbon-dashboard/
 - Holt-Winters: Exponential smoothing with seasonality
 - Scenario modeling with adjustable reduction assumptions
 
-**Interview Talking Points:**
-- "Implemented three complementary forecasting approaches"
-- "ARIMA with statsmodels - shows understanding of statistical theory, not just library usage"
-- "Users can tune ARIMA parameters (p,d,q) and compare models using AIC/BIC"
-- "Scenario analysis models different decarbonization strategies: 15-20% reduction pathways"
-- "Forecast operational metrics like PUE improvement trajectory to 2030"
-
-**Why Not Auto-ARIMA:**
-- "pmdarima had binary compatibility issues, so I implemented manual ARIMA with statsmodels"
-- "This actually demonstrates deeper understanding - users can experiment with parameters"
-- "Shows ability to work around library issues rather than being dependent on black-box solutions"
-
 ---
 
-### 5. 💰 ROI Analysis
+### 5.  ROI Analysis
 **Purpose:** Financial modeling for decarbonization investments
 
 **Key Features:**
@@ -149,6 +121,7 @@ carbon-dashboard/
   3. Water Efficiency ROI (cost savings + risk mitigation)
   4. Carbon Pricing Impact (EU ETS, California, internal price scenarios)
   5. Decarbonization Cost Curve (MACC - prioritization by $/tonne)
+   
 - Historical investment returns (2020-2024 actual improvements)
 - Portfolio optimization with budget constraints
 - Implementation timelines and cumulative impact
@@ -159,30 +132,23 @@ carbon-dashboard/
 - Marginal Abatement Cost Curve (MACC) implementation
 - Historical ROI based on actual operational data
 
-**Interview Talking Points:**
-- "Built 5 different financial models for decarbonization strategies"
-- "Historical ROI uses actual 2020-2024 improvements with industry-standard cost estimates"
-- "MACC prioritizes initiatives by cost-effectiveness ($/tonne CO₂e reduced)"
-- "Shows business case: PUE improvements have 2-3 year payback"
-- "Renewable PPAs break-even at ~$45/tonne carbon price (below current EU ETS)"
-
 ---
 
 ## Data Methodology
 
 ### Data Sources
 **Real Data (from environmental reports):**
-- ✅ Annual emissions by scope (2020-2024)
-- ✅ Facility-level PUE ratings (27 data centers)
-- ✅ Facility-level water consumption (27 data centers)
-- ✅ Regional CFE percentages
-- ✅ Waste generation and diversion rates
-- ✅ Energy consumption totals
+-  Annual emissions by scope (2020-2024)
+-  Facility-level PUE ratings (27 data centers)
+-  Facility-level water consumption (27 data centers)
+-  Regional CFE percentages
+-  Waste generation and diversion rates
+-  Energy consumption totals
 
 **Estimated/Interpolated:**
-- 🟡 Monthly disaggregation (from annual totals)
-- 🟡 Facilities not listed in reports (proportional allocation)
-- 🟡 Cost estimates (using market rates: $70/MWh, $50/tonne CO₂e)
+-  Monthly disaggregation (from annual totals)
+-  Facilities not listed in reports (proportional allocation)
+-  Cost estimates (using market rates: $70/MWh, $50/tonne CO₂e)
 
 **Methodology Notes:**
 - Companies publish annual aggregates, not monthly facility-level data
@@ -220,34 +186,6 @@ carbon-dashboard/
 
 ---
 
-## Interview Talking Points by Role
-
-### For Data Science Roles:
-- "I implemented three time series models and compared them using statistical metrics"
-- "Used actual environmental report data - shows ability to work with real-world constraints"
-- "Built intensity metrics to separate efficiency from growth"
-- "Demonstrated model explainability with clear diagnostics"
-
-### For Data Engineering Roles:
-- "Built ETL pipeline to process annual reports into time series data"
-- "Designed normalized database schema for sustainability metrics"
-- "Implemented data quality validation with clear error messages"
-- "Created reusable data loader utilities for DRY code"
-
-### For Analytics/BI Roles:
-- "Created 5 interactive dashboards for different stakeholder needs"
-- "Focused on actionable insights: ROI, cost curves, improvement opportunities"
-- "Used real industry data - demonstrates domain knowledge"
-- "Built financial models that CFOs would actually use"
-
-### For Sustainability/ESG Roles:
-- "Implemented GHG Protocol standards for emissions accounting"
-- "Tracked SBTi-aligned targets (50% Scope 1&2, 30% Scope 3 reduction)"
-- "Analyzed operational efficiency metrics: PUE, CFE, water intensity"
-- "Built business case for decarbonization investments"
-
----
-
 ## Challenges & Solutions
 
 ### Challenge 1: Limited Data
@@ -275,7 +213,6 @@ carbon-dashboard/
 ## Performance Metrics
 
 **Code Quality:**
-- 5 main pages, ~2,500 lines of Python
 - Modular utilities for code reuse
 - Comprehensive error handling
 - Clear documentation throughout
@@ -341,11 +278,11 @@ carbon-dashboard/
 ├── streamlit_app/
 │   ├── app.py                          # Landing page
 │   ├── pages/                          # Dashboard pages
-│   │   ├── 1_📊_Emissions_Overview.py
-│   │   ├── 2_⚡_Operational_Metrics.py
-│   │   ├── 3_🔬_Scope_Analysis.py
-│   │   ├── 4_🤖_ML_Forecasting.py
-│   │   └── 5_💰_ROI_Analysis.py
+│   │   ├── 1__Emissions_Overview.py
+│   │   ├── 2__Operational_Metrics.py
+│   │   ├── 3__Scope_Analysis.py
+│   │   ├── 4__ML_Forecasting.py
+│   │   └── 5__ROI_Analysis.py
 │   └── utils/
 │       └── data_loader.py              # Reusable utilities
 └── docs/
@@ -356,11 +293,8 @@ carbon-dashboard/
 
 ## Contact & Links
 
-**GitHub:** [Your GitHub username]  
-**LinkedIn:** [Your LinkedIn]  
-**Email:** [Your email]  
-**Portfolio:** [Your portfolio site]
+**GitHub:** [github.com/adam-ritter] 
+**LinkedIn:** [www.linkedin.com/in/adam-ritter-env/]  
+**Email:** [adam.h.ritter@gmail.com] 
 
 ---
-
-*This project demonstrates end-to-end data science and analytics capabilities in the sustainability domain, from data engineering to machine learning to business insights.*

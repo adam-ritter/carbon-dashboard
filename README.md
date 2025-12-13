@@ -8,21 +8,21 @@ A production-ready analytics dashboard for corporate carbon accounting, operatio
 
 ---
 
-## 🎯 Project Overview
+##  Project Overview
 
 This platform demonstrates enterprise-grade sustainability analytics capabilities:
 
-- **📊 Data Engineering**: ETL pipeline processing real environmental reports
-- **🤖 Machine Learning**: Time series forecasting with Prophet, ARIMA, and Holt-Winters
-- **💰 Financial Modeling**: ROI analysis, cost curves, scenario planning
-- **⚡ Operational Metrics**: PUE, CFE, water intensity, waste circularity
-- **📈 Interactive Dashboards**: 5 comprehensive analysis pages
+- ** Data Engineering**: ETL pipeline processing real environmental reports
+- ** Machine Learning**: Time series forecasting with Prophet, ARIMA, and Holt-Winters
+- ** Financial Modeling**: ROI analysis, cost curves, scenario planning
+- ** Operational Metrics**: PUE, CFE, water intensity, waste circularity
+- ** Interactive Dashboards**: 5 comprehensive analysis pages
 
-**Key Differentiator:** Uses actual tech company environmental report data (2020-2024), not synthetic datasets.
+**Key Differentiator:** Uses actual tech company environmental report data (Google 2020-2024), not synthetic datasets.
 
 ---
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Prerequisites
 
@@ -76,7 +76,7 @@ The dashboard will open in your browser at `http://localhost:8501`
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 ```
 carbon-dashboard/
 ├── README.md                          # This file
@@ -92,11 +92,11 @@ carbon-dashboard/
 │   ├── app.py                          # Landing page
 │   │
 │   ├── pages/                          # Dashboard pages
-│   │   ├── 1_📊_Emissions_Overview.py  # Portfolio-wide tracking
-│   │   ├── 2_⚡_Operational_Metrics.py # PUE, CFE, water, waste
-│   │   ├── 3_🔬_Scope_Analysis.py      # GHG Protocol breakdown
-│   │   ├── 4_🤖_ML_Forecasting.py      # Prophet, ARIMA, Holt-Winters
-│   │   └── 5_💰_ROI_Analysis.py        # Financial modeling
+│   │   ├── 1__Emissions_Overview.py  # Portfolio-wide tracking
+│   │   ├── 2__Operational_Metrics.py # PUE, CFE, water, waste
+│   │   ├── 3__Scope_Analysis.py      # GHG Protocol breakdown
+│   │   ├── 4__ML_Forecasting.py      # Prophet, ARIMA, Holt-Winters
+│   │   └── 5__ROI_Analysis.py        # Financial modeling
 │   │
 │   └── utils/
 │       └── data_loader.py              # Reusable data utilities
@@ -108,33 +108,33 @@ carbon-dashboard/
 
 ## 🎨 Dashboard Features
 
-### 1. 📊 Emissions Overview
+### 1.  Emissions Overview
 - **Real-time KPIs**: Total emissions, YoY changes, renewable percentage
 - **Multi-dimensional breakdowns**: By scope, region, facility type, time
 - **Intensity metrics**: Emissions per MWh, per water consumed
 - **Historical trends**: 2020-2024 performance analysis
 
-### 2. ⚡ Operational Metrics
+### 2.  Operational Metrics
 - **PUE Tracking**: Power Usage Effectiveness (industry benchmark: 1.09)
 - **Carbon-Free Energy**: Hourly CFE matching (66% in 2024)
 - **Water Management**: Consumption, replenishment (64% in 2024), intensity
 - **Waste Circularity**: Diversion rates (84% in 2024)
 - **Historical Performance**: Year-over-year improvements with financial impact
 
-### 3. 🔬 Scope Analysis
+### 3.  Scope Analysis
 - **GHG Protocol Compliant**: Scope 1, 2 (location & market-based), 3
 - **Category Breakdown**: 15 Scope 3 categories
 - **SBTi Tracking**: Science-Based Targets (50% Scope 1&2, 30% Scope 3 by 2030)
 - **Visualizations**: Waterfall charts, Pareto analysis
 
-### 4. 🤖 ML Forecasting
+### 4.  ML Forecasting
 - **Three Models**: Prophet, ARIMA/SARIMA, Holt-Winters
 - **Scenario Analysis**: Business-as-usual, Aggressive Decarbonization, Efficiency Focus
 - **Forecast Targets**: Emissions, PUE, CFE, water, waste
 - **Model Diagnostics**: MAE, RMSE, MAPE, AIC, BIC
 - **6-60 Month Horizon**: Adjustable forecast period
 
-### 5. 💰 ROI Analysis
+### 5.  ROI Analysis
 - **PUE Improvement ROI**: NPV, payback, sensitivity analysis
 - **Renewable Energy ROI**: PPA costs vs grid + carbon pricing
 - **Water Efficiency ROI**: Cost savings + risk mitigation
@@ -172,17 +172,17 @@ carbon-dashboard/
 ### Data Sources
 
 **Real Data (from environmental reports):**
-- ✅ Annual emissions by scope (2020-2024): 8.7M → 15.2M tonnes CO₂e
-- ✅ Facility-level PUE ratings: 27 data centers (2020-2024)
-- ✅ Facility-level water consumption: 27 data centers (2024)
-- ✅ Regional CFE percentages: 12% (APAC) to 92% (Latin America)
-- ✅ Energy consumption: 15.5M → 32.7M MWh (2020-2024)
-- ✅ Waste generation: 31.5K → 58.5K tonnes (2020-2024)
+-  Annual emissions by scope (2020-2024): 8.7M → 15.2M tonnes CO₂e
+-  Facility-level PUE ratings: 27 data centers (2020-2024)
+-  Facility-level water consumption: 27 data centers (2024)
+-  Regional CFE percentages: 12% (APAC) to 92% (Latin America)
+-  Energy consumption: 15.5M → 32.7M MWh (2020-2024)
+-  Waste generation: 31.5K → 58.5K tonnes (2020-2024)
 
 **Estimated/Interpolated:**
-- 🟡 Monthly disaggregation: Linear interpolation from annual totals
-- 🟡 Facilities not in reports: Proportional allocation based on facility type
-- 🟡 Cost estimates: Market rates ($70/MWh energy, $50/tonne CO₂e)
+-  Monthly disaggregation: Linear interpolation from annual totals
+-  Facilities not in reports: Proportional allocation based on facility type
+-  Cost estimates: Market rates ($70/MWh energy, $50/tonne CO₂e)
 
 ### Key Assumptions
 - 100% renewable electricity matching maintained 2020-2024
@@ -359,12 +359,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👤 Author
 
-**Adam Holden**
+**Adam Ritter**
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
-- Portfolio: [Your Portfolio](https://yourportfolio.com)
-- Email: your.email@example.com
+- GitHub: [github.com/adam-ritter]
+- LinkedIn: [linkedin.com/in/adam-ritter-env]
+- Email: [adam.h.ritter@gmail.com]
 
 ---
 
@@ -382,7 +381,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Learn More:**
 - [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md) - Detailed project documentation
-- [INTERVIEW_PREP.md](INTERVIEW_PREP.md) - Interview talking points and Q&A
 
 **Related Topics:**
 - [GHG Protocol](https://ghgprotocol.org/) - Emissions accounting standards
@@ -399,10 +397,6 @@ For questions or issues:
 2. Review [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md)
 3. Open an issue on GitHub
 4. Contact via email
-
----
-
-**⭐ If you find this project useful, please consider giving it a star on GitHub!**
 
 ---
 
