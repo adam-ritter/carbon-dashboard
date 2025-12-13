@@ -211,12 +211,17 @@ def generate_sustainability_database():
     print("=" * 80)
     
     # Delete existing databases
-    for db_file in ['sustainability_data.db', 'sustainability_data_clean.db']:
-        if os.path.exists(db_file):
-            print(f"🗑️  Removing: {db_file}")
-            os.remove(db_file)
+    for db_file in [DB_PATH]:
+        if db_file.exists():
+            db_file.unlink()
     
-    conn = sqlite3.connect('sustainability_data.db')
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    DATA_DIR = BASE_DIR / "data"
+    DB_PATH = DATA_DIR / "sustainability_data.db"
+
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
     print("\n📊 Creating schema...")
@@ -561,7 +566,7 @@ def generate_sustainability_database():
     
     conn.close()
     
-    print("\n✅ Database complete: sustainability_data.db")
+    print(f"\n✅ Database complete: {DB_PATH}")
     print("=" * 80)
 
 if __name__ == "__main__":
