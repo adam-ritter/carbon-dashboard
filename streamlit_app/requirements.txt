@@ -6,6 +6,5 @@ scikit-learn
 prophet
 statsmodels
 scipy
-sqlite3
 sqlalchemy
 pmdarima
