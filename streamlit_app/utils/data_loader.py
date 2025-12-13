@@ -12,8 +12,9 @@ from pathlib import Path
 # Canonical database paths (absolute, deterministic)
 # ------------------------------------------------------------------
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = BASE_DIR / "data"
+REPO_ROOT = Path(__file__).resolve().parents[2]  # utils -> streamlit_app -> repo root
+DATA_DIR = REPO_ROOT / "data"
+
 
 RAW_DB_PATH = DATA_DIR / "sustainability_data.db"
 CLEAN_DB_PATH = DATA_DIR / "sustainability_data_clean.db"
