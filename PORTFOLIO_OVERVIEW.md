@@ -3,7 +3,7 @@
 **Author:** Adam Ritter  
 **Tech Stack:** Python, Streamlit, Plotly, Scikit-learn, Prophet, Statsmodels  
 **Data Source:** Based on Google's environmental reports (2020-2024)  
-**Live Demo:** [Link to deployed app if hosted]
+**Live Demo:** [carbon-dashboard-qiuk6yiazz2jwumlz9bjul.streamlit.app/]
 
 ---
 
