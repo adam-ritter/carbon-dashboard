@@ -8,6 +8,13 @@ import sqlite3
 import os
 from typing import Optional, List
 
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "data" / "sustainability_data.db"
+
+conn = sqlite3.connect(DB_PATH, check_same_thread=False)
+
 def get_database_path():
     """
     Return path to cleaned database if it exists, otherwise raw database
