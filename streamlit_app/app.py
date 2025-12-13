@@ -8,6 +8,19 @@ import sys
 sys.path.append('.')
 from utils.data_loader import get_data_quality_status, get_summary_statistics
 
+from pathlib import Path
+from data.generate_sample_data import generate_sustainability_database
+
+BASE_DIR = Path(__file__).resolve().parent
+DATA_DIR = BASE_DIR / "data"
+DB_PATH = DATA_DIR / "sustainability_data.db"
+
+DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+if not DB_PATH.exists():
+    with st.spinner("Initializing sustainability database..."):
+        generate_sustainability_database()
+
 st.set_page_config(
     page_title="Sustainability Analytics Dashboard",
     page_icon="🌍",
