@@ -17,7 +17,20 @@ DB_PATH = DATA_DIR / "sustainability_data.db"
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-if not DB_PATH.exists():
+def db_has_required_tables(db_path: Path) -> bool:
+    if not db_path.exists():
+        return False
+    try:
+        conn = sqlite3.connect(db_path)
+        tables = {r[0] for r in conn.execute(
+            "SELECT name FROM sqlite_master WHERE type='table';"
+        ).fetchall()}
+        conn.close()
+        return "emissions_monthly" in tables
+    except Exception:
+        return False
+
+if not db_has_required_tables(DB_PATH):
     with st.spinner("Initializing sustainability database..."):
         generate_sustainability_database(db_path=DB_PATH)
 
