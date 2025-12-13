@@ -5,7 +5,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 import sys
 sys.path.append('..')
-from utils.data_loader import load_emissions_data, load_facilities
+from utils.data_loader import load_emissions_data, load_facilities, get_database_path
 import sqlite3
 import sys
 sys.path.append('..')
@@ -33,8 +33,15 @@ def get_scope_data():
     emissions_df['date'] = pd.to_datetime(emissions_df['date'])
     emissions_df['year'] = emissions_df['date'].dt.year
     emissions_df['month'] = emissions_df['date'].dt.to_period('M').astype(str)
-    conn = sqlite3.connect('../data/sustainability_data.db')
-    scope3_categories = pd.read_sql_query("SELECT category_id, category_name, description, typical_pct_of_scope3 FROM scope3_categories ORDER BY typical_pct_of_scope3 DESC", conn)
+
+    # FIX: Use canonical absolute DB path instead of relative '../data/...'
+    conn = sqlite3.connect(get_database_path(), check_same_thread=False)
+
+    scope3_categories = pd.read_sql_query(
+        "SELECT category_id, category_name, description, typical_pct_of_scope3 "
+        "FROM scope3_categories ORDER BY typical_pct_of_scope3 DESC",
+        conn
+    )
     conn.close()
     return emissions_df, facilities_df, scope3_categories
 
