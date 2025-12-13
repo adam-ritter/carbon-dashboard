@@ -16,6 +16,7 @@ Author: Adam Ritter
 Date: January 2025
 """
 
+from pathlib import Path
 import sqlite3
 import pandas as pd
 import numpy as np
