@@ -68,7 +68,7 @@ else:
 st.markdown("---")
 
 # Project Overview
-st.markdown("## 📋 Project Overview")
+st.markdown("##  Project Overview")
 
 col1, col2 = st.columns([2, 1])
 
@@ -188,7 +188,7 @@ try:
     st.markdown("---")
     
     # Operational Excellence Metrics
-    st.markdown("### ⚡ Operational Excellence Metrics")
+    st.markdown("###  Operational Excellence Metrics")
     st.markdown("*Key performance indicators based on actual facility data*")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -310,7 +310,7 @@ except Exception as e:
 st.markdown("---")
 
 # Key Features
-st.markdown("## ✨ Dashboard Features")
+st.markdown("##  Dashboard Features")
 
 col1, col2, col3 = st.columns(3)
 
