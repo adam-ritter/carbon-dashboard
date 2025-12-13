@@ -19,7 +19,7 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 if not DB_PATH.exists():
     with st.spinner("Initializing sustainability database..."):
-        generate_sustainability_database()
+        generate_sustainability_database(db_path=DB_PATH)
 
 st.set_page_config(
     page_title="Sustainability Analytics Dashboard",
