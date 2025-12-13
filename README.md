@@ -1,4 +1,4 @@
-# 🌍 Corporate Sustainability Analytics Platform
+#  Corporate Sustainability Analytics Platform
 
 A production-ready analytics dashboard for corporate carbon accounting, operational efficiency tracking, and decarbonization strategy planning. Built with real environmental report data (2020-2024).
 
@@ -106,7 +106,7 @@ carbon-dashboard/
 
 ---
 
-## 🎨 Dashboard Features
+##  Dashboard Features
 
 ### 1.  Emissions Overview
 - **Real-time KPIs**: Total emissions, YoY changes, renewable percentage
@@ -144,7 +144,7 @@ carbon-dashboard/
 
 ---
 
-## 🔧 Technical Stack
+##  Technical Stack
 
 **Core Technologies:**
 - **Python 3.10+**: Primary language
@@ -167,7 +167,7 @@ carbon-dashboard/
 
 ---
 
-## 📊 Data Methodology
+##  Data Methodology
 
 ### Data Sources
 
@@ -202,7 +202,7 @@ Generated data matches published reports within ±1.2%:
 
 ---
 
-## 🎓 Learning Outcomes
+##  Learning Outcomes
 
 This project demonstrates:
 
@@ -238,7 +238,7 @@ This project demonstrates:
 
 ---
 
-## 🐛 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
@@ -278,7 +278,7 @@ streamlit run app.py
 
 ---
 
-## 📝 Usage Examples
+##  Usage Examples
 
 ### Regenerate Database with Custom Data
 Edit `data/generate_sample_data.py` to modify:
@@ -306,12 +306,12 @@ df.to_csv('emissions_export.csv', index=False)
 ### Run Specific Pages Only
 ```bash
 # Run just the forecasting page
-streamlit run streamlit_app/pages/4_🤖_ML_Forecasting.py
+streamlit run streamlit_app/pages/4__ML_Forecasting.py
 ```
 
 ---
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 **Deployment:**
 - [ ] Deploy to Streamlit Cloud
@@ -339,7 +339,7 @@ streamlit run streamlit_app/pages/4_🤖_ML_Forecasting.py
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 This is a portfolio project, but suggestions are welcome!
 
@@ -351,13 +351,13 @@ This is a portfolio project, but suggestions are welcome!
 
 ---
 
-## 📄 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👤 Author
+##  Author
 
 **Adam Ritter**
 
@@ -367,7 +367,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - Environmental report data methodology based on published tech company sustainability reports
 - GHG Protocol standards from [ghgprotocol.org](https://ghgprotocol.org)
@@ -377,7 +377,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📚 Additional Resources
+##  Additional Resources
 
 **Learn More:**
 - [PORTFOLIO_OVERVIEW.md](PORTFOLIO_OVERVIEW.md) - Detailed project documentation
@@ -390,7 +390,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 📞 Support
+##  Support
 
 For questions or issues:
 1. Check the [Troubleshooting](#-troubleshooting) section
