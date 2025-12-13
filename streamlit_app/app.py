@@ -11,7 +11,7 @@ from utils.data_loader import get_data_quality_status, get_summary_statistics
 from pathlib import Path
 from data.generate_sample_data import generate_sustainability_database
 
-BASE_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 DB_PATH = DATA_DIR / "sustainability_data.db"
 
