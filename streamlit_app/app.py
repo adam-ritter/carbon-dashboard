@@ -79,23 +79,23 @@ with col1:
     This dashboard demonstrates a **complete end-to-end analytics workflow** for corporate carbon accounting 
     based on real environmental report data:
     
-    ** Carbon Accounting & Reporting**
+    **Carbon Accounting & Reporting**
     - GHG Protocol-aligned Scope 1, 2, 3 tracking
     - Data based on actual tech company reports (2020-2024)
     - Multi-facility, multi-region monitoring
     - Science-Based Target tracking and progress
     
-    ** Machine Learning & AI**
+    **Machine Learning & AI**
     - Time series forecasting (Prophet, Holt-Winters, ARIMA)
     
-    ** Operational Metrics & Efficiency**
+    **Operational Metrics & Efficiency**
     - Real facility-level water consumption data
     - PUE (Power Usage Effectiveness) tracking
     - Carbon-free energy (CFE) hourly matching
     - Waste circularity and diversion rates
     - ROI analysis for efficiency investments
     
-    ** Financial Analysis**
+    **Financial Analysis**
     - Cost modeling (energy, water, carbon pricing)
     - ROI of decarbonization strategies
     - Efficiency investment payback analysis
@@ -339,69 +339,8 @@ with col1:
     </ul>
     </div>
     """, unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="feature-box">
-    <h4> AI Forecasting</h4>
-    <ul>
-        <li>Prophet time series</li>
-        <li>Holt-Winters smoothing</li>
-        <li>Confidence intervals</li>
-        <li>Trend decomposition</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
 
-with col2:
-    st.markdown("""
-    <div class="feature-box">
-    <h4> Anomaly Detection</h4>
-    <ul>
-        <li>Isolation Forest (ML)</li>
-        <li>Statistical Z-score</li>
-        <li>Investigation workflow</li>
-        <li>Root cause analysis</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="feature-box">
-    <h4> Driver Analysis</h4>
-    <ul>
-        <li>Operational metrics</li>
-        <li>Feature importance</li>
-        <li>SHAP explainability</li>
-        <li>What-if scenarios</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="feature-box">
-    <h4> Facility Clustering</h4>
-    <ul>
-        <li>K-means segmentation</li>
-        <li>PCA visualization</li>
-        <li>Peer benchmarking</li>
-        <li>Targeted strategies</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-
-with col3:
-    st.markdown("""
-    <div class="feature-box">
-    <h4> Data Quality</h4>
-    <ul>
-        <li>5-dimensional validation</li>
-        <li>Completeness checks</li>
-        <li>Consistency rules</li>
-        <li>Quality scoring</li>
-    </ul>
-    </div>
-    """, unsafe_allow_html=True)
-    
+with col2: 
     st.markdown("""
     <div class="feature-box">
     <h4> ROI Analysis</h4>
@@ -410,6 +349,18 @@ with col3:
         <li>Renewable energy ROI</li>
         <li>Carbon pricing impact</li>
         <li>Decarbonization costs</li>
+    </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="feature-box">
+    <h4> AI Forecasting</h4>
+    <ul>
+        <li>Prophet time series</li>
+        <li>Holt-Winters smoothing</li>
+        <li>Confidence intervals</li>
+        <li>Trend decomposition</li>
     </ul>
     </div>
     """, unsafe_allow_html=True)
@@ -493,15 +444,11 @@ st.markdown("##  Getting Started")
 st.markdown("""
 ### Recommended Navigation Path:
 
-1. ** Emissions Overview** - Review emissions landscape and trends
-2. ** Scope Analysis** - Deep dive into GHG Protocol breakdown
-3. ** Operational Metrics** - Explore efficiency and resource use
-4. ** AI Forecasting** - Predictive models and scenario planning
-5. ** Driver Analysis** - Understand what drives emissions
-6. ** ROI Analysis** - Financial impact of decarbonization strategies
-7. ** Facility Clustering** - Benchmark and segment facilities
-8. ** Anomaly Detection** - Investigate unusual patterns
-9. ** Data Quality** - Validation and quality assurance
+1. **Emissions Overview** - Review emissions landscape and trends
+2. **Scope Analysis** - Deep dive into GHG Protocol breakdown
+3. **Operational Metrics** - Explore efficiency and resource use
+4. **AI Forecasting** - Predictive models and scenario planning
+5. **ROI Analysis** - Financial impact of decarbonization strategies
 
 ---
 
