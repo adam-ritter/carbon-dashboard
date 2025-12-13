@@ -12,11 +12,11 @@ A production-ready analytics dashboard for corporate carbon accounting, operatio
 
 This platform demonstrates enterprise-grade sustainability analytics capabilities:
 
-- ** Data Engineering**: ETL pipeline processing real environmental reports
-- ** Machine Learning**: Time series forecasting with Prophet, ARIMA, and Holt-Winters
-- ** Financial Modeling**: ROI analysis, cost curves, scenario planning
-- ** Operational Metrics**: PUE, CFE, water intensity, waste circularity
-- ** Interactive Dashboards**: 5 comprehensive analysis pages
+- **Data Engineering**: ETL pipeline processing real environmental reports
+- **Machine Learning**: Time series forecasting with Prophet, ARIMA, and Holt-Winters
+- **Financial Modeling**: ROI analysis, cost curves, scenario planning
+- **Operational Metrics**: PUE, CFE, water intensity, waste circularity
+- **Interactive Dashboards**: 5 comprehensive analysis pages
 
 **Key Differentiator:** Uses actual tech company environmental report data (Google 2020-2024), not synthetic datasets.
 
