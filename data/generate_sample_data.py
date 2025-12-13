@@ -202,7 +202,11 @@ def get_monthly_allocation(date):
         'renewable_pct': 1.00,
     }
 
-def generate_sustainability_database():
+def generate_sustainability_database(db_path=None):
+    if db_path is not None:
+        global DB_PATH
+        DB_PATH = db_path
+        
     """Generate database with actual operational metrics"""
     
     print("=" * 80)
