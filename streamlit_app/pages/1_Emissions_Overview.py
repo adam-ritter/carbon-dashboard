@@ -438,7 +438,7 @@ try:
     
     # Insight 4: Facility concentration
     top_3_pct = (facility_totals.head(3)['total_emissions'].sum() / total_emissions) * 100
-    insights.append(f"🎯 **Top 3 facilities** account for {top_3_pct:.0f}% of emissions - targeted interventions recommended")
+    insights.append(f" **Top 3 facilities** account for {top_3_pct:.0f}% of emissions - targeted interventions recommended")
     
     for insight in insights:
         st.markdown(insight)
