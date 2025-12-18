@@ -1,6 +1,6 @@
 #  Corporate Sustainability Analytics Platform
 
-A production-ready analytics dashboard for corporate carbon accounting, operational efficiency tracking, and decarbonization strategy planning. Built with real environmental report data (2020-2024).
+A production-ready analytics dashboard for corporate carbon accounting, operational efficiency tracking, and decarbonization strategy planning. Built with real environmental report data (2020-2024). Live app found at [://carbon-dashboard-qiuk6yiazz2jwumlz9bjul.streamlit.app/]
 
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io/)
